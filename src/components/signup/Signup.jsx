@@ -2,7 +2,10 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
+
 import * as s from "./StyledSignup";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -13,6 +16,8 @@ function Signup() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [authNumber, setAuthNumber] = useState("");
 
+  const [user, setUser] = useAtom(userAtom);
+
   const navigate = useNavigate();
 
   // `회원가입` 버튼의 onClick에 할당
@@ -20,25 +25,50 @@ function Signup() {
     e.preventDefault();
     try {
       if (!email) {
-        alert("이메일을 입력해주세요.");
+        alert("이메일을 입력해 주세요.");
         return;
       }
       if (!password) {
-        alert("비밀번호를 입력해주세요.");
+        alert("비밀번호를 입력해 주세요.");
         return;
       }
-      if (password === confirmPassword) {
+      if (!confirmPassword) {
+        alert("비밀번호 확인란을 입력해 주세요.");
+        return;
+      }
+      if (!name) {
+        alert("이름을 입력해 주세요.");
+        return;
+      }
+      if (!nickname) {
+        alert("닉네임을 입력해 주세요");
+        return;
+      }
+      if (!phoneNumber) {
+        alert("전화번호를 입력해 주세요");
+        return;
+      }
+      if (isNaN(phoneNumber) === true) {
+        alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert(getErrorMessage("auth/wrong-password"));
+        return;
+      } else {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
         console.log(userCredential);
+        setUser({
+          name: name,
+          nickname: nickname,
+          phoneNumber: phoneNumber,
+        });
         alert("회원가입에 성공하셨습니다.");
-
         navigate("/");
-      } else {
-        alert(getErrorMessage("auth/wrong-password"));
       }
     } catch (error) {
       alert(getErrorMessage(error.code));
@@ -71,11 +101,6 @@ function Signup() {
 
   return (
     <div className="SignupContainer">
-      <div className="SocialLoginContainer">
-        <div>Google</div>
-        <div>facebook</div>
-        <div>Naver</div>
-      </div>
       <form>
         <div className="EmailInputBox">
           <span>이메일: </span>
@@ -139,11 +164,11 @@ function Signup() {
           />
         </div>
         <div className="PhoneNumberInputBox">
-          <span>연락처 </span>
+          <span>전화번호 </span>
           <input
             type="tel"
             value={phoneNumber}
-            placeholder="전화번호를 입력해 주세요."
+            placeholder="'-'없이 숫자로만 입력해 주세요"
             onChange={(e) => {
               setPhoneNumber(e.target.value);
             }}

@@ -48,7 +48,7 @@ function Login() {
       case "auth/network-request-failed":
         return "네트워크 연결에 실패 하였습니다.";
       case "auth/invalid-email":
-        return "잘못된 이메일 형식입니다.";
+        return "잘못된 이메일 형식입니다. email@email.com 형식으로 작성해 주세요";
       case "auth/internal-error":
         return "잘못된 요청입니다.";
       default:
