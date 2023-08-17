@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import GeoCoder from "./GeoCoder";
 
 function PlaceMap() {
   const mapElement = useRef(null);
   const [address, setAddress] = useState(""); // 주소 상태 추가
 
-  // 컴포넌트가 마운트될 때, 수동으로 스크립트를 넣어줍니다.
-  // 이는 script가 실행되기 이전에 window.initMap이 먼저 선언되어야 하기 때문입니다.
   // 지도 api스크립트를 동적으로 로딩하는 역할
   const loadScript = useCallback((url) => {
     const firstScript = window.document.getElementsByTagName("script")[0];
@@ -17,18 +16,33 @@ function PlaceMap() {
   }, []);
 
   // script에서 google map api를 가져온 후에 실행될 callback 함수
+  // 지도 초기화 함수
   const initMap = useCallback(() => {
+    // google이 정의되었을 때만 지도와 마커 생성
     const { google } = window;
     if (!mapElement.current || !google) return;
 
-    const location = { lat: 37.5656, lng: 126.9769 };
+    const initialLocation = { lat: 37.5939491407769, lng: 127.054890960564 };
     const map = new google.maps.Map(mapElement.current, {
       zoom: 17,
-      center: location,
+      center: initialLocation,
     });
-    new google.maps.Marker({
-      position: location,
+    // 마커 생성
+    const marker = new google.maps.Marker({
+      position: initialLocation,
       map,
+    });
+
+    // 마커 클릭 시 주소 가져오기
+    const geocoder = new google.maps.Geocoder();
+    marker.addListener("click", () => {
+      geocoder.geocode({ location: initialLocation }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          setAddress(results[0].formatted_address);
+        } else {
+          setAddress("주소를 가져올 수 없습니다.");
+        }
+      });
     });
   }, []);
 
@@ -86,15 +100,14 @@ function PlaceMap() {
             ref={mapElement}
             style={{ minHeight: "400px", width: "600px" }}
           />
-          {/* <input
-        type="text"
-        value={address}
-        placeholder="Enter an address"
-        style={{ marginBottom: "10px" }}
-      />
-      <button onClick={(e) => setAddress(e.target.value)}>주소 입력</button> */}
+          <input
+            type="text"
+            placeholder="Enter an address"
+            style={{ marginBottom: "10px" }}
+          />
+          <button onClick={(e) => setAddress(e.target.value)}>주소 입력</button>
           <div style={{ display: "flex" }}>
-            <p>서울시 마포구 2312-1</p>
+            <p>{address}</p>
             <button style={{ marginLeft: "auto" }}>주소복사</button>
           </div>
         </div>
@@ -120,6 +133,7 @@ function PlaceMap() {
       >
         댓글 창
       </div>
+      <GeoCoder />
     </div>
   );
 }
