@@ -1,7 +1,178 @@
-import React from "react";
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import * as s from "./StyledSignup";
 
 function Signup() {
-  return <div>Signup</div>;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [authNumber, setAuthNumber] = useState("");
+
+  const navigate = useNavigate();
+
+  // `회원가입` 버튼의 onClick에 할당
+  const signupHandler = async (e) => {
+    e.preventDefault();
+    try {
+      if (!email) {
+        alert("이메일을 입력해주세요.");
+        return;
+      }
+      if (!password) {
+        alert("비밀번호를 입력해주세요.");
+        return;
+      }
+      if (password === confirmPassword) {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log(userCredential);
+        alert("회원가입에 성공하셨습니다.");
+
+        navigate("/");
+      } else {
+        alert(getErrorMessage("auth/wrong-password"));
+      }
+    } catch (error) {
+      alert(getErrorMessage(error.code));
+    }
+  };
+
+  const getErrorMessage = (errorCode) => {
+    switch (errorCode) {
+      case "auth/user-not-found":
+      case "auth/missing-email":
+        return "잘못된 이메일입니다.";
+      case "auth/missing-password":
+        return "잘못된 비밀번호입니다.";
+      case "auth/wrong-password":
+        return "비밀번호가 일치하지 않습니다.";
+      case "auth/email-already-in-use":
+        return "이미 사용 중인 이메일입니다.";
+      case "auth/weak-password":
+        return "비밀번호는 6글자 이상이어야 합니다.";
+      case "auth/network-request-failed":
+        return "네트워크 연결에 실패 하였습니다.";
+      case "auth/invalid-email":
+        return "잘못된 이메일 형식입니다.";
+      case "auth/internal-error":
+        return "잘못된 요청입니다.";
+      default:
+        return "회원가입에 실패하셨습니다.";
+    }
+  };
+
+  return (
+    <div className="SignupContainer">
+      <div className="SocialLoginContainer">
+        <div>Google</div>
+        <div>facebook</div>
+        <div>Naver</div>
+      </div>
+      <form>
+        <div className="EmailInputBox">
+          <span>이메일: </span>
+          <input
+            type="email"
+            value={email}
+            placeholder="이메일을 입력해 주세요 (ex: treplay@treplay.com)"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            autoFocus
+            autoComplete="email"
+          />
+        </div>
+        <div className="NameInputBox">
+          <span>이름 </span>
+          <input
+            type="text"
+            value={name}
+            placeholder="이름을 입력해 주세요."
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            autoFocus
+            autoComplete="name"
+          />
+        </div>
+        <div className="PasswordInputBox">
+          <span>비밀번호 </span>
+          <input
+            type="password"
+            value={password}
+            placeholder="비밀번호를 입력해 주세요"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            autoComplete="password"
+          />
+        </div>
+        <div className="ConfirmPasswordInputBox">
+          <span>비밀번호 확인 </span>
+          <input
+            type="password"
+            value={confirmPassword}
+            placeholder="비밀번호를 동일하게 입력해 주세요"
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
+            autoComplete="password"
+          />
+        </div>
+        <div className="NicknameInputBox">
+          <span>닉네임 </span>
+          <input
+            type="text"
+            value={nickname}
+            placeholder="닉네임을 입력해 주세요."
+            onChange={(e) => {
+              setNickname(e.target.value);
+            }}
+          />
+        </div>
+        <div className="PhoneNumberInputBox">
+          <span>연락처 </span>
+          <input
+            type="tel"
+            value={phoneNumber}
+            placeholder="전화번호를 입력해 주세요."
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+            }}
+          />
+        </div>
+      </form>
+      <div className="AgreementContainer">
+        {/* 약관동의 안 할 시 회원가입 막기 */}
+        <div className="AgreementBox">
+          <input type="checkbox" />
+          약관동의
+          <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
+        </div>
+        <div>
+          <input type="checkbox" />
+          약관동의2
+          <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
+        </div>
+      </div>
+      <button
+        type="submit"
+        onClick={(e) => {
+          signupHandler(e);
+        }}
+      >
+        회원가입
+      </button>
+    </div>
+  );
 }
 
 export default Signup;
