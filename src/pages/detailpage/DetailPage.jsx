@@ -1,7 +1,12 @@
 import React from "react";
+import GoogleMap from "../../components/GoogleMap";
 
 function DetailPage() {
-  return <div>DetailPage</div>;
+  return (
+    <>
+      <GoogleMap />
+    </>
+  );
 }
 
 export default DetailPage;

@@ -1,3 +1,4 @@
+import { Routes, Route, Link } from "react-router-dom";
 import Layout from "./common/Layout";
 import MainPage from "./pages/mainpage/MainPage";
 import NationPage from "./pages/nationpage/NationPage";
@@ -16,7 +17,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/list" element={<NationPage />} />
         <Route path="/list/:category" element={<CategoryPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/detail" element={<DetailPage />} />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
