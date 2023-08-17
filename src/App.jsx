@@ -8,6 +8,7 @@ import Edit from "./pages/edit/Edit";
 import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
+import { Link, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
