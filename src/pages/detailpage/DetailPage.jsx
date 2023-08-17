@@ -1,10 +1,10 @@
 import React from "react";
-import GoogleMap from "../../components/GoogleMap";
+import PlaceMap from "../../components/PlaceMap";
 
 function DetailPage() {
   return (
     <>
-      <GoogleMap />
+      <PlaceMap />
     </>
   );
 }

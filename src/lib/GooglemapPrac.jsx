@@ -1,0 +1,154 @@
+const mapElement = useRef(null);
+const [address, setAddress] = useState(""); // 주소 상태 추가
+
+// 컴포넌트가 마운트될 때, 수동으로 스크립트를 넣어줍니다.
+// 이는 script가 실행되기 이전에 window.initMap이 먼저 선언되어야 하기 때문입니다.
+// 지도 api스크립트를 동적으로 로딩하는 역할
+const loadScript = useCallback((url) => {
+  const firstScript = window.document.getElementsByTagName("script")[0];
+  const newScript = window.document.createElement("script");
+  newScript.src = url;
+  newScript.async = true;
+  newScript.defer = true;
+  firstScript?.parentNode?.insertBefore(newScript, firstScript);
+}, []);
+
+// script에서 google map api를 가져온 후에 실행될 callback 함수
+const initMap = useCallback(() => {
+  const { google } = window;
+  if (!mapElement.current || !google) return;
+
+  const location = { lat: 37.5656, lng: 126.9769 };
+  const map = new google.maps.Map(mapElement.current, {
+    zoom: 17,
+    center: location,
+  });
+  new google.maps.Marker({
+    position: location,
+    map,
+  });
+}, []);
+
+useEffect(() => {
+  const script = window.document.getElementsByTagName("script")[0];
+  const includeCheck = script.src.startsWith(
+    "https://maps.googleapis.com/maps/api"
+  );
+
+  // script 중복 호출 방지
+  if (includeCheck) return initMap();
+
+  window.initMap = initMap;
+  loadScript(
+    "https://maps.googleapis.com/maps/api/js?key=AIzaSyArdwSvnMVGKTD_LUxm_pGKnDDnrUSeZDY&callback=initMap&language=en"
+  );
+}, [initMap, loadScript]);
+
+return (
+  <>
+    <div ref={mapElement} style={{ minHeight: "400px" }} />
+    <input
+      type="text"
+      value={address}
+      placeholder="Enter an address"
+      style={{ marginBottom: "10px" }}
+    />
+    <button onClick={(e) => setAddress(e.target.value)}>주소 입력</button>
+    <p>주소</p>
+    <p>장소명</p>
+  </>
+);
+
+import React, { useState } from "react";
+import {
+  GoogleMap,
+  InfoWindowF,
+  MarkerF,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+
+const containerStyle = {
+  width: "800px",
+  height: "400px",
+};
+
+function PlaceMap() {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+  });
+
+  const [center, setCenter] = useState({
+    lat: 37.5656,
+    lng: 126.9769,
+  });
+  const [map, setMap] = React.useState(null);
+  const [address, setAddress] = useState("");
+  const [selectedMarker, setSelectedMarker] = useState(null);
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
+  const myStyles = [
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }],
+    },
+  ];
+
+  return isLoaded ? (
+    <>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={17}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        options={{ disableDefaultUI: true, styles: myStyles }}
+      >
+        {/* <MarkerF
+          onLoad={onLoad}
+          position={{ lat: 37.5656, lng: 126.9769 }}
+          icon={{
+            url: "icon.svg",
+            scaledSize: new window.google.maps.Size(32, 32),
+          }}
+          onClick={(e) => {
+            setSelectedMarker({ lat: 37.5656, lng: 126.9769 });
+            setCenter({ lat: 37.5656, lng: 126.9769 });
+          }}
+        /> */}
+        {/* <InfoWindowF
+          position={selectedMarker}
+          options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
+          onCloseClick={() => {
+            setSelectedMarker(null);
+          }}
+        ></InfoWindowF> */}
+      </GoogleMap>
+      <input
+        type="text"
+        value={address}
+        placeholder="Enter an address"
+        style={{ marginBottom: "10px" }}
+      />
+      <button onClick={(e) => setAddress(e.target.value)}>주소 입력</button>
+      <p>주소</p>
+      <p>장소명</p>
+    </>
+  ) : (
+    <></>
+  );
+}
+
+export default PlaceMap;
