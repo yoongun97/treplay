@@ -1,26 +1,20 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-
 import * as s from "./StyledSignup";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [authNumber, setAuthNumber] = useState("");
-
-  const [user, setUser] = useAtom(userAtom);
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  const [isChecked1, setIsChecked1] = useState(false);
+  const [isChecked2, setIsChecked2] = useState(false);
 
   const navigate = useNavigate();
 
-  // `회원가입` 버튼의 onClick에 할당
   const signupHandler = async (e) => {
     e.preventDefault();
     try {
@@ -36,24 +30,24 @@ function Signup() {
         alert("비밀번호 확인란을 입력해 주세요.");
         return;
       }
-      if (!name) {
-        alert("이름을 입력해 주세요.");
+      if (password !== confirmPassword) {
+        alert(getErrorMessage("auth/wrong-password"));
         return;
       }
       if (!nickname) {
         alert("닉네임을 입력해 주세요");
         return;
       }
-      if (!phoneNumber) {
-        alert("전화번호를 입력해 주세요");
-        return;
-      }
-      if (isNaN(phoneNumber) === true) {
-        alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
-        return;
-      }
-      if (password !== confirmPassword) {
-        alert(getErrorMessage("auth/wrong-password"));
+      // if (!phoneNumber) {
+      //   alert("전화번호를 입력해 주세요");
+      //   return;
+      // }
+      // if (isNaN(phoneNumber) === true) {
+      //   alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
+      //   return;
+      // }
+      if (isChecked1 === false || isChecked2 === false) {
+        alert("약관에 동의해 주세요");
         return;
       } else {
         const userCredential = await createUserWithEmailAndPassword(
@@ -62,10 +56,8 @@ function Signup() {
           password
         );
         console.log(userCredential);
-        setUser({
-          name: name,
-          nickname: nickname,
-          phoneNumber: phoneNumber,
+        await updateProfile(auth.currentUser, {
+          displayName: nickname,
         });
         alert("회원가입에 성공하셨습니다.");
         navigate("/");
@@ -99,6 +91,14 @@ function Signup() {
     }
   };
 
+  const checkboxHandler = (checkbox) => {
+    if (checkbox === 1) {
+      setIsChecked1(!isChecked1);
+    } else if (checkbox === 2) {
+      setIsChecked2(!isChecked2);
+    }
+  };
+
   return (
     <div className="SignupContainer">
       <form>
@@ -113,19 +113,6 @@ function Signup() {
             }}
             autoFocus
             autoComplete="email"
-          />
-        </div>
-        <div className="NameInputBox">
-          <span>이름 </span>
-          <input
-            type="text"
-            value={name}
-            placeholder="이름을 입력해 주세요."
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            autoFocus
-            autoComplete="name"
           />
         </div>
         <div className="PasswordInputBox">
@@ -163,7 +150,7 @@ function Signup() {
             }}
           />
         </div>
-        <div className="PhoneNumberInputBox">
+        {/* <div className="PhoneNumberInputBox">
           <span>전화번호 </span>
           <input
             type="tel"
@@ -173,17 +160,29 @@ function Signup() {
               setPhoneNumber(e.target.value);
             }}
           />
-        </div>
+        </div> */}
       </form>
       <div className="AgreementContainer">
         {/* 약관동의 안 할 시 회원가입 막기 */}
         <div className="AgreementBox">
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            checked={isChecked1}
+            onChange={() => {
+              checkboxHandler(1);
+            }}
+          />
           약관동의
           <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
         </div>
         <div>
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            checked={isChecked2}
+            onChange={() => {
+              checkboxHandler(2);
+            }}
+          />
           약관동의2
           <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
         </div>
