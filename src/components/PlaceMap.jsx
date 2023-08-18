@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import GeoCoder from "./GeoCoder";
 
 function PlaceMap() {
   const mapElement = useRef(null);
   const [address, setAddress] = useState(""); // 주소 상태 추가
+  const [initialLocation, setInitialLocation] = useState({
+    lat: 37.6093347203718,
+    lng: 126.934340439756,
+  });
 
   // 지도 api스크립트를 동적으로 로딩하는 역할
   const loadScript = useCallback((url) => {
@@ -22,7 +25,6 @@ function PlaceMap() {
     const { google } = window;
     if (!mapElement.current || !google) return;
 
-    const initialLocation = { lat: 37.5939491407769, lng: 127.054890960564 };
     const map = new google.maps.Map(mapElement.current, {
       zoom: 17,
       center: initialLocation,
@@ -42,9 +44,34 @@ function PlaceMap() {
         } else {
           setAddress("주소를 가져올 수 없습니다.");
         }
+        console.log(results);
+        console.log(status);
       });
     });
   }, []);
+
+  // 주소 가져오기 버튼 클릭 시 실행될 함수
+  const fetchCoordinates = () => {
+    const inputAddress = document.getElementById("address").value;
+    if (inputAddress === "") {
+      alert("주소를 입력하세요.");
+      return;
+    }
+    console.log(inputAddress);
+
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: inputAddress }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const location = results[0].geometry.viewport;
+        setInitialLocation({ lat: location.Va.lo, lng: location.Ia.lo });
+      } else {
+        alert("주소를 가져올 수 없습니다.");
+      }
+      console.log(results);
+      console.log(status);
+      console.log(initialLocation);
+    });
+  };
 
   useEffect(() => {
     const script = window.document.getElementsByTagName("script")[0];
@@ -61,6 +88,10 @@ function PlaceMap() {
     );
   }, [initMap, loadScript]);
 
+  useEffect(() => {
+    initMap(); // 초기화 함수 호출
+  }, [initMap, initialLocation]); // initialLocation 변경 시에도 호출
+
   return (
     <div
       style={{
@@ -73,7 +104,7 @@ function PlaceMap() {
       }}
     >
       <h2>장소명</h2>
-      <button style={{ margin: " 20px 190px 20px auto" }}>공유하기</button>
+      <button style={{ margin: " 20px 5% 20px auto" }}>공유하기</button>
       <div
         style={{
           display: "flex",
@@ -100,12 +131,6 @@ function PlaceMap() {
             ref={mapElement}
             style={{ minHeight: "400px", width: "600px" }}
           />
-          <input
-            type="text"
-            placeholder="Enter an address"
-            style={{ marginBottom: "10px" }}
-          />
-          <button onClick={(e) => setAddress(e.target.value)}>주소 입력</button>
           <div style={{ display: "flex" }}>
             <p>{address}</p>
             <button style={{ marginLeft: "auto" }}>주소복사</button>
@@ -133,7 +158,15 @@ function PlaceMap() {
       >
         댓글 창
       </div>
-      <GeoCoder />
+      <div>
+        <input
+          id="address"
+          type="text"
+          placeholder="Enter an address"
+          style={{ marginBottom: "10px" }}
+        />
+        <button onClick={fetchCoordinates}>주소 가져오기</button>
+      </div>
     </div>
   );
 }
