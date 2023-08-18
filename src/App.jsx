@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/list" element={<NationPage />} />
         <Route path="/list/:category" element={<CategoryPage />} />
-        <Route path="/detail" element={<DetailPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
