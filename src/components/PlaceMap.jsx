@@ -1,11 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-function PlaceMap() {
+function PlaceMap({ postAddress }) {
   const mapElement = useRef(null);
   const [address, setAddress] = useState(""); // 주소 상태 추가
   const [initialLocation, setInitialLocation] = useState({
     lat: 37.6093347203718,
     lng: 126.934340439756,
+  });
+
+  console.log(postAddress);
+
+  const geocoder = new window.google.maps.Geocoder();
+  geocoder.geocode({ address: postAddress }, (results, status) => {
+    if (status === "OK" && results[0]) {
+      const location = results[0].geometry.viewport;
+      console.log(location);
+      setInitialLocation({ lat: location.Va.lo, lng: location.Ia.lo });
+    } else {
+      alert("주소를 가져올 수 없습니다.");
+    }
   });
 
   // 지도 api스크립트를 동적으로 로딩하는 역할
@@ -50,29 +63,6 @@ function PlaceMap() {
     });
   }, []);
 
-  // 주소 가져오기 버튼 클릭 시 실행될 함수
-  const fetchCoordinates = () => {
-    const inputAddress = document.getElementById("address").value;
-    if (inputAddress === "") {
-      alert("주소를 입력하세요.");
-      return;
-    }
-    console.log(inputAddress);
-
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: inputAddress }, (results, status) => {
-      if (status === "OK" && results[0]) {
-        const location = results[0].geometry.viewport;
-        setInitialLocation({ lat: location.Va.lo, lng: location.Ia.lo });
-      } else {
-        alert("주소를 가져올 수 없습니다.");
-      }
-      console.log(results);
-      console.log(status);
-      console.log(initialLocation);
-    });
-  };
-
   useEffect(() => {
     const script = window.document.getElementsByTagName("script")[0];
     const includeCheck = script.src.startsWith(
@@ -88,10 +78,6 @@ function PlaceMap() {
     );
   }, [initMap, loadScript]);
 
-  useEffect(() => {
-    initMap(); // 초기화 함수 호출
-  }, [initMap, initialLocation]); // initialLocation 변경 시에도 호출
-
   return (
     <>
       <div>
@@ -100,15 +86,6 @@ function PlaceMap() {
           <p>{address}</p>
           <button style={{ marginLeft: "auto" }}>주소복사</button>
         </div>
-      </div>
-      <div>
-        <input
-          id="address"
-          type="text"
-          placeholder="Enter an address"
-          style={{ marginBottom: "10px" }}
-        />
-        <button onClick={fetchCoordinates}>주소 가져오기</button>
       </div>
     </>
   );
