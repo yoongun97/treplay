@@ -1,13 +1,15 @@
-import Layout from "./common/Layout";
-import MainPage from "./pages/mainpage/MainPage";
-import NationPage from "./pages/nationpage/NationPage";
-import CategoryPage from "./pages/categorypage/CategoryPage";
-import DetailPage from "./pages/detailpage/DetailPage";
-import Create from "./pages/create/Create";
-import Edit from "./pages/edit/Edit";
-import MyPage from "./pages/mypage/MyPage";
-import Login from "./components/login/Login";
-import Signup from "./components/signup/Signup";
+import Layout from './common/Layout';
+import MainPage from './pages/mainpage/MainPage';
+import NationPage from './pages/nationpage/NationPage';
+import CategoryPage from './pages/categorypage/CategoryPage';
+import DetailPage from './pages/detailpage/DetailPage';
+import Create from './pages/create/Create';
+import Edit from './pages/edit/Edit';
+import MyPage from './pages/mypage/MyPage';
+import Login from './components/login/Login';
+import Signup from './components/signup/Signup';
+import { Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function App() {
   return (
