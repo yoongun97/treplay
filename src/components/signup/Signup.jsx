@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -11,6 +11,7 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
+  const [isUsedNickname, setIsUsedNickname] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
@@ -44,6 +45,12 @@ function Signup() {
         alert("닉네임을 입력해 주세요");
         return;
       }
+      if (isUsedNickname === true) {
+        alert(
+          "중복된 닉네임은 사용할 수 없습니다. 다른 닉네임을 입력해 주세요."
+        );
+        return;
+      }
       if (!phoneNumber) {
         alert("전화번호를 입력해 주세요");
         return;
@@ -66,9 +73,10 @@ function Signup() {
         });
         const newUser = {
           uid: userCredential.user.uid,
-          nickname: nickname,
-          name: name,
-          phoneNumber: phoneNumber,
+          email,
+          nickname,
+          name,
+          phoneNumber,
         };
 
         const collectionRef = collection(db, "users");
@@ -110,6 +118,35 @@ function Signup() {
       setIsChecked1(!isChecked1);
     } else if (checkbox === 2) {
       setIsChecked2(!isChecked2);
+    }
+  };
+
+  const nicknameCheckHandler = async (e) => {
+    e.preventDefault();
+    try {
+      if (!!nickname === false) {
+        return alert("닉네임을 입력해 주세요");
+      }
+      const q = query(collection(db, "users"));
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const usedNickname = data.filter((item) => item.nickname === nickname);
+
+      if (usedNickname.length > 0) {
+        setIsUsedNickname(true);
+        return alert(
+          "이미 사용 중인 닉네임입니다. 다른 닉네임을 사용해 주세요."
+        );
+      } else if (usedNickname.length === 0) {
+        setIsUsedNickname(false);
+        return alert("사용 가능한 닉네임입니다!");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -174,6 +211,7 @@ function Signup() {
               setNickname(e.target.value);
             }}
           />
+          <button onClick={(e) => nicknameCheckHandler(e)}>중복체크</button>
         </div>
         <div className="PhoneNumberInputBox">
           <span>전화번호 </span>
