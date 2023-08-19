@@ -16,8 +16,8 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<MainPage />} />
-        <Route path="/list" element={<NationPage />} />
-        <Route path="/list/:category" element={<CategoryPage />} />
+        <Route path="/:nation" element={<NationPage />} />
+        <Route path="/:nation/:category" element={<CategoryPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />

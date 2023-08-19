@@ -1,7 +1,14 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function MainPage() {
-  return <div>MainPage</div>;
+  return (
+    <div>
+      <Link to={'/한국'}>한국</Link> <br />
+      <Link to={'/일본'}>일본</Link> <br />
+      <Link to={'/미국'}>미국</Link> <br />
+    </div>
+  );
 }
 
 export default MainPage;
