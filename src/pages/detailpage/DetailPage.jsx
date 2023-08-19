@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PlaceMap from "../../components/PlaceMap";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 
 function DetailPage() {
-  const [posts, setPosts] = useState([]);
   const { id } = useParams();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // collection 이름이 todos인 collection의 모든 document를 가져옵니다.
-      const q = query(collection(db, "posts"));
-      const querySnapshot = await getDocs(q);
+  const {
+    data: post,
+    isLoading,
+    isError,
+    error,
+  } = useQuery("post", async () => {
+    const postRef = doc(db, "posts", id);
+    const docSnapshot = await getDoc(postRef);
 
-      const initialPosts = [];
+    if (docSnapshot.exists()) {
+      return { id: docSnapshot.id, ...docSnapshot.data() };
+    } else {
+      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
+    }
+  });
 
-      querySnapshot.forEach((doc) => {
-        initialPosts.push({ id: doc.id, ...doc.data() });
-      });
+  if (isLoading) {
+    return <div>데이터 가져오는 중...</div>;
+  }
 
-      // firestore에서 가져온 데이터를 state에 전달
-      setPosts(initialPosts);
-    };
-
-    fetchData();
-  }, []);
-
-  const post = posts.find((post) => post.id === id);
-  console.log(posts);
-  console.log(post);
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <>
