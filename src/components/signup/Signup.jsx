@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 
+
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
