@@ -60,7 +60,7 @@ function Login() {
     <div className="LoginContainer">
       <div>
         <div>Logo img</div>
-        <s.InputContainer>
+        <s.InputForm>
           <div className="EmailInputBox">
             <span>이메일: </span>
             <input
@@ -86,21 +86,20 @@ function Login() {
               autoComplete="password"
             />
           </div>
-        </s.InputContainer>
+          <button
+            type="submit"
+            onClick={(e) => {
+              loginHandler(e);
+            }}
+          >
+            로그인
+          </button>
+        </s.InputForm>
         <div className="LinkContainer">
-          <Link to="">아이디 찾기</Link>
-          <Link to="">비밀번호 찾기</Link>
           <Link to="/signup">회원가입</Link>
         </div>
       </div>
-      <button
-        type="submit"
-        onClick={(e) => {
-          loginHandler(e);
-        }}
-      >
-        로그인
-      </button>
+
       <div className="SocialLoginContainer">
         <p>SNS 계정으로 로그인 하기</p>
         <s.SnsContainer>

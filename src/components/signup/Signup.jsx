@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-// import * as s from "./StyledSignup";
+import * as s from "./StyledSignup";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
+
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState("");
+  const [isUsedNickname, setIsUsedNickname] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
 
@@ -34,18 +38,28 @@ function Signup() {
         alert(getErrorMessage("auth/wrong-password"));
         return;
       }
+      if (!name) {
+        alert("이름을 입력해 주세요");
+        return;
+      }
       if (!nickname) {
         alert("닉네임을 입력해 주세요");
         return;
       }
-      // if (!phoneNumber) {
-      //   alert("전화번호를 입력해 주세요");
-      //   return;
-      // }
-      // if (isNaN(phoneNumber) === true) {
-      //   alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
-      //   return;
-      // }
+      if (isUsedNickname === true) {
+        alert(
+          "중복된 닉네임은 사용할 수 없습니다. 다른 닉네임을 입력해 주세요."
+        );
+        return;
+      }
+      if (!phoneNumber) {
+        alert("전화번호를 입력해 주세요");
+        return;
+      }
+      if (isNaN(phoneNumber) === true) {
+        alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
+        return;
+      }
       if (isChecked1 === false || isChecked2 === false) {
         alert("약관에 동의해 주세요");
         return;
@@ -55,10 +69,19 @@ function Signup() {
           email,
           password
         );
-        console.log(userCredential);
-        await updateProfile(auth.currentUser, {
+        updateProfile(auth.currentUser, {
           displayName: nickname,
         });
+        const newUser = {
+          uid: userCredential.user.uid,
+          email,
+          nickname,
+          name,
+          phoneNumber,
+        };
+
+        const collectionRef = collection(db, "users");
+        await addDoc(collectionRef, newUser);
         alert("회원가입에 성공하셨습니다.");
         navigate("/");
       }
@@ -96,6 +119,35 @@ function Signup() {
       setIsChecked1(!isChecked1);
     } else if (checkbox === 2) {
       setIsChecked2(!isChecked2);
+    }
+  };
+
+  const nicknameCheckHandler = async (e) => {
+    e.preventDefault();
+    try {
+      if (!!nickname === false) {
+        return alert("닉네임을 입력해 주세요");
+      }
+      const q = query(collection(db, "users"));
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const usedNickname = data.filter((item) => item.nickname === nickname);
+
+      if (usedNickname.length > 0) {
+        setIsUsedNickname(true);
+        return alert(
+          "이미 사용 중인 닉네임입니다. 다른 닉네임을 사용해 주세요."
+        );
+      } else if (usedNickname.length === 0) {
+        setIsUsedNickname(false);
+        return alert("사용 가능한 닉네임입니다!");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -139,6 +191,17 @@ function Signup() {
             autoComplete="password"
           />
         </div>
+        <div className="NameInputBox">
+          <span>이름 </span>
+          <input
+            type="text"
+            value={name}
+            placeholder="이름을 입력해 주세요."
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+        </div>
         <div className="NicknameInputBox">
           <span>닉네임 </span>
           <input
@@ -149,8 +212,9 @@ function Signup() {
               setNickname(e.target.value);
             }}
           />
+          <button onClick={(e) => nicknameCheckHandler(e)}>중복체크</button>
         </div>
-        {/* <div className="PhoneNumberInputBox">
+        <div className="PhoneNumberInputBox">
           <span>전화번호 </span>
           <input
             type="tel"
@@ -160,41 +224,40 @@ function Signup() {
               setPhoneNumber(e.target.value);
             }}
           />
-        </div> */}
+        </div>
+        <div className="AgreementContainer">
+          <div className="AgreementBox">
+            <input
+              type="checkbox"
+              checked={isChecked1}
+              onChange={() => {
+                checkboxHandler(1);
+              }}
+            />
+            약관동의
+            <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              checked={isChecked2}
+              onChange={() => {
+                checkboxHandler(2);
+              }}
+            />
+            약관동의2
+            <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
+          </div>
+        </div>
+        <button
+          type="submit"
+          onClick={(e) => {
+            signupHandler(e);
+          }}
+        >
+          회원가입
+        </button>
       </form>
-      <div className="AgreementContainer">
-        {/* 약관동의 안 할 시 회원가입 막기 */}
-        <div className="AgreementBox">
-          <input
-            type="checkbox"
-            checked={isChecked1}
-            onChange={() => {
-              checkboxHandler(1);
-            }}
-          />
-          약관동의
-          <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            checked={isChecked2}
-            onChange={() => {
-              checkboxHandler(2);
-            }}
-          />
-          약관동의2
-          <textarea placeholder="소ㅑㄹ라샬라" readOnly></textarea>
-        </div>
-      </div>
-      <button
-        type="submit"
-        onClick={(e) => {
-          signupHandler(e);
-        }}
-      >
-        회원가입
-      </button>
     </div>
   );
 }
