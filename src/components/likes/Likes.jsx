@@ -7,12 +7,9 @@ import { userAtom } from "../../store/userAtom";
 
 export default function Likes() {
   const { id } = useParams();
-  const likesRef = useRef(null);
-  const dislikesRef = useRef(null);
 
   const [likes, setLikes] = useState(false);
   const [dislikes, setDislikes] = useState(false);
-  const [currentPost, setCurrentPost] = useState({});
 
   const [user] = useAtom(userAtom);
 
@@ -21,8 +18,6 @@ export default function Likes() {
     const q = query(collection(db, "likes"), where("postId", "==", id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
-
-    setCurrentPost(data);
 
     // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
     const userOwnData = data?.find((doc) => doc.uid === user.uid);
