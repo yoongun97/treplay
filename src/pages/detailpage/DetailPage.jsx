@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
+import Likes from "../../components/likes/Likes";
 
 function DetailPage() {
   const { id } = useParams();
@@ -70,10 +71,7 @@ function DetailPage() {
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
         <div>
-          <div style={{ display: "flex" }}>
-            <button>또가요</button>
-            <button>안가요</button>
-          </div>
+          <Likes />
           <div style={{ display: "flex" }}>
             <div
               style={{ width: "50%", height: "20px", backgroundColor: "Red" }}
