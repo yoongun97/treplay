@@ -1,3 +1,4 @@
+import { Routes, Route, Link } from "react-router-dom";
 import Layout from "./common/Layout";
 import MainPage from "./pages/mainpage/MainPage";
 import NationPage from "./pages/nationpage/NationPage";
@@ -8,9 +9,8 @@ import Edit from "./pages/edit/Edit";
 import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
-import { Link, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";

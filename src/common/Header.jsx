@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 
 const Header = () => {
-  const [user, setUser] = useAtom(userAtom);
+  const [user] = useAtom(userAtom);
   const auth = getAuth();
 
   const logoutHandler = () => {

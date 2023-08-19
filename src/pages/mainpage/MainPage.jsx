@@ -1,11 +1,8 @@
-<<<<<<< HEAD
-import React from 'react';
 import { Link } from 'react-router-dom';
-=======
 import { useAtom } from "jotai";
 import React from "react";
 import { userAtom } from "../../store/userAtom";
->>>>>>> origin/feat#4
+
 
 function MainPage() {
   return (
