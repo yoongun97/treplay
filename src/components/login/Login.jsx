@@ -33,6 +33,7 @@ function Login() {
       navigate("/");
     } catch (error) {
       alert(getErrorMessage(error.code));
+      console.log(error.code);
     }
   };
 

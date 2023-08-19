@@ -10,7 +10,7 @@ import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
