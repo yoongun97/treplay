@@ -5,6 +5,7 @@ import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import Likes from "../../components/likes/Likes";
+import Bookmark from "../../components/bookmark/Bookmark";
 
 function DetailPage() {
   const { id } = useParams();
@@ -71,6 +72,7 @@ function DetailPage() {
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
         <div>
+          <Bookmark />
           <Likes />
           <div style={{ display: "flex" }}>
             <div
