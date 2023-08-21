@@ -21,15 +21,15 @@ function SelectBox() {
   const handleNationClick = (option) => {
     setSelectedNation(option);
     setIsActive(false);
-    setPost({ ...post, nation: selectedNation });
+    setPost({ ...post, nation: option });
   };
 
   const handleCategoryClick = (option) => {
     setSelectedCategory(option);
     setIsActive1(false);
-    setPost({ ...post, category: selectedCategory });
+    setPost({ ...post, category: option });
   };
-
+  console.log(post);
   return (
     <StBox>
       <DropdownWrapper>

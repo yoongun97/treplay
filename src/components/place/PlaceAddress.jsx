@@ -26,6 +26,7 @@ function PlaceAddress() {
   //     setAddress(selectedPlace?.formatted_address);
   //   });
   // };
+  console.log(post);
 
   return (
     <div style={{ backgroundColor: "gray" }}>
