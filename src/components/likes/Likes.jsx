@@ -13,11 +13,25 @@ export default function Likes() {
 
   const [user] = useAtom(userAtom);
 
+  // 또가요, 안가요 각각의 개수와 총합, 그리고 각 퍼센테이지를 구하기 위한 데이터들
+  const [likesCount, setLikesCount] = useState();
+  const [dislikesCount, setDislikesCount] = useState();
+
+  const totalCount = likesCount + dislikesCount;
+  const likesPercentage = (likesCount / totalCount) * 100;
+  const dislikesPercentage = (dislikesCount / totalCount) * 100;
+
   // 처음 랜더링될 때 user의 uid와 동일한 uid를 가진 likes의 정보가 있으면 likes/dislikes를 true 처리해서 버튼 누르지 못하도록 함
   const fetchData = async () => {
     const q = query(collection(db, "likes"), where("postId", "==", id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
+
+    // likes, dislikes 의 누적 개수를 저장하기 위한 부분
+    const likedData = data?.filter((doc) => doc.state === "like");
+    const dislikedData = data?.filter((doc) => doc.state === "dislike");
+    setLikesCount(likedData.length);
+    setDislikesCount(dislikedData.length);
 
     // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
     const userOwnData = data?.find((doc) => doc.uid === user.uid);
@@ -71,20 +85,34 @@ export default function Likes() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      {/* 또가요 버튼 */}
-      <button onClick={(e) => likesButtonHandler(e, "like")} disabled={likes}>
-        또가요
-      </button>
-      {/* 안가요 버튼 */}
-      <button
-        onClick={(e) => likesButtonHandler(e, "dislike")}
-        disabled={dislikes}
-      >
-        안가요
-      </button>
+    <div>
+      <div style={{ display: "flex" }}>
+        {/* 또가요 버튼 */}
+        <button onClick={(e) => likesButtonHandler(e, "like")} disabled={likes}>
+          또가요
+        </button>
+        {/* 안가요 버튼 */}
+        <button
+          onClick={(e) => likesButtonHandler(e, "dislike")}
+          disabled={dislikes}
+        >
+          안가요
+        </button>
 
-      {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
+        {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
+      </div>
+      <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <div style={{ width: "50%", height: "20px", backgroundColor: "Red" }}>
+          또가요({likesCount}) {likesPercentage.toFixed(1)}%
+        </div>
+        <div style={{ width: "50%", height: "20px", backgroundColor: "Blue" }}>
+          안가요({dislikesCount}) {dislikesPercentage.toFixed(1)}%
+        </div>
+      </div>
     </div>
   );
 }
