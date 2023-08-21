@@ -26,7 +26,6 @@ function PlaceAddress() {
   //     setAddress(selectedPlace?.formatted_address);
   //   });
   // };
-  console.log(post);
 
   return (
     <div style={{ backgroundColor: "gray" }}>
@@ -34,8 +33,8 @@ function PlaceAddress() {
         <input
           id="search-box"
           placeholder="장소명을 입력하세요"
-          value={place}
-          onChange={(e) => setPlace(e.targetValue)}
+          // value={place}
+          // onChange={(e) => setPlace(e.targetValue)}
         />
         <button
           onClick={(e) => {

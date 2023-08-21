@@ -41,7 +41,6 @@ function ImageUpload() {
       // 파일 URL 가져오기
       const downloadURL = await getDownloadURL(imageRef);
       newDownloadURLs.push(downloadURL); // 새로운 downloadURL 배열에 추가
-      console.log(newDownloadURLs);
       setPost({ ...post, postImgs: newDownloadURLs });
     }
 
