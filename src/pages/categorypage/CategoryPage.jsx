@@ -3,10 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
+import PageNation from '../../components/pageNation/PageNation';
 
 function CategoryPage() {
   const [search, setSearch] = useState('');
-  const { nation, category, uid } = useParams();
+  const { nation, category } = useParams();
+  //페이지네이션
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
@@ -47,6 +51,10 @@ function CategoryPage() {
   if (isLoading) {
     return '정보를 가져오고 있습니다.';
   }
+  //페이지 네이션
+  const indexOfLastPost = currentPage * postsViewPage;
+  const indexOfFirstPost = indexOfLastPost - postsViewPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div>
@@ -66,29 +74,34 @@ function CategoryPage() {
       </div>
       <Link to={`/create`}>글 작성하기</Link>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {posts &&
-          posts.map((post) => (
-            <div key={post.id}>
-              <Link
-                to={`/detail/${post.id}`}
-                style={{
-                  display: 'flex',
-                  width: '300px',
-                  height: '100px',
-                  margin: '20px',
-                  border: '1px solid black',
-                  textDecoration: 'none',
-                  color: 'black',
-                }}
-              >
-                {post.author} <br />
-                {post.placeName} <br />
-                {post.postContent} <br />
-                {post.placeLocation} <br />
-              </Link>
-            </div>
-          ))}
+        {currentPosts.map((post) => (
+          <div key={post.uid}>
+            <Link
+              to={`/detail/${post.uid}`}
+              style={{
+                display: 'flex',
+                width: '300px',
+                height: '100px',
+                margin: '20px',
+                border: '1px solid black',
+                textDecoration: 'none',
+                color: 'black',
+              }}
+            >
+              {post.author} <br />
+              {post.placeName} <br />
+              {post.postContent} <br />
+              {post.placeLocation} <br />
+            </Link>
+          </div>
+        ))}
       </div>
+      <PageNation
+        postsViewPage={postsViewPage}
+        totalPosts={posts.length}
+        currentPage={currentPage}
+        pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
+      />
     </div>
   );
 }
