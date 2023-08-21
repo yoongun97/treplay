@@ -74,18 +74,6 @@ function DetailPage() {
         <div>
           <Bookmark />
           <Likes />
-          <div style={{ display: "flex" }}>
-            <div
-              style={{ width: "50%", height: "20px", backgroundColor: "Red" }}
-            >
-              50%
-            </div>
-            <div
-              style={{ width: "50%", height: "20px", backgroundColor: "Blue" }}
-            >
-              50%
-            </div>
-          </div>
         </div>
         <div
           style={{ width: "800px", height: "300px", border: "1px solid black" }}
