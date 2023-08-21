@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../Firebase';
+import { db } from '../../firebaseConfig';
 
 function CategoryPage() {
   const [search, setSearch] = useState('');
-  const { nation, category } = useParams();
+  const { nation, category, uid } = useParams();
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
@@ -19,7 +19,6 @@ function CategoryPage() {
   };
 
   const fetchPosts = async () => {
-
     const postsCollection = query(
       collection(db, 'posts'),
       where('nation', '==', nation),
@@ -30,19 +29,19 @@ function CategoryPage() {
 
     const postsData = [];
     querySnapshot.forEach((doc) => {
-      postsData.push(doc.data());
-      console.log(doc.id);
+      const postsUid = { id: doc.id, ...doc.data() };
+      postsData.push(postsUid);
+      console.log({ postsUid });
     });
 
     return postsData;
   };
 
-
   const { data: posts, error, isLoading } = useQuery('posts', fetchPosts);
 
   if (error) {
-    console.error("데이터를 가져올 수 없습니다", error);
-    return alert("데이터를 가져올 수 없습니다");
+    console.error('데이터를 가져올 수 없습니다', error);
+    return alert('데이터를 가져올 수 없습니다');
   }
 
   if (isLoading) {
@@ -50,7 +49,6 @@ function CategoryPage() {
   }
 
   return (
-
     <div>
       <div>
         <div>
@@ -67,16 +65,27 @@ function CategoryPage() {
         </div>
       </div>
       <Link to={`/create`}>글 작성하기</Link>
-      <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {posts &&
           posts.map((post) => (
-            <div key={post.uid}>
-              <div>
-                <p>{post.author}</p>
-                <p>{post.placeName}</p>
-                <p>{post.postContent}</p>
-                <p>{post.placeLocation}</p>
-              </div>
+            <div key={post.id}>
+              <Link
+                to={`/detail/${post.id}`}
+                style={{
+                  display: 'flex',
+                  width: '300px',
+                  height: '100px',
+                  margin: '20px',
+                  border: '1px solid black',
+                  textDecoration: 'none',
+                  color: 'black',
+                }}
+              >
+                {post.author} <br />
+                {post.placeName} <br />
+                {post.postContent} <br />
+                {post.placeLocation} <br />
+              </Link>
             </div>
           ))}
       </div>
