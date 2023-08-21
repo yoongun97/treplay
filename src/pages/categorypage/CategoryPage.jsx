@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../Firebase';
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 function CategoryPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const { nation, category } = useParams();
 
   const handleSearchInputChange = (e) => {
@@ -13,17 +13,16 @@ function CategoryPage() {
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setSearch(e.currentTarget.value);
     }
   };
 
   const fetchPosts = async () => {
-
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -37,8 +36,7 @@ function CategoryPage() {
     return postsData;
   };
 
-
-  const { data: posts, error, isLoading } = useQuery('posts', fetchPosts);
+  const { data: posts, error, isLoading } = useQuery("posts", fetchPosts);
 
   if (error) {
     console.error("데이터를 가져올 수 없습니다", error);
@@ -46,11 +44,10 @@ function CategoryPage() {
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
 
   return (
-
     <div>
       <div>
         <div>
