@@ -1,5 +1,5 @@
 import React from "react";
-import PlaceMap from "../../components/PlaceMap";
+import PlaceMap from "../../components/place/PlaceMap";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
