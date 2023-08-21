@@ -19,6 +19,7 @@ function CategoryPage() {
   };
 
   const fetchPosts = async () => {
+
     const postsCollection = query(
       collection(db, 'posts'),
       where('nation', '==', nation),
@@ -36,11 +37,12 @@ function CategoryPage() {
     return postsData;
   };
 
+
   const { data: posts, error, isLoading } = useQuery('posts', fetchPosts);
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    console.error("데이터를 가져올 수 없습니다", error);
+    return alert("데이터를 가져올 수 없습니다");
   }
 
   if (isLoading) {
@@ -48,6 +50,7 @@ function CategoryPage() {
   }
 
   return (
+
     <div>
       <div>
         <div>

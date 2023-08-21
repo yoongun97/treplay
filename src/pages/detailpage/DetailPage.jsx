@@ -17,7 +17,6 @@ import { useQuery, useQueryClient } from 'react-query';
 import Likes from "../../components/likes/Likes";
 import Bookmark from "../../components/bookmark/Bookmark";
 
-
 function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
