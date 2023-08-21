@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PlaceMap from '../../components/PlaceMap';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import { db, auth } from '../../firebaseConfig';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 function DetailPage() {
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const [comment, setComment] = useState('');
-  const [commentArray, setCommentArray] = useState([]);
-
+  const [comments, setComments] = useState([]);
+  const currentUser = auth.currentUser;
+  console.log({ currentUser });
   const {
     data: post,
     isLoading,
@@ -18,13 +30,45 @@ function DetailPage() {
   } = useQuery('post', async () => {
     const postRef = doc(db, 'posts', id);
     const docSnapshot = await getDoc(postRef);
-
+    //firebase 에서 댓글 불러오기
     if (docSnapshot.exists()) {
-      return { id: docSnapshot.id, ...docSnapshot.data() };
+      const commentsRef = query(
+        collection(db, 'comments'),
+        where('postId', '==', id)
+      );
+      const commentsSnapshot = await getDocs(commentsRef);
+      const commentsData = [];
+      commentsSnapshot.forEach((doc) => {
+        commentsData.push({ id: doc.id, ...doc.data() });
+      });
+
+      return {
+        id: docSnapshot.id,
+        ...docSnapshot.data(),
+        comments: commentsData,
+        //firebase 에서 댓글 불러오기
+      };
     } else {
       throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
     }
   });
+  console.log({ post });
+  //댓글 작성,삭제 실시간으로 보여주기
+  // useEffect(() => {
+  //   const commentsRef = query(
+  //     collection(db, 'comments'),
+  //     where('postId', '==', id)
+  //   );
+  //   const commentsUpdate = onSnapshot(commentsRef, (snapshot) => {
+  //     const commentsData = [];
+  //     snapshot.forEach((doc) => {
+  //       commentsData.push({ id: doc.id, ...doc.data() });
+  //     });
+  //     setComments(commentsData);
+  //   });
+
+  //   return () => commentsUpdate();
+  // }, [id]);
 
   if (isLoading) {
     return <div>데이터 가져오는 중...</div>;
@@ -33,24 +77,40 @@ function DetailPage() {
   if (isError) {
     return <div>{error.message}</div>;
   }
+
   //댓글 등록
   const commentChange = (e) => setComment(e.target.value);
 
-  const commentSubmit = (e) => {
+  const commentSubmit = async (e) => {
     e.preventDefault();
     if (comment === '') {
       return;
     }
-    setCommentArray((commentList) => [comment, ...commentList]);
-    setComment('');
+
+    try {
+      const newComment = {
+        comment: comment,
+        postId: id,
+        userId: currentUser.uid,
+        author: currentUser.displayName,
+      };
+      const docRef = await addDoc(collection(db, 'comments'), newComment);
+      setComments([...post.comments, { id: docRef.id, ...newComment }]);
+      setComment('');
+      queryClient.invalidateQueries('post');
+    } catch (error) {
+      console.error('댓글 추가 에러: ', error);
+    }
   };
+
   //댓글삭제
-  const handleDelete = (id) => {
-    setCommentArray((commentList) => {
-      const newCommentList = [...commentList];
-      newCommentList.splice(id, 1);
-      return newCommentList;
-    });
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteDoc(doc(db, 'comments', commentId));
+      setComments(post.comments.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error('댓글 삭제 에러: ', error);
+    }
   };
 
   return (
@@ -122,10 +182,17 @@ function DetailPage() {
             <input type="submit" value="등록" />
           </form>
           <div>
-            {commentArray.map((value, id) => (
-              <div key={id}>
-                {value}
-                <button onClick={() => handleDelete(id)}>삭제</button>
+            {post?.comments?.map((comment) => (
+              <div key={comment.id}>
+                <div>
+                  {comment.author}
+                  <div>{comment.comment}</div>
+                </div>
+                {currentUser && comment.userId === currentUser.uid && (
+                  <button onClick={() => handleDeleteComment(comment.id)}>
+                    삭제
+                  </button>
+                )}
               </div>
             ))}
           </div>
