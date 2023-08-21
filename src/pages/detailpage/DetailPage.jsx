@@ -14,6 +14,9 @@ import {
 import { db, auth } from '../../firebaseConfig';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
+import Likes from "../../components/likes/Likes";
+import Bookmark from "../../components/bookmark/Bookmark";
+
 
 function DetailPage() {
   const queryClient = useQueryClient();
@@ -151,22 +154,8 @@ function DetailPage() {
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
         <div>
-          <div style={{ display: 'flex' }}>
-            <button>또가요</button>
-            <button>안가요</button>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <div
-              style={{ width: '50%', height: '20px', backgroundColor: 'Red' }}
-            >
-              50%
-            </div>
-            <div
-              style={{ width: '50%', height: '20px', backgroundColor: 'Blue' }}
-            >
-              50%
-            </div>
-          </div>
+          <Bookmark />
+          <Likes />
         </div>
         {/* 댓글창 */}
         <span
