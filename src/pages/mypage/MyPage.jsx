@@ -2,9 +2,19 @@ import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { userAtom } from "../../store/userAtom";
 import Unloggined from "../../common/Unloggined";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
+import SavedList from "./components/SavedList";
+import MyList from "./components/MyList";
+import { updateProfile } from "firebase/auth";
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -12,13 +22,12 @@ function MyPage() {
   const userUid = userUidObject.uid;
 
   const [isMyListActived, setIsMyListActived] = useState(true);
-  const [isSavedListActived, setIsSavedListActived] = useState(false);
+  const [isEditorAcitved, setIsEditorActived] = useState(false);
 
   const [allLikedData, setAllLikedData] = useState([]);
-  const [ownSavedData, setOwnSavedData] = useState([]);
-
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [newNickname, setNewNickname] = useState("");
 
   const fetchData = async () => {
     // 또가요 데이터
@@ -34,9 +43,6 @@ function MyPage() {
     const savedQuerySnapshot = await getDocs(savedQ);
     const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
 
-    // 모든 저장 데이터 저장
-    setOwnSavedData(savedData);
-
     // 모든 글 데이터
     const postsQ = query(collection(db, "posts"));
     const postsQuerySnapshot = await getDocs(postsQ);
@@ -45,12 +51,12 @@ function MyPage() {
       id: doc.id,
     }));
 
-    // 내가 쓴 글 목록
+    // 내가 쓴 글 목록 저장
     setMyPosts(postsData.filter((data) => data.uid === userUid));
 
-    // 저장한 글 목록
+    // 저장한 글 목록 저장
     const filteredData = postsData.filter((post) => {
-      return ownSavedData.some((data) => post.id === data.postId);
+      return savedData.some((data) => post.id === data.postId);
     });
     setSavedPosts(filteredData);
   };
@@ -60,14 +66,55 @@ function MyPage() {
     fetchData();
   }, []);
 
+  // 버튼 클릭 시 리스트 전환 함수
   const activeSavedListHandler = () => {
-    setIsSavedListActived(true);
     setIsMyListActived(false);
   };
-
   const activeMyListHandler = () => {
-    setIsSavedListActived(false);
     setIsMyListActived(true);
+  };
+
+  const startEditNameHandler = () => {
+    setIsEditorActived(true);
+    console.log("수정 시작");
+  };
+
+  // 닉네임 중복 검사 및 수정 완료 핸들러
+  const endEditNameHandler = async () => {
+    const userQ = query(collection(db, "users"));
+    const querySnapshot = await getDocs(userQ);
+    const data = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    const ownData = data.find((item) => item.uid === userUid);
+    const usedNickname = data.filter((item) => item.nickname === newNickname);
+
+    try {
+      if (!!newNickname === false) {
+        return alert("닉네임을 입력해 주세요");
+      } else if (usedNickname.length > 0) {
+        return alert(
+          "이미 사용 중인 닉네임입니다. 다른 닉네임을 사용해 주세요."
+        );
+      } else if (usedNickname.length === 0) {
+        setIsEditorActived(false);
+
+        // 1. firebase auth 정보 업데이트
+        updateProfile(auth.currentUser, {
+          displayName: newNickname,
+        });
+        // 2. firestore users db 정보 업데이트
+        const userRef = doc(db, "users", `${ownData.id}`);
+        await updateDoc(userRef, { nickname: newNickname });
+
+        fetchData();
+
+        return alert("닉네임 수정 완료!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -82,8 +129,37 @@ function MyPage() {
                 <button>수정</button>
               </div>
               <div>
-                <input type="text" value={user.displayName} disabled />
-                <button>수정</button>
+                {/* 닉네임 인풋 */}
+                {isEditorAcitved ? (
+                  <input
+                    type="text"
+                    value={newNickname}
+                    placeholder="새로운 닉네임을 입력하세요"
+                    onChange={(e) => {
+                      setNewNickname(e.target.value);
+                    }}
+                  />
+                ) : (
+                  <input type="text" value={user.displayName} disabled />
+                )}
+                {/* 닉네임 수정 버튼 */}
+                {isEditorAcitved ? (
+                  <button
+                    onClick={() => {
+                      endEditNameHandler();
+                    }}
+                  >
+                    완료
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      startEditNameHandler();
+                    }}
+                  >
+                    수정
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -94,52 +170,14 @@ function MyPage() {
               <span onClick={activeSavedListHandler}>저장한글</span>
             </div>
             <div className="ListContainerInner">
+              {/* 버튼 전환 시 리스트 전환 */}
               {isMyListActived === true ? (
-                // 내가 쓴 글 리스트 출력
-                <div>
-                  {myPosts?.map((post) => {
-                    const likedCount = allLikedData?.filter(
-                      (data) => data.postId === post.id && data.state === "like"
-                    );
-                    const dislikedCount = allLikedData?.filter(
-                      (data) =>
-                        data.postId === post.id && data.state === "dislike"
-                    );
-                    return (
-                      <div className="myListBox" key={post.id}>
-                        <div className="ImgBox">이미지</div>
-                        <div className="ContentInfo">
-                          <span>{post.author}</span>
-                          <span>또가요({likedCount.length})</span>
-                          <span>안가요({dislikedCount.lenght})</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <MyList myPosts={myPosts} allLikedData={allLikedData} />
               ) : (
-                // 저장한 글 출력
-                <div>
-                  {savedPosts?.map((post) => {
-                    const likedCount = allLikedData?.filter(
-                      (data) => data.postId === post.id && data.state === "like"
-                    );
-                    const dislikedCount = allLikedData?.filter(
-                      (data) =>
-                        data.postId === post.id && data.state === "dislike"
-                    );
-                    return (
-                      <div className="myListBox" key={post.id}>
-                        <div className="ImgBox">이미지</div>
-                        <div className="ContentInfo">
-                          <span>{post.author}</span>
-                          <span>또가요({likedCount.length})</span>
-                          <span>안가요({dislikedCount.lenght})</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <SavedList
+                  savedPosts={savedPosts}
+                  allLikedData={allLikedData}
+                />
               )}
             </div>
           </div>
