@@ -12,6 +12,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [isUsedNickname, setIsUsedNickname] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);

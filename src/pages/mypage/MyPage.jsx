@@ -24,12 +24,24 @@ function MyPage() {
   const [isMyListActived, setIsMyListActived] = useState(true);
   const [isEditorAcitved, setIsEditorActived] = useState(false);
 
+  const [ownData, setOwnData] = useState([]);
+  const [usedNickname, setUsedNickname] = useState([]);
   const [allLikedData, setAllLikedData] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [newNickname, setNewNickname] = useState("");
 
   const fetchData = async () => {
+    // 유저 데이터
+    const userQ = query(collection(db, "users"));
+    const querySnapshot = await getDocs(userQ);
+    const data = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setOwnData(data.find((item) => item.uid === userUid));
+    setUsedNickname(data.filter((item) => item.nickname === newNickname));
+
     // 또가요 데이터
     const likedQ = query(collection(db, "likes"));
     const likedQuerySnapshot = await getDocs(likedQ);
@@ -74,6 +86,10 @@ function MyPage() {
     setIsMyListActived(true);
   };
 
+  // 프로필 사진 수정 핸들러
+  const changePhotoHandler = () => {};
+
+  // 닉네임 수정 버튼 클릭 핸들러
   const startEditNameHandler = () => {
     setIsEditorActived(true);
     console.log("수정 시작");
@@ -81,15 +97,6 @@ function MyPage() {
 
   // 닉네임 중복 검사 및 수정 완료 핸들러
   const endEditNameHandler = async () => {
-    const userQ = query(collection(db, "users"));
-    const querySnapshot = await getDocs(userQ);
-    const data = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    const ownData = data.find((item) => item.uid === userUid);
-    const usedNickname = data.filter((item) => item.nickname === newNickname);
-
     try {
       if (!!newNickname === false) {
         return alert("닉네임을 입력해 주세요");
@@ -125,40 +132,60 @@ function MyPage() {
             <p>마이페이지</p>
             <div>
               <div>
-                <div>프로필사진</div>
-                <button>수정</button>
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="프로필 이미지" />
+                ) : (
+                  <img src="" alt="프로필 이미지 미등록" />
+                )}
+                <button
+                  onClick={() => {
+                    changePhotoHandler();
+                  }}
+                >
+                  수정
+                </button>
               </div>
               <div>
-                {/* 닉네임 인풋 */}
-                {isEditorAcitved ? (
-                  <input
-                    type="text"
-                    value={newNickname}
-                    placeholder="새로운 닉네임을 입력하세요"
-                    onChange={(e) => {
-                      setNewNickname(e.target.value);
-                    }}
-                  />
+                {/* SNS 이용자는 닉네임 못 바꾸게 함 */}
+                {ownData === undefined ? (
+                  <div>
+                    <input type="text" value={user.displayName} disabled />
+                    <p>SNS 로그인 사용 시 닉네임을 수정할 수 없습니다.</p>
+                  </div>
                 ) : (
-                  <input type="text" value={user.displayName} disabled />
-                )}
-                {/* 닉네임 수정 버튼 */}
-                {isEditorAcitved ? (
-                  <button
-                    onClick={() => {
-                      endEditNameHandler();
-                    }}
-                  >
-                    완료
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      startEditNameHandler();
-                    }}
-                  >
-                    수정
-                  </button>
+                  <div>
+                    {/* 닉네임 인풋 */}
+                    {isEditorAcitved ? (
+                      <input
+                        type="text"
+                        value={newNickname}
+                        placeholder="새로운 닉네임을 입력하세요"
+                        onChange={(e) => {
+                          setNewNickname(e.target.value);
+                        }}
+                      />
+                    ) : (
+                      <input type="text" value={user.displayName} disabled />
+                    )}
+                    {/* 닉네임 수정 버튼 */}
+                    {isEditorAcitved ? (
+                      <button
+                        onClick={() => {
+                          endEditNameHandler();
+                        }}
+                      >
+                        완료
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          startEditNameHandler();
+                        }}
+                      >
+                        수정
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
