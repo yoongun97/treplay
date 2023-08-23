@@ -70,6 +70,13 @@ function PlaceSearch() {
     setSearchResults([]); // 결과를 선택하면 검색 목록 숨기기
   };
 
+  // 엔터 키 이벤트 핸들러
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return isLoaded ? (
     <div>
       <div>
@@ -78,6 +85,7 @@ function PlaceSearch() {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Enter an address to search"
+          onKeyDown={handleEnterKey}
         />
         <button onClick={handleSearch}>검색</button>
         <div>
