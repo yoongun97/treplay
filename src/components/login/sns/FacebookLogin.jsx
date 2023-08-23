@@ -1,12 +1,14 @@
 import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 function FacebookLogin() {
+  const navigate = useNavigate();
   const handleFacebookLogin = async () => {
     try {
       const provider = new FacebookAuthProvider();
-      const data = await signInWithPopup(auth, provider);
-      console.log(data);
+      const userCredential = await signInWithPopup(auth, provider);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

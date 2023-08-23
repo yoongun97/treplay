@@ -6,7 +6,7 @@ import { db } from '../../firebaseConfig';
 import PageNation from '../../components/pageNation/PageNation';
 
 function CategoryPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const { nation, category } = useParams();
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,23 +17,27 @@ function CategoryPage() {
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setSearch(e.currentTarget.value);
     }
   };
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
 
     const postsData = [];
     querySnapshot.forEach((doc) => {
-      postsData.push({ ...doc.data(), id: doc.id });
+
+      postsData.push({
+        ...doc.data(),
+        id: doc.id,
+      });
     });
 
     return postsData;
@@ -47,7 +51,7 @@ function CategoryPage() {
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
@@ -93,6 +97,7 @@ function CategoryPage() {
             </Link>
           </div>
         ))}
+
       </div>
       <PageNation
         postsViewPage={postsViewPage}

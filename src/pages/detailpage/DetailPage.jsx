@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import PlaceMap from '../../components/place/PlaceMap';
+import React, { useEffect, useState } from "react";
+import PlaceMap from "../../components/place/PlaceMap";
 import {
   addDoc,
   collection,
@@ -20,7 +20,7 @@ import Bookmark from '../../components/bookmark/Bookmark';
 function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
   console.log({ currentUser });
@@ -29,14 +29,14 @@ function DetailPage() {
     isLoading,
     isError,
     error,
-  } = useQuery('post', async () => {
-    const postRef = doc(db, 'posts', id);
+  } = useQuery("post", async () => {
+    const postRef = doc(db, "posts", id);
     const docSnapshot = await getDoc(postRef);
     //firebase 에서 댓글 불러오기
     if (docSnapshot.exists()) {
       const commentsRef = query(
-        collection(db, 'comments'),
-        where('postId', '==', id)
+        collection(db, "comments"),
+        where("postId", "==", id)
       );
       const commentsSnapshot = await getDocs(commentsRef);
       const commentsData = [];
@@ -51,7 +51,7 @@ function DetailPage() {
         //firebase 에서 댓글 불러오기
       };
     } else {
-      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
+      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
   console.log({ id });
@@ -85,7 +85,7 @@ function DetailPage() {
 
   const commentSubmit = async (e) => {
     e.preventDefault();
-    if (comment === '') {
+    if (comment === "") {
       return;
     }
 
@@ -96,23 +96,23 @@ function DetailPage() {
         userId: currentUser.uid,
         author: currentUser.displayName,
       };
-      const docRef = await addDoc(collection(db, 'comments'), newComment);
+      const docRef = await addDoc(collection(db, "comments"), newComment);
       setComments([...post.comments, { id: docRef.id, ...newComment }]);
-      setComment('');
-      queryClient.invalidateQueries('post');
+      setComment("");
+      queryClient.invalidateQueries("post");
     } catch (error) {
-      console.error('댓글 추가 에러: ', error);
+      console.error("댓글 추가 에러: ", error);
     }
   };
 
   //댓글삭제
   const handleDeleteComment = async (commentId) => {
     try {
-      await deleteDoc(doc(db, 'comments', commentId));
+      await deleteDoc(doc(db, "comments", commentId));
       setComments(post.comments.filter((comment) => comment.id !== commentId));
       queryClient.invalidateQueries('post');
     } catch (error) {
-      console.error('댓글 삭제 에러: ', error);
+      console.error("댓글 삭제 에러: ", error);
     }
   };
 
@@ -120,32 +120,32 @@ function DetailPage() {
     <>
       <div
         style={{
-          maxWidth: '1200px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          margin: '0 auto 0 auto',
+          maxWidth: "1200px",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "0 auto 0 auto",
         }}
       >
         <h2>{post?.placeName}</h2>
-        <button style={{ margin: ' 20px 5% 20px auto' }}>공유하기</button>
+        <button style={{ margin: " 20px 5% 20px auto" }}>공유하기</button>
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            margin: '0 auto 0 auto',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "0 auto 0 auto",
           }}
         >
-          <div style={{ display: 'flex', marginLeft: 'auto' }}>
+          <div style={{ display: "flex", marginLeft: "auto" }}>
             <button>수정</button>
             <button>삭제</button>
           </div>
           <img
             style={{
-              width: '400px',
-              height: '400px',
+              width: "400px",
+              height: "400px",
             }}
             src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
             alt="디테일 이미지"
@@ -159,7 +159,7 @@ function DetailPage() {
         </div>
         {/* 댓글창 */}
         <span
-          style={{ width: '800px', height: '300px', border: '1px solid black' }}
+          style={{ width: "800px", height: "300px", border: "1px solid black" }}
         >
           <form onSubmit={commentSubmit}>
             <textarea
