@@ -33,7 +33,6 @@ function CategoryPage() {
 
     const postsData = [];
     querySnapshot.forEach((doc) => {
-
       postsData.push({
         ...doc.data(),
         id: doc.id,
@@ -75,6 +74,7 @@ function CategoryPage() {
         </div>
       </div>
       <Link to={`/create`}>글 작성하기</Link>
+
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {currentPosts.map((post) => (
           <div key={post.id}>

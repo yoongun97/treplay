@@ -10,6 +10,7 @@ import {
   onSnapshot,
   query,
   where,
+
 } from 'firebase/firestore';
 import { db, auth } from '../../firebaseConfig';
 import { useParams } from 'react-router-dom';
@@ -21,9 +22,9 @@ function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [comment, setComment] = useState("");
+
   const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
-  console.log({ currentUser });
   const {
     data: post,
     isLoading,
@@ -54,7 +55,7 @@ function DetailPage() {
       throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
-  console.log({ id });
+
   //댓글 작성,삭제 실시간으로 보여주기
   // useEffect(() => {
   //   const commentsRef = query(
