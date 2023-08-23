@@ -31,7 +31,7 @@ function MyPage() {
   const [allLikedData, setAllLikedData] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [newNickname, setNewNickname] = useState("");
+  const [newNickname, setNewNickname] = useState(user.displayName);
 
   const fetchData = async () => {
     // 유저 데이터
@@ -189,7 +189,6 @@ function MyPage() {
                       <input
                         type="text"
                         value={newNickname}
-                        placeholder="새로운 닉네임을 입력하세요"
                         onChange={(e) => {
                           setNewNickname(e.target.value);
                         }}
