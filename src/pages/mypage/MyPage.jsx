@@ -166,10 +166,14 @@ function MyPage() {
                 ) : (
                   <img src="" alt="프로필 이미지 미등록" />
                 )}
-                <input
-                  type="file"
-                  onChange={(e) => uploadPhotoHandler(e)}
-                ></input>
+                <div>
+                  <input
+                    type="file"
+                    onChange={(e) => uploadPhotoHandler(e)}
+                  ></input>
+                  <span>파일버튼</span>
+                  {/* 추후 input display:none하고 span 태그로 버튼 모양 만들기 */}
+                </div>
               </div>
               <div>
                 {/* SNS 이용자는 닉네임 못 바꾸게 함 */}
