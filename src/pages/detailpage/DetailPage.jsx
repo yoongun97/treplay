@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import Likes from "../../components/likes/Likes";
 import Bookmark from "../../components/bookmark/Bookmark";
+import ImageSlide from "../../components/ImageSlide";
 
 function DetailPage() {
   const queryClient = useQueryClient();
@@ -53,22 +54,23 @@ function DetailPage() {
       throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
-  //댓글 작성,삭제 실시간으로 보여주기
-  // useEffect(() => {
-  //   const commentsRef = query(
-  //     collection(db, 'comments'),
-  //     where('postId', '==', id)
-  //   );
-  //   const commentsUpdate = onSnapshot(commentsRef, (snapshot) => {
-  //     const commentsData = [];
-  //     snapshot.forEach((doc) => {
-  //       commentsData.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     setComments(commentsData);
-  //   });
 
-  //   return () => commentsUpdate();
-  // }, [id]);
+  //댓글 작성,삭제 실시간으로 보여주기
+  useEffect(() => {
+    const commentsRef = query(
+      collection(db, "comments"),
+      where("postId", "==", id)
+    );
+    const commentsUpdate = onSnapshot(commentsRef, (snapshot) => {
+      const commentsData = [];
+      snapshot.forEach((doc) => {
+        commentsData.push({ id: doc.id, ...doc.data() });
+      });
+      setComments(commentsData);
+    });
+
+    return () => commentsUpdate();
+  }, [id]);
 
   if (isLoading) {
     return <div>데이터 가져오는 중...</div>;
@@ -139,6 +141,7 @@ function DetailPage() {
             <button>수정</button>
             <button>삭제</button>
           </div>
+          {/* <ImageSlide /> */}
           <img
             style={{
               width: "400px",
