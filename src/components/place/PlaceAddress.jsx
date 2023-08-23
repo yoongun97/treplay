@@ -32,7 +32,7 @@ function PlaceAddress() {
   return (
     <div style={{ backgroundColor: "gray" }}>
       <div>
-        <input id="search-box" placeholder="장소명을 입력하세요" />
+        {/* <input id="search-box" placeholder="장소명을 입력하세요" /> */}
         <button
           onClick={(e) => {
             setPost({
