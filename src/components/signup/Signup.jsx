@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 
-
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +12,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [isUsedNickname, setIsUsedNickname] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);

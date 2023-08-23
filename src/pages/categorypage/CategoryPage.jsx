@@ -29,8 +29,10 @@ function CategoryPage() {
 
     const postsData = [];
     querySnapshot.forEach((doc) => {
-      postsData.push(doc.data());
-      console.log(doc.id);
+      postsData.push({
+        ...doc.data(),
+        id: doc.id,
+      });
     });
 
     return postsData;
@@ -67,7 +69,7 @@ function CategoryPage() {
       <div>
         {posts &&
           posts.map((post) => (
-            <div key={post.uid}>
+            <div key={post.id}>
               <div>
                 <p>{post.author}</p>
                 <p>{post.placeName}</p>
