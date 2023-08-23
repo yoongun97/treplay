@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import * as s from "./StyledSignup";
+// import * as s from "./StyledSignup";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 
 function Signup() {

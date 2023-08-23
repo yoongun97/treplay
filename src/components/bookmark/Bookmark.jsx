@@ -2,7 +2,6 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  doc,
   getDocs,
   query,
   where,

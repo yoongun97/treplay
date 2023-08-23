@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs, query, where } from "@firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { db } from "../../firebaseConfig";
 import { useAtom } from "jotai";
