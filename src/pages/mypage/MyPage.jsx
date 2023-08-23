@@ -10,11 +10,13 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db, storage } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import SavedList from "./components/SavedList";
 import MyList from "./components/MyList";
 import { updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useQuery } from "react-query";
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -86,13 +88,28 @@ function MyPage() {
     setIsMyListActived(true);
   };
 
-  // 프로필 사진 수정 핸들러
-  const changePhotoHandler = () => {};
+  // 프로필 사진 업로드 및 변경 핸들러
+  const uploadPhotoHandler = (e) => {
+    try {
+      const image = e.target.files[0];
+      const imageRef = ref(storage, `ProfileImages/${image.name}`);
+      uploadBytes(imageRef, image).then(() => {
+        getDownloadURL(imageRef).then(async (url) => {
+          await updateProfile(auth.currentUser, {
+            photoURL: url,
+          });
+          fetchData();
+          alert("프로필 수정 완료!");
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // 닉네임 수정 버튼 클릭 핸들러
   const startEditNameHandler = () => {
     setIsEditorActived(true);
-    console.log("수정 시작");
   };
 
   // 닉네임 중복 검사 및 수정 완료 핸들러
@@ -124,6 +141,18 @@ function MyPage() {
     }
   };
 
+  // 리액트 쿼리로 로딩/에러 처리
+
+  const { isLoading, iserror, error } = useQuery("userData", fetchData);
+
+  if (isLoading) {
+    return <div>로딩 중입니다...</div>;
+  }
+
+  if (iserror) {
+    return alert(`에러 발생! Error Code: ${error.message}`);
+  }
+
   return (
     <div>
       {user ? (
@@ -133,17 +162,14 @@ function MyPage() {
             <div>
               <div>
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="프로필 이미지" />
+                  <img src={user.photoURL} alt="프로필 이미지" width="100px" />
                 ) : (
                   <img src="" alt="프로필 이미지 미등록" />
                 )}
-                <button
-                  onClick={() => {
-                    changePhotoHandler();
-                  }}
-                >
-                  수정
-                </button>
+                <input
+                  type="file"
+                  onChange={(e) => uploadPhotoHandler(e)}
+                ></input>
               </div>
               <div>
                 {/* SNS 이용자는 닉네임 못 바꾸게 함 */}

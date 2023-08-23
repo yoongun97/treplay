@@ -11,7 +11,6 @@ function MyList({ myPosts, allLikedData }) {
           (data) => data.postId === post.id && data.state === "dislike"
         );
         const postImg = post.postImgs;
-        console.log(postImg);
         return (
           <div className="ListBox" key={post.id}>
             {postImg ? (
