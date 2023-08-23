@@ -10,18 +10,20 @@ import {
   onSnapshot,
   query,
   where,
-} from "firebase/firestore";
-import { db, auth } from "../../firebaseConfig";
-import { useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
-import Likes from "../../components/likes/Likes";
-import Bookmark from "../../components/bookmark/Bookmark";
+
+} from 'firebase/firestore';
+import { db, auth } from '../../firebaseConfig';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
+import Likes from '../../components/likes/Likes';
+import Bookmark from '../../components/bookmark/Bookmark';
 
 function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [comment, setComment] = useState("");
-  const [, setComments] = useState([]);
+
+  const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
   const {
     data: post,
@@ -53,6 +55,7 @@ function DetailPage() {
       throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
+
   //댓글 작성,삭제 실시간으로 보여주기
   // useEffect(() => {
   //   const commentsRef = query(
@@ -108,6 +111,7 @@ function DetailPage() {
     try {
       await deleteDoc(doc(db, "comments", commentId));
       setComments(post.comments.filter((comment) => comment.id !== commentId));
+      queryClient.invalidateQueries('post');
     } catch (error) {
       console.error("댓글 삭제 에러: ", error);
     }
@@ -159,7 +163,7 @@ function DetailPage() {
           style={{ width: "800px", height: "300px", border: "1px solid black" }}
         >
           <form onSubmit={commentSubmit}>
-            <input
+            <textarea
               type="text"
               placeholder="댓글을 입력해주세요"
               value={comment}
