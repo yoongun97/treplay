@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [post, setPost] = useAtom(postAtom);
+  const [post] = useAtom(postAtom);
   const [user] = useAtom(userAtom);
   const date = new Date();
   const navigate = useNavigate();

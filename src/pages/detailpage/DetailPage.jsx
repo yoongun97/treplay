@@ -22,7 +22,8 @@ function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [comment, setComment] = useState("");
-  const [, setComments] = useState([]);
+
+  const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
   const {
     data: post,
@@ -110,6 +111,7 @@ function DetailPage() {
     try {
       await deleteDoc(doc(db, "comments", commentId));
       setComments(post.comments.filter((comment) => comment.id !== commentId));
+      queryClient.invalidateQueries("post");
     } catch (error) {
       console.error("댓글 삭제 에러: ", error);
     }
@@ -162,7 +164,7 @@ function DetailPage() {
           style={{ width: "800px", height: "300px", border: "1px solid black" }}
         >
           <form onSubmit={commentSubmit}>
-            <input
+            <textarea
               type="text"
               placeholder="댓글을 입력해주세요"
               value={comment}

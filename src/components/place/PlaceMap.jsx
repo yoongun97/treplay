@@ -41,6 +41,7 @@ function PlaceMap({ postAddress }) {
           position: location,
           map,
         });
+        console.log(marker);
         // 변환된 주소를 setAddress를 통해 상태에 업데이트
         setAddress(results[0].formatted_address);
       } else {
