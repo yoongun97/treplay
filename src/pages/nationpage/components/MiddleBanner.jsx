@@ -30,7 +30,8 @@ const MiddleBannerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 140px auto;
+  padding: 140px 0;
+  background-color: #f2f8ff;
 `;
 const ImageBox = styled.div`
   width: 400px;
