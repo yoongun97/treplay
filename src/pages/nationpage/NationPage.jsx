@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Category from "./components/Category";
 import MiddleBanner from "./components/MiddleBanner";
+import Preview from "./components/Preview";
 
 function NationPage() {
   // category 파라미터를 가져옴
@@ -13,21 +14,7 @@ function NationPage() {
       <div className="ImageSlide">이미지 배너 슬라이드</div>
       <Category />
       <MiddleBanner />
-      <div className="PreviewContainer">
-        <h2>구경해봐요 또갈집</h2>
-        <div className="PreviewButtonBox">
-          <button>숙소</button>
-          <button>맛집</button>
-          <button>관광명소</button>
-        </div>
-        <div className="PreviewListContainer">
-          <div className="PreviewListBox">
-            <div>이미지</div>
-            <div>likes</div>
-            <div>dislikes</div>
-          </div>
-        </div>
-      </div>
+      <Preview />
       <div className="EventBannerContainer">
         <div>이미지</div>
         <div className="EventBannerLeftBox">
