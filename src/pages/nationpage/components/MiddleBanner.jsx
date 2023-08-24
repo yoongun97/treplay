@@ -9,12 +9,18 @@ const MiddleBanner = () => {
       <MiddleBannerPhrasesBox>
         <h2>모여봐요 또갈집</h2>
         <h3>또 다른 프로필을 구경해 보세요</h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
-          numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
-          sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
-          possimus esse?
-        </p>
+        <div>
+          <span>
+            {" "}
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
+            numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
+            sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
+            possimus esse? Lorem ipsum dolor sit amet consectetur, adipisicing
+            elit. Maxime numquam ducimus, possimus porro saepe vel assumenda!
+            Eveniet maiores sed animi aperiam, nulla deserunt voluptatem quod,
+            saepe sunt soluta possimus esse?
+          </span>
+        </div>
         <MoreInfoButton>
           <span>더 알아보기</span>
           <span>{`>`}</span>
@@ -55,11 +61,22 @@ const MiddleBannerPhrasesBox = styled.div`
     font-size: 22px;
   }
 
-  & > p {
+  & > div {
     margin-bottom: 16px;
     font-size: 16px;
     font-weight: 300;
+    line-height: 1.5;
     color: #878d94;
+
+    & > span {
+      overflow: hidden;
+      white-space: normal;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      word-break: keep-all;
+    }
   }
 `;
 

@@ -114,7 +114,7 @@ const PreviewListBox = styled.div`
 const ImageBox = styled.div`
   width: 380px;
   height: 380px;
-  margin: 80px 0 20px;
+  margin-bottom: 20px;
   border-radius: 30px;
   background-color: #999;
 `;
