@@ -27,10 +27,6 @@ export default Category;
 const CategoryContainer = styled.div`
   margin: 140px 0;
   text-align: center;
-  & > h2 {
-    font-size: 28px;
-    color: #0a58be;
-  }
 `;
 
 const CategoryButtonBox = styled.div`
@@ -48,9 +44,8 @@ const CategoryBox = styled(Link)`
   height: 300px;
   border-radius: 50%;
   background-color: #999;
-  text-decoration: none;
 
-  & > span {
-    color: #000;
-  }
+  font-size: 20px;
+  font-weight: 400;
+  color: white;
 `;
