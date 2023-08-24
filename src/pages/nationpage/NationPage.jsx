@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Category from "./components/Category";
+import MiddleBanner from "./components/MiddleBanner";
 
 function NationPage() {
   // category 파라미터를 가져옴
@@ -11,24 +12,7 @@ function NationPage() {
       {/* 최상위 이미지 배너 슬라이드 삽입 */}
       <div className="ImageSlide">이미지 배너 슬라이드</div>
       <Category />
-      <div className="MiddleBannerContainer">
-        <div>이미지1</div>
-        <div>이미지2</div>
-        <div className="MiddleBannerPhrasesBox">
-          <h3>모여봐요 또갈집</h3>
-          <h4>또 다른 프로필을 구경해 보세요</h4>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
-            numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
-            sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
-            possimus esse?
-          </p>
-          <button className="MoreInfoButton">
-            <span>더 알아보기</span>
-            <img src="" alt=">" />
-          </button>
-        </div>
-      </div>
+      <MiddleBanner />
       <div className="PreviewContainer">
         <h2>구경해봐요 또갈집</h2>
         <div className="PreviewButtonBox">
