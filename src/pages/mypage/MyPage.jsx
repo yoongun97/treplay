@@ -10,13 +10,13 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { auth, db, storage } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import SavedList from "./components/SavedList";
 import MyList from "./components/MyList";
 import { updateProfile } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useQuery } from "react-query";
+import ProfileImage from "./components/ProfileImage";
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -92,25 +92,6 @@ function MyPage() {
     setIsMyListActived(true);
   };
 
-  // 프로필 사진 업로드 및 변경 핸들러
-  const uploadPhotoHandler = (e) => {
-    try {
-      const image = e.target.files[0];
-      const imageRef = ref(storage, `ProfileImages/${image.name}`);
-      uploadBytes(imageRef, image).then(() => {
-        getDownloadURL(imageRef).then(async (url) => {
-          await updateProfile(auth.currentUser, {
-            photoURL: url,
-          });
-          fetchData();
-          alert("프로필 수정 완료!");
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // 닉네임 수정 버튼 클릭 핸들러
   const startEditNameHandler = () => {
     setIsEditorActived(true);
@@ -167,21 +148,7 @@ function MyPage() {
           <div className="UserInfoInner">
             <p>마이페이지</p>
             <div>
-              <div>
-                {user.photoURL ? (
-                  <img src={user.photoURL} alt="프로필 이미지" width="100px" />
-                ) : (
-                  <img src="" alt="프로필 이미지 미등록" />
-                )}
-                <div>
-                  <input
-                    type="file"
-                    onChange={(e) => uploadPhotoHandler(e)}
-                  ></input>
-                  <span>파일버튼</span>
-                  {/* 추후 input display:none하고 span 태그로 버튼 모양 만들기 */}
-                </div>
-              </div>
+              <ProfileImage />
               <div>
                 {/* SNS 이용자는 닉네임 못 바꾸게 함 */}
                 {ownData === undefined ? (
@@ -228,12 +195,12 @@ function MyPage() {
           </div>
           <div className="ListContainer">
             <div>
-              {/* 내가 쓴 글/ 저장한 글 전환 */}
+              {/* 내가 쓴 글/ 저장한 글 전환 버튼 */}
               <span onClick={activeMyListHandler}>내가쓴글</span>
               <span onClick={activeSavedListHandler}>저장한글</span>
             </div>
             <div className="ListContainerInner">
-              {/* 버튼 전환 시 리스트 전환 */}
+              {/* 버튼 전환에 따른 리스트 변환 */}
               {isMyListActived === true ? (
                 <MyList myPosts={myPosts} allLikedData={allLikedData} />
               ) : (
