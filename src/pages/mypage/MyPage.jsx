@@ -26,23 +26,27 @@ function MyPage() {
   const [isMyListActived, setIsMyListActived] = useState(true);
   const [isEditorAcitved, setIsEditorActived] = useState(false);
 
+  const [allData, setAllData] = useState([]);
+
   const [ownData, setOwnData] = useState([]);
-  const [usedNickname, setUsedNickname] = useState([]);
   const [allLikedData, setAllLikedData] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [newNickname, setNewNickname] = useState(user.displayName);
+
+  // 입력 받는 새로운 닉네임
+  const [newNickname, setNewNickname] = useState(user?.displayName);
 
   const fetchData = async () => {
     // 유저 데이터
+
     const userQ = query(collection(db, "users"));
     const querySnapshot = await getDocs(userQ);
     const data = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
+    setAllData(data);
     setOwnData(data.find((item) => item.uid === userUid));
-    setUsedNickname(data.filter((item) => item.nickname === newNickname));
 
     // 또가요 데이터
     const likedQ = query(collection(db, "likes"));
@@ -115,6 +119,9 @@ function MyPage() {
   // 닉네임 중복 검사 및 수정 완료 핸들러
   const endEditNameHandler = async () => {
     try {
+      const usedNickname = allData.filter(
+        (item) => item.nickname === newNickname
+      );
       if (!!newNickname === false) {
         return alert("닉네임을 입력해 주세요");
       } else if (usedNickname.length > 0) {
