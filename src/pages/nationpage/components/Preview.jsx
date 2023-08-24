@@ -120,8 +120,11 @@ const ImageBox = styled.div`
 `;
 
 const LikesContainer = styled.div`
+  display: flex;
+  gap: 8px;
   & > div {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     height: 38px;
     padding: 6px 10px;
     border-radius: 10px;
@@ -129,10 +132,6 @@ const LikesContainer = styled.div`
     font-size: 16px;
     font-weight: 300;
     line-height: 38px;
-  }
-
-  & > div:first-child {
-    margin-right: 8px;
   }
 
   & > div > span:first-child {
