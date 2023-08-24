@@ -4,10 +4,12 @@ import { useQuery } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
 
 function CategoryPage() {
   const [search, setSearch] = useState('');
   const { nation, category } = useParams();
+
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
@@ -33,7 +35,10 @@ function CategoryPage() {
 
     const postsData = [];
     querySnapshot.forEach((doc) => {
-      postsData.push({ ...doc.data(), id: doc.id });
+      postsData.push({
+        ...doc.data(),
+        id: doc.id,
+      });
     });
 
     return postsData;
@@ -53,6 +58,7 @@ function CategoryPage() {
   const indexOfLastPost = currentPage * postsViewPage;
   const indexOfFirstPost = indexOfLastPost - postsViewPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  //또가요 안가요 보여주기
 
   return (
     <div>
@@ -71,15 +77,17 @@ function CategoryPage() {
         </div>
       </div>
       <Link to={`/create`}>글 작성하기</Link>
+
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {currentPosts.map((post) => (
-          <div key={post.id}>
+          //style 가로로 3개만 보여주기
+          <div key={post.id} style={{ flex: '0 0 calc(33.33% - 40px)' }}>
             <Link
               to={`/detail/${post.id}`}
               style={{
                 display: 'grid',
-                width: '300px',
-                height: '300px',
+                width: '500px',
+                height: '500px',
                 margin: '20px',
                 border: '1px solid black',
                 textDecoration: 'none',
@@ -93,8 +101,8 @@ function CategoryPage() {
                 alt="PostImgs"
                 src={post.postImgs}
                 style={{
-                  width: '150px',
-                  height: '150px',
+                  width: '250px',
+                  height: '250px',
                   margin: 'auto',
                   display: 'block',
                 }}
@@ -102,6 +110,7 @@ function CategoryPage() {
               <br />
               {post.postContent} <br />
               {post.placeLocation} <br />
+              <CategoryLikes id={post.id} />
             </Link>
           </div>
         ))}

@@ -30,8 +30,6 @@ function PlaceMap({ postAddress }) {
     geocoder.geocode({ address: postAddress }, (results, status) => {
       if (status === "OK" && results[0]) {
         const location = results[0].geometry.location;
-        console.log(results);
-        console.log(location);
 
         // 변환된 좌표를 기반으로 지도를 초기화하고 Map 객체를 생성합니다.
         const map = new window.google.maps.Map(mapElement.current, {
@@ -43,6 +41,7 @@ function PlaceMap({ postAddress }) {
           position: location,
           map,
         });
+        console.log(marker);
         // 변환된 주소를 setAddress를 통해 상태에 업데이트
         setAddress(results[0].formatted_address);
       } else {

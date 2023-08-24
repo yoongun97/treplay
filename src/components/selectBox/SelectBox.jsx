@@ -29,7 +29,6 @@ function SelectBox() {
     setIsActive1(false);
     setPost({ ...post, category: option });
   };
-  console.log(post);
   return (
     <StBox>
       <DropdownWrapper>

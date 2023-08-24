@@ -1,19 +1,19 @@
-import { Routes, Route, Link } from "react-router-dom";
-import Layout from "./common/Layout";
-import MainPage from "./pages/mainpage/MainPage";
-import NationPage from "./pages/nationpage/NationPage";
-import CategoryPage from "./pages/categorypage/CategoryPage";
-import DetailPage from "./pages/detailpage/DetailPage";
-import Create from "./pages/create/Create";
-import Edit from "./pages/edit/Edit";
-import MyPage from "./pages/mypage/MyPage";
-import Login from "./components/login/Login";
-import Signup from "./components/signup/Signup";
-import { useEffect } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom } from "./store/userAtom";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebaseConfig";
+import { Routes, Route, Link } from 'react-router-dom';
+import Layout from './common/Layout';
+import MainPage from './pages/mainpage/MainPage';
+import NationPage from './pages/nationpage/NationPage';
+import CategoryPage from './pages/categorypage/CategoryPage';
+import DetailPage from './pages/detailpage/DetailPage';
+import Create from './pages/create/Create';
+import Edit from './pages/edit/Edit';
+import MyPage from './pages/mypage/MyPage';
+import Login from './components/login/Login';
+import Signup from './components/signup/Signup';
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { userAtom } from './store/userAtom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebaseConfig';
 
 function App() {
   const [, setUser] = useAtom(userAtom); // userAtom 사용
