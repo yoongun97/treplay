@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import Likes from "../../components/likes/Likes";
 import Bookmark from "../../components/bookmark/Bookmark";
-import ImageSlide from "../../components/ImageSlide";
 import Comments from "../../components/comments/Comments";
 
 function DetailPage() {
