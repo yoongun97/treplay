@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PlaceMap from '../../components/place/PlaceMap';
 import {
   addDoc,
@@ -7,7 +7,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  onSnapshot,
   query,
   where,
 } from 'firebase/firestore';
@@ -21,7 +20,7 @@ function DetailPage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
+  const [setComments] = useState([]);
   const currentUser = auth.currentUser;
   console.log({ currentUser });
   const {
@@ -54,23 +53,6 @@ function DetailPage() {
       throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
     }
   });
-  console.log({ id });
-  //댓글 작성,삭제 실시간으로 보여주기
-  // useEffect(() => {
-  //   const commentsRef = query(
-  //     collection(db, 'comments'),
-  //     where('postId', '==', id)
-  //   );
-  //   const commentsUpdate = onSnapshot(commentsRef, (snapshot) => {
-  //     const commentsData = [];
-  //     snapshot.forEach((doc) => {
-  //       commentsData.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     setComments(commentsData);
-  //   });
-
-  //   return () => commentsUpdate();
-  // }, [id]);
 
   if (isLoading) {
     return <div>데이터 가져오는 중...</div>;

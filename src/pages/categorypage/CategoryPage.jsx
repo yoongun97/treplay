@@ -77,17 +77,29 @@ function CategoryPage() {
             <Link
               to={`/detail/${post.id}`}
               style={{
-                display: 'flex',
+                display: 'grid',
                 width: '300px',
-                height: '100px',
+                height: '300px',
                 margin: '20px',
                 border: '1px solid black',
                 textDecoration: 'none',
                 color: 'black',
+                textAlign: 'center',
               }}
             >
               {post.author} <br />
               {post.placeName} <br />
+              <img
+                alt="PostImgs"
+                src={post.postImgs}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  margin: 'auto',
+                  display: 'block',
+                }}
+              />
+              <br />
               {post.postContent} <br />
               {post.placeLocation} <br />
             </Link>
