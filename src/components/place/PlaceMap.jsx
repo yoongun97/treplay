@@ -21,7 +21,17 @@ function PlaceMap({ postAddress }) {
     return () => {
       document.head.removeChild(script);
     };
-  }, []);
+  }, [postAddress]);
+
+  // 주소 복사
+  const copyAddress = () => {
+    if (!document.queryCommandSupported("copy")) {
+      return alert("복사 기능이 지원되지 않는 브라우저입니다.");
+    }
+
+    navigator.clipboard.writeText(address);
+    alert("주소가 복사되었습니다.");
+  };
 
   // 지도 초기화 함수
   const initMap = () => {
@@ -56,7 +66,9 @@ function PlaceMap({ postAddress }) {
         <div ref={mapElement} style={{ minHeight: "400px", width: "600px" }} />
         <div style={{ display: "flex" }}>
           <p>{address}</p>
-          <button style={{ marginLeft: "auto" }}>주소복사</button>
+          <button style={{ marginLeft: "auto" }} onClick={copyAddress}>
+            주소복사
+          </button>
         </div>
       </div>
     </>

@@ -1,16 +1,20 @@
 import React from "react";
 import PlaceMap from "../../components/place/PlaceMap";
-import { doc, getDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
 import Likes from "../../components/likes/Likes";
 import Bookmark from "../../components/bookmark/Bookmark";
-import ImageSlide from "../../components/ImageSlide";
+import ImageSlide from "../../components/imageslide/ImageSlide";
 import Comments from "../../components/comments/Comments";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 
 function DetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [user] = useAtom(userAtom);
 
   const {
     data: post,
@@ -26,6 +30,23 @@ function DetailPage() {
     } else {
       throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
+  });
+
+  // url 복사
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("링크가 복사되었습니다.");
+    } catch (error) {
+      console.error("링크 복사 중 오류 발생:", error);
+      alert("링크 복사 중 오류가 발생했습니다.");
+    }
+  };
+
+  const deleteMutation = useMutation(async (post) => {
+    const postRef = doc(db, "posts", post.id);
+    await deleteDoc(postRef);
+    navigate(`/${post?.nation}/${post?.category}`);
   });
 
   if (isLoading) {
@@ -49,7 +70,14 @@ function DetailPage() {
         }}
       >
         <h2>{post?.placeName}</h2>
-        <button style={{ margin: " 20px 5% 20px auto" }}>공유하기</button>
+        <button
+          style={{ margin: " 20px 5% 20px auto" }}
+          onClick={copyUrl}
+          value={post.id}
+        >
+          공유하기
+        </button>
+
         <div
           style={{
             display: "flex",
@@ -58,19 +86,39 @@ function DetailPage() {
             margin: "0 auto 0 auto",
           }}
         >
-          <div style={{ display: "flex", marginLeft: "auto" }}>
-            <button>수정</button>
-            <button>삭제</button>
-          </div>
-          {/* <ImageSlide /> */}
-          <img
-            style={{
-              width: "400px",
-              height: "400px",
-            }}
-            src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
-            alt="디테일 이미지"
-          />
+          {user.uid === post?.uid ? (
+            <div style={{ display: "flex", marginLeft: "auto" }}>
+              <button
+                onClick={() => {
+                  navigate(`/edit/${id}`);
+                }}
+              >
+                수정
+              </button>
+              <button
+                onClick={() => {
+                  deleteMutation.mutate(post);
+                }}
+              >
+                삭제
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+          {post?.postImgs.length !== 0 ? (
+            <ImageSlide postImgs={post?.postImgs} />
+          ) : (
+            <img
+              style={{
+                width: "400px",
+                height: "400px",
+              }}
+              src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
+              alt="디테일 이미지"
+            />
+          )}
+
           <p>{post?.postContent}</p>
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
