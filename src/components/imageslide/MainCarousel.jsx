@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import "./slick.css";
+import { styled } from "styled-components";
 
 function SampleArrow(props) {
   const { className, style, onClick } = props;
@@ -17,63 +18,58 @@ function MainCarousel() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 3000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 4500,
     pauseOnHover: true,
     nextArrow: <SampleArrow />,
     prevArrow: <SampleArrow />,
-    appendDots: (dots) => (
-      <div
-        style={{
-          width: "100%",
-          position: "absolute",
-          bottom: "24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <ul style={{ listStyle: "none" }}>{dots}</ul>
-      </div>
-    ),
+    appendDots: (dots) => <ul style={{ listStyle: "none" }}>{dots}</ul>,
     dotsClass: "dots_custom",
   };
   return (
     <div>
-      <Slider
+      <StyledSlider
         {...settings}
         style={{
           height: "700px",
           width: "100%",
         }}
       >
-        <div>
-          <img
-            src="https://cdn.pixabay.com/photo/2016/03/04/19/36/beach-1236581_640.jpg"
-            alt="MainCarousel1"
-            style={{ maxWidth: "1920px", width: "100%", height: "700px" }}
-          />
-        </div>
-        <div>
-          <img
-            src="https://cdn.pixabay.com/photo/2016/07/30/00/03/winding-road-1556177_640.jpg"
-            alt="MainCarousel2"
-            style={{ maxWidth: "1920px", width: "100%", height: "700px" }}
-          />
-        </div>
-        <div>
-          <img
-            src="https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_640.jpg"
-            alt="MainCarousel3"
-            style={{ maxWidth: "1920px", width: "100%", height: "700px" }}
-          />
-        </div>
-      </Slider>
+        <ImageContainer>
+          <img src="image/mainBanner01.jpg" alt="MainCarousel1" />
+        </ImageContainer>
+        <ImageContainer>
+          <img src="image/mainBanner02.jpg" alt="MainCarousel2" />
+        </ImageContainer>
+        <ImageContainer>
+          <img src="image/mainBanner03.jpg" alt="MainCarousel3" />
+        </ImageContainer>
+      </StyledSlider>
     </div>
   );
 }
 
 export default MainCarousel;
+
+const StyledSlider = styled(Slider)`
+  display: flex;
+  justify-content: center;
+
+  & > ul {
+    position: absolute;
+    bottom: 24px;
+  }
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;

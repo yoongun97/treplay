@@ -11,7 +11,6 @@ function NationPage() {
 
   return (
     <div className="Container">
-      {/* 최상위 이미지 배너 슬라이드 삽입 */}
       <MainCarousel />
       <Category />
       <MiddleBanner />

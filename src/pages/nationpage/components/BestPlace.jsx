@@ -38,7 +38,8 @@ const BestPlace = () => {
 export default BestPlace;
 
 const BestPlaceContainer = styled.div`
-  margin: 140px 0;
+  max-width: 1920px;
+  margin: 140px auto;
   text-align: center;
   & > h2 {
     margin-bottom: 80px;
@@ -48,7 +49,6 @@ const BestPlaceContainer = styled.div`
 const BestPlaceBox = styled.div`
   position: relative;
   height: 420px;
-  min-width: 1600px;
   /* 박스 두 개 겹침 현상 때문에 min-width 설정 */
 `;
 
