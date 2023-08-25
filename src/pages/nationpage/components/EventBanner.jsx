@@ -17,7 +17,7 @@ const EventBanner = () => {
           </p>
           <LinkBox to={`/${nation}/맛집`}>
             <span>보러가기</span>
-            <span>{">"}</span>
+            <img src="icon/right_arrow_white.svg" alt="more_icon" />
           </LinkBox>
         </EventBannerBox>
         <EventBannerBox>
@@ -28,7 +28,7 @@ const EventBanner = () => {
           </p>
           <LinkBox to={`/create`}>
             <span>자랑하기</span>
-            <span>{">"}</span>
+            <img src="icon/right_arrow_white.svg" alt="more_icon" />
           </LinkBox>
         </EventBannerBox>
       </EventBannerBoxContainer>
@@ -81,7 +81,8 @@ const LinkBox = styled(Link)`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  padding: 0 18px;
+  align-items: center;
+  padding: 5px 5px 5px 18px;
   width: 100px;
   height: 36px;
   border: 1px solid #fff;
@@ -90,5 +91,4 @@ const LinkBox = styled(Link)`
   font-size: 14px;
   font-weight: 300;
   text-align: center;
-  line-height: 36px;
 `;

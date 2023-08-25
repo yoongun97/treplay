@@ -27,7 +27,7 @@ const BestPlace = () => {
           </div>
           <MoreInfoButton>
             <span>더 알아보기</span>
-            <span>{">"}</span>
+            <img src="icon/right_arrow_blue.svg" alt="more_icon" />
           </MoreInfoButton>
         </PhrasesBox>
       </BestPlaceBox>
