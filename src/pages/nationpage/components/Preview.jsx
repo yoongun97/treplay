@@ -15,11 +15,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <span>👍</span>
+              <img src="icon/like_icon.svg"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <span>👍</span>
+              <img src="icon/dislike_icon.svg"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>
@@ -28,11 +28,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <span>👍</span>
+              <img src="icon/like_icon.svg"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <span>👍</span>
+              <img src="icon/dislike_icon.svg"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>
@@ -41,11 +41,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <span>👍</span>
+              <img src="icon/like_icon.svg"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <span>👍</span>
+              <img src="icon/dislike_icon.svg"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>
@@ -134,7 +134,7 @@ const LikesContainer = styled.div`
     line-height: 38px;
   }
 
-  & > div > span:first-child {
+  & > div > img {
     margin-right: 12px;
   }
 `;
