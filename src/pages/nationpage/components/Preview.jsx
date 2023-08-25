@@ -15,11 +15,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <img src="icon/like_icon.svg"></img>
+              <img src="icon/like_icon.svg" alt="likesIcon"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <img src="icon/dislike_icon.svg"></img>
+              <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>
@@ -28,11 +28,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <img src="icon/like_icon.svg"></img>
+              <img src="icon/like_icon.svg" alt="likesIcon"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <img src="icon/dislike_icon.svg"></img>
+              <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>
@@ -41,11 +41,11 @@ const Preview = () => {
           <ImageBox>이미지</ImageBox>
           <LikesContainer>
             <div className="likesBox">
-              <img src="icon/like_icon.svg"></img>
+              <img src="icon/like_icon.svg" alt="likesIcon"></img>
               <span>likes</span>
             </div>
             <div className="dislikesBox">
-              <img src="icon/dislike_icon.svg"></img>
+              <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
               <span>dislikes</span>
             </div>
           </LikesContainer>

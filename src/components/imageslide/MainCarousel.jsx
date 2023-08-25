@@ -30,7 +30,7 @@ function MainCarousel() {
     dotsClass: "dots_custom",
   };
   return (
-    <div>
+    <div className="CarouselContainer">
       <StyledSlider
         {...settings}
         style={{
@@ -57,6 +57,10 @@ export default MainCarousel;
 const StyledSlider = styled(Slider)`
   display: flex;
   justify-content: center;
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
 
   & > ul {
     position: absolute;
@@ -65,11 +69,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 const ImageContainer = styled.div`
-  display: flex;
-  align-items: center;
+  width: 100%;
   & > img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
   }
 `;
