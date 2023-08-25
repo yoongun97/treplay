@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import Likes from "../../components/likes/Likes";
 import Bookmark from "../../components/bookmark/Bookmark";
-import ImageSlide from "../../components/imageslide/ImageSlide";
 import Comments from "../../components/comments/Comments";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
