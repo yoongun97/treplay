@@ -21,7 +21,6 @@ const Preview = ({
 
   useEffect(() => {
     fetchData();
-    console.log("랜더링!");
   }, [posts]);
 
   // 버튼을 누르면 해당 nation, category 로 필터하여 데이터 가져옴

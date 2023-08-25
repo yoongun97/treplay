@@ -1,33 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import MoreInfoButton from "./MoreInfoButton";
+import { useQuery } from "react-query";
 
-const BestPlace = () => {
+const BestPlace = ({ posts, allLikedData }) => {
+  const { nation } = useParams();
+  const [bestPost, setBestPost] = useState();
+
+  const nationPosts = posts.filter((post) => post.nation === nation);
+
+  const findMostLikedPost = async () => {
+    const likeCounts = {};
+
+    // 좋아요가 "like"인 경우의 개수를 카운트
+
+    await nationPosts.map((post) => {
+      const nationLikedData = allLikedData.filter(
+        (data) => data.postId === post.id
+      );
+
+      nationLikedData.forEach((item) => {
+        if (item.state === "like") {
+          if (!likeCounts[item.postId]) {
+            likeCounts[item.postId] = 1;
+          } else {
+            likeCounts[item.postId]++;
+          }
+        }
+      });
+    });
+
+    let bestPostId = null;
+    let maxLikeCount = 0;
+
+    // 가장 많은 개수를 가진 postId를 찾음
+    for (const postId in likeCounts) {
+      if (likeCounts[postId] > maxLikeCount) {
+        maxLikeCount = likeCounts[postId];
+        bestPostId = postId;
+      }
+    }
+
+    const [bestPost] = posts.filter((post) => post.id === bestPostId);
+    setBestPost(bestPost);
+  };
+
+  useEffect(() => {
+    findMostLikedPost();
+  }, [posts]);
+
   return (
     <BestPlaceContainer>
       <h2>베스트 또갈집</h2>
       <BestPlaceBox>
-        <ImageBox>이미지</ImageBox>
+        <ImageBox $imageurl={bestPost?.postImgs[0]}></ImageBox>
+        {/* 경고문 발생한 거 해결 위해 $붙임 */}
         <PhrasesBox>
-          <h4>[맛집] 부평 우와</h4>
+          <h4>
+            [{bestPost?.category}] {bestPost?.placeName}
+          </h4>
           <div>
-            <span>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi
-              libero totam cupiditate suscipit, nesciunt consequatur deleniti
-              incidunt alias dolorum ullam recusandae reiciendis sed temporibus
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-              officiis eos officia, maiores voluptatibus, id neque ut earum
-              dolor illo quisquam necessitatibus perspiciatis quibusdam
-              repellat, soluta ratione provident ex quae? Lorem ipsum dolor sit
-              amet consectetur adipisicing elit. Excepturi, eius facere, libero
-              neque eligendi quam asperiores eos nulla ad veritatis deleniti.
-              Incidunt odio voluptatum labore vel eligendi veritatis
-              necessitatibus laborum.
-            </span>
+            <span>{bestPost?.postContent}</span>
           </div>
-          <MoreInfoButton>
-            <span>더 알아보기</span>
-            <div></div>
-          </MoreInfoButton>
+          <MoreInfoButton to={`/detail/${bestPost?.id}`}></MoreInfoButton>
         </PhrasesBox>
       </BestPlaceBox>
     </BestPlaceContainer>
@@ -57,7 +93,10 @@ const ImageBox = styled.div`
   left: 320px;
   width: 640px;
   height: 420px;
-  background-color: #999;
+  background-image: url(${(props) => props.$imageurl});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 `;
 
 const PhrasesBox = styled.div`
@@ -96,38 +135,5 @@ const PhrasesBox = styled.div`
       -webkit-box-orient: vertical;
       word-break: keep-all;
     }
-  }
-`;
-
-const MoreInfoButton = styled.button`
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  width: 180px;
-  height: 52px;
-  border-radius: 60px;
-  border: 1px solid #0a58be;
-  background-color: #fff;
-  color: #0a58be;
-  font-size: 18px;
-  font-weight: 400;
-  transition: 0.3s;
-
-  &:hover {
-    background-color: #0a58be;
-    color: #fff;
-  }
-
-  & > div {
-    width: 24px;
-    height: 24px;
-    background-image: url("icon/right_arrow_blue.svg");
-    transition: 0.3s;
-  }
-
-  &:hover > div {
-    background-image: url("icon/right_arrow_white.svg");
   }
 `;

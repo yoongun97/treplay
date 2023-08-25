@@ -53,12 +53,12 @@ function NationPage() {
       <MiddleBanner />
       <Preview
         posts={posts}
+        allLikedData={allLikedData}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        allLikedData={allLikedData}
       />
       <EventBanner />
-      <BestPlace />
+      <BestPlace posts={posts} allLikedData={allLikedData} />
     </div>
   );
 }
