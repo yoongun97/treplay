@@ -10,6 +10,7 @@ import ImageSlide from "../../components/imageslide/ImageSlide";
 import Comments from "../../components/comments/Comments";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
+import ImageCarousel from "../../components/imageslide/ImageCarousel";
 
 function DetailPage() {
   const { id } = useParams();
@@ -65,7 +66,7 @@ function DetailPage() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          // alignItems: "center",
           margin: "0 auto 0 auto",
         }}
       >
@@ -106,19 +107,30 @@ function DetailPage() {
           ) : (
             <></>
           )}
-          {post?.postImgs.length !== 0 ? (
-            <ImageSlide postImgs={post?.postImgs} />
-          ) : (
-            <img
-              style={{
-                width: "400px",
-                height: "400px",
-              }}
-              src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
-              alt="디테일 이미지"
-            />
-          )}
-
+        </div>
+        {post?.postImgs.length !== 0 ? (
+          // <ImageSlide postImgs={post?.postImgs} />
+          <ImageCarousel postImgs={post?.postImgs} />
+        ) : (
+          <img
+            style={{
+              width: "400px",
+              height: "400px",
+            }}
+            src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
+            alt="디테일 이미지"
+          />
+        )}
+        <div
+          style={{
+            maxWidth: "1200px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "30px auto 0 auto",
+          }}
+        >
           <p>{post?.postContent}</p>
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
