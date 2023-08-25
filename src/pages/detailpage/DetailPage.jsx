@@ -107,19 +107,7 @@ function DetailPage() {
             <></>
           )}
         </div>
-        {post?.postImgs.length !== 0 ? (
-          // <ImageSlide postImgs={post?.postImgs} />
-          <ImageCarousel postImgs={post?.postImgs} />
-        ) : (
-          <img
-            style={{
-              width: "400px",
-              height: "400px",
-            }}
-            src="https://cdn.pixabay.com/photo/2023/08/02/14/25/dog-8165447_640.jpg"
-            alt="디테일 이미지"
-          />
-        )}
+        <ImageCarousel postImgs={post?.postImgs} />
         <div
           style={{
             maxWidth: "1200px",

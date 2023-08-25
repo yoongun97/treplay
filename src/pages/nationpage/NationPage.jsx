@@ -4,6 +4,7 @@ import MiddleBanner from "./components/MiddleBanner";
 import Preview from "./components/Preview";
 import EventBanner from "./components/EventBanner";
 import BestPlace from "./components/BestPlace";
+import MainCarousel from "../../components/imageslide/MainCarousel";
 
 function NationPage() {
   // category 파라미터를 가져옴
@@ -11,7 +12,7 @@ function NationPage() {
   return (
     <div className="Container">
       {/* 최상위 이미지 배너 슬라이드 삽입 */}
-      <div className="ImageSlide">이미지 배너 슬라이드</div>
+      <MainCarousel />
       <Category />
       <MiddleBanner />
       <Preview />
