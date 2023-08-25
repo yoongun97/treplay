@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import MoreInfoButton from "./MoreInfoButton";
-import { useQuery } from "react-query";
 
 const BestPlace = ({ posts, allLikedData }) => {
   const { nation } = useParams();
@@ -10,12 +9,12 @@ const BestPlace = ({ posts, allLikedData }) => {
 
   const nationPosts = posts.filter((post) => post.nation === nation);
 
-  const findMostLikedPost = async () => {
+  const findMostLikedPost = () => {
     const likeCounts = {};
 
     // 좋아요가 "like"인 경우의 개수를 카운트
 
-    await nationPosts.map((post) => {
+    nationPosts.forEach((post) => {
       const nationLikedData = allLikedData.filter(
         (data) => data.postId === post.id
       );
@@ -48,7 +47,7 @@ const BestPlace = ({ posts, allLikedData }) => {
 
   useEffect(() => {
     findMostLikedPost();
-  }, [posts]);
+  }, []);
 
   return (
     <BestPlaceContainer>
