@@ -23,7 +23,7 @@ const MiddleBanner = () => {
         </div>
         <MoreInfoButton>
           <span>더 알아보기</span>
-          <img src="icon/right_arrow_blue.svg" alt="more_icon" />
+          <div></div>
         </MoreInfoButton>
       </MiddleBannerPhrasesBox>
     </MiddleBannerContainer>
@@ -106,5 +106,16 @@ const MoreInfoButton = styled.button`
   &:hover {
     background-color: #0a58be;
     color: #fff;
+  }
+
+  & > div {
+    width: 24px;
+    height: 24px;
+    background-image: url("icon/right_arrow_blue.svg");
+    transition: 0.3s;
+  }
+
+  &:hover > div {
+    background-image: url("icon/right_arrow_white.svg");
   }
 `;

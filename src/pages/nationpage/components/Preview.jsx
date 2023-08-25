@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
+import { db } from "../../../firebaseConfig";
+import { collection, getDocs, query } from "firebase/firestore";
 
 const Preview = () => {
+  const [selectedPosts, setSelectedPosts] = useState([]);
+
+  const selectListHandler = async (category) => {
+    const postsQ = query(collection(db, "posts"));
+    const postsQuerySnapshot = await getDocs(postsQ);
+    const postsData = postsQuerySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    console.log(postsData);
+  };
   return (
     <PreviewContainer>
       <h2>구경해봐요 또갈집</h2>
       <CategoryButtonContainer>
-        <CategoryButton>숙소</CategoryButton>
-        <CategoryButton>맛집</CategoryButton>
-        <CategoryButton>관광명소</CategoryButton>
+        <CategoryButton onClick={() => selectListHandler("hotel")}>
+          숙소
+        </CategoryButton>
+        <CategoryButton onClick={() => selectListHandler("food")}>
+          맛집
+        </CategoryButton>
+        <CategoryButton onClick={() => selectListHandler("tour")}>
+          관광명소
+        </CategoryButton>
       </CategoryButtonContainer>
       <PreviewListContainer>
         <PreviewListBox>
