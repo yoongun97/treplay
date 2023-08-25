@@ -27,3 +27,7 @@ a {
 }
 
 /* a 태그 (Link) 로 한 것들 모두 위 효과 적용됨 */
+
+button {
+  cursor: pointer;
+}
