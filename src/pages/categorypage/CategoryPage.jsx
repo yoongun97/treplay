@@ -4,10 +4,12 @@ import { useQuery } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
 
 function CategoryPage() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const { nation, category } = useParams();
+
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
@@ -17,16 +19,16 @@ function CategoryPage() {
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       setSearch(e.currentTarget.value);
     }
   };
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, "posts"),
-      where("nation", "==", nation),
-      where("category", "==", category)
+      collection(db, 'posts'),
+      where('nation', '==', nation),
+      where('category', '==', category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -50,12 +52,13 @@ function CategoryPage() {
   }
 
   if (isLoading) {
-    return "정보를 가져오고 있습니다.";
+    return '정보를 가져오고 있습니다.';
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
   const indexOfFirstPost = indexOfLastPost - postsViewPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  //또가요 안가요 보여주기
 
   return (
     <div>
@@ -77,27 +80,40 @@ function CategoryPage() {
 
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {currentPosts.map((post) => (
-          <div key={post.id}>
+          //style 가로로 3개만 보여주기
+          <div key={post.id} style={{ flex: '0 0 calc(33.33% - 40px)' }}>
             <Link
               to={`/detail/${post.id}`}
               style={{
-                display: 'flex',
-                width: '300px',
-                height: '100px',
+                display: 'grid',
+                width: '500px',
+                height: '500px',
                 margin: '20px',
                 border: '1px solid black',
                 textDecoration: 'none',
                 color: 'black',
+                textAlign: 'center',
               }}
             >
               {post.author} <br />
               {post.placeName} <br />
+              <img
+                alt="PostImgs"
+                src={post.postImgs}
+                style={{
+                  width: '250px',
+                  height: '250px',
+                  margin: 'auto',
+                  display: 'block',
+                }}
+              />
+              <br />
               {post.postContent} <br />
               {post.placeLocation} <br />
+              <CategoryLikes id={post.id} />
             </Link>
           </div>
         ))}
-
       </div>
       <PageNation
         postsViewPage={postsViewPage}
