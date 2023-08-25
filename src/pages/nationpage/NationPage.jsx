@@ -14,10 +14,9 @@ function NationPage() {
 
   const [posts, setPosts] = useState([]);
   const [allLikedData, setAllLikedData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("숙박");
 
   const fetchData = async () => {
-    setSelectedCategory("숙박");
     const postsQ = query(collection(db, "posts"));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
