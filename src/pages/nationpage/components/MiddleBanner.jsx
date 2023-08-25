@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
+import MoreInfoButton from "./MoreInfoButton";
 
 const MiddleBanner = () => {
   return (
@@ -11,7 +12,6 @@ const MiddleBanner = () => {
         <h3>또 다른 프로필을 구경해 보세요</h3>
         <div>
           <span>
-            {" "}
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
             numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
             sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
@@ -21,10 +21,7 @@ const MiddleBanner = () => {
             saepe sunt soluta possimus esse?
           </span>
         </div>
-        <MoreInfoButton>
-          <span>더 알아보기</span>
-          <div></div>
-        </MoreInfoButton>
+        <MoreInfoButton to={"/"}></MoreInfoButton>
       </MiddleBannerPhrasesBox>
     </MiddleBannerContainer>
   );
@@ -85,37 +82,5 @@ const MiddleBannerPhrasesBox = styled.div`
       -webkit-box-orient: vertical;
       word-break: keep-all;
     }
-  }
-`;
-
-const MoreInfoButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  width: 180px;
-  height: 52px;
-  border-radius: 60px;
-  border: 1px solid #0a58be;
-  background-color: #fff;
-  color: #0a58be;
-  font-size: 18px;
-  font-weight: 400;
-  transition: 0.3s;
-
-  &:hover {
-    background-color: #0a58be;
-    color: #fff;
-  }
-
-  & > div {
-    width: 24px;
-    height: 24px;
-    background-image: url("icon/right_arrow_blue.svg");
-    transition: 0.3s;
-  }
-
-  &:hover > div {
-    background-image: url("icon/right_arrow_white.svg");
   }
 `;
