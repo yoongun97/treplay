@@ -30,6 +30,7 @@ const Preview = ({
     );
     setSelectedPosts(filteredPosts);
   };
+
   return (
     <PreviewContainer>
       <h2>구경해봐요 또갈집</h2>

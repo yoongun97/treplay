@@ -10,8 +10,6 @@ import { db } from "../../firebaseConfig";
 import { useQuery } from "react-query";
 
 function NationPage() {
-  // category 파라미터를 가져옴
-
   const [posts, setPosts] = useState([]);
   const [allLikedData, setAllLikedData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("숙박");
