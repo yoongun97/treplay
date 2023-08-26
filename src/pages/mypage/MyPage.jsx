@@ -115,7 +115,11 @@ function MyPage() {
             <div className="ListContainerInner">
               {/* 버튼 전환에 따른 리스트 변환 */}
               {isMyListActived === true ? (
-                <MyList myPosts={myPosts} allLikedData={allLikedData} />
+                <MyList
+                  myPosts={myPosts}
+                  setMyPosts={setMyPosts}
+                  allLikedData={allLikedData}
+                />
               ) : (
                 <SavedList
                   savedPosts={savedPosts}
