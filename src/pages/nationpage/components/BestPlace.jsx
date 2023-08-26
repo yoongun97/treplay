@@ -47,9 +47,6 @@ const BestPlace = ({ posts, allLikedData }) => {
 
   useEffect(() => {
     findMostLikedPost();
-  }, []);
-  useEffect(() => {
-    findMostLikedPost();
   }, [{ nation }]);
 
   return (
