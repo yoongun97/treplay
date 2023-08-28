@@ -1,16 +1,23 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from "react";
+import Category from "./components/Category";
+import MiddleBanner from "./components/MiddleBanner";
+import Preview from "./components/Preview";
+import EventBanner from "./components/EventBanner";
+import BestPlace from "./components/BestPlace";
+import MainCarousel from "../../components/imageslide/MainCarousel";
 
 function NationPage() {
   // category 파라미터를 가져옴
-  const { nation } = useParams();
 
   return (
-    <div>
-      {/*category 파라미터를 삽입하여 링크 생성 */}
-      <Link to={`/${nation}/관광명소`}>관광명소</Link> <br />
-      <Link to={`/${nation}/맛집`}>맛집</Link> <br />
-      <Link to={`/${nation}/숙박`}>숙박</Link> <br />
+    <div className="Container">
+      {/* 최상위 이미지 배너 슬라이드 삽입 */}
+      <MainCarousel />
+      <Category />
+      <MiddleBanner />
+      <Preview />
+      <EventBanner />
+      <BestPlace />
     </div>
   );
 }

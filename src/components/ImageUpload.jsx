@@ -79,9 +79,9 @@ function ImageUpload() {
       uid: user.uid,
     };
 
-    // Firestore에서 'todos' 컬렉션에 대한 참조 생성하기
+    // Firestore에서 'posts' 컬렉션에 대한 참조 생성하기
     const collectionRef = collection(db, "posts");
-    // 'todos' 컬렉션에 newTodo 문서를 추가합니다.
+    // 'posts' 컬렉션에 newPost 문서를 추가합니다.
     const docRef = await addDoc(collectionRef, newPost);
 
     // 추가한 문서의 ID를 이용하여 상세 페이지로 이동
