@@ -3,8 +3,6 @@ import React from "react";
 import { styled } from "styled-components";
 
 function MainPage() {
-  const moveToLeftHandler = () => {};
-
   return (
     <MainContainer>
       <MainInner>
@@ -106,6 +104,7 @@ const NationInner = styled.div`
 `;
 
 const StyledButton = styled(Link)`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,9 +128,29 @@ const StyledButton = styled(Link)`
     background-image: url(image/america.jpg);
   }
 
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: 0.3s;
+  }
+  &:hover {
+    & > span {
+      color: transparent;
+    }
+
+    &::after {
+      background-color: transparent;
+    }
+  }
   & > span {
     font-size: 32px;
     font-weight: 500;
     color: #fff;
+    z-index: 30;
+    transition: 0.2s;
   }
 `;
