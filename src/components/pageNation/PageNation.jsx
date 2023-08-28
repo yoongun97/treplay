@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { styled } from "styled-components";
 
 const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
   const pageNumber = [];
@@ -20,28 +21,67 @@ const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
   };
 
   return (
-    <div>
-      <nav>
-        <div>
-          <button onClick={prevPage}>이전</button>
-          {pageNumber.length > 0 ? (
-            <>
-              {pageNumber.map((number) => (
-                <button
-                  key={number}
-                  onClick={() => pagenate(number)}
-                  className={currentPage === number ? 'active' : ''}
-                >
-                  {number}
-                </button>
-              ))}
-            </>
-          ) : null}
-          <button onClick={nextPage}>다음</button>
-        </div>
-      </nav>
-    </div>
+    <Container>
+      <PrevButton onClick={prevPage}></PrevButton>
+      {pageNumber.length > 0 ? (
+        <PageNumberContianer>
+          {pageNumber.map((number) => (
+            <PageNumberButton
+              key={number}
+              onClick={() => pagenate(number)}
+              className={currentPage === number ? "active" : ""}
+            >
+              {number}
+            </PageNumberButton>
+          ))}
+        </PageNumberContianer>
+      ) : null}
+      <NextButton onClick={nextPage}></NextButton>
+    </Container>
   );
 };
 
 export default PageNation;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+`;
+
+const PrevButton = styled.div`
+  width: 24px;
+  height: 24px;
+  margin-right: 16px;
+  background: url(icon/left-arrow-gray.svg) no-repeat center / 100%;
+  cursor: pointer;
+`;
+const NextButton = styled.div`
+  width: 24px;
+  height: 24px;
+  margin-left: 16px;
+  background: url(icon/right-arrow-gray.svg) no-repeat center / 100%;
+  cursor: pointer;
+`;
+
+const PageNumberContianer = styled.div`
+  display: flex;
+  gap: 6px;
+`;
+
+const PageNumberButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+
+  &.active {
+    border-radius: 50%;
+    color: #fff;
+    background-color: #0a58be;
+  }
+`;
