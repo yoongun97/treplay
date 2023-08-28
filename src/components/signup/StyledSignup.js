@@ -1,7 +1,21 @@
 import styled, { css } from "styled-components";
 
+export const Overlay = styled.div`
+  ${({ isModalOpen }) =>
+    isModalOpen &&
+    `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정 배경색 */
+    z-index: 2;
+  `}
+`;
+
 export const SignupContainer = styled.div`
-  margin: 240px auto auto auto;
+  margin: 150px auto auto auto;
   width: 500px;
   display: flex;
   flex-direction: column;

@@ -4,7 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 function Layout() {
   return (
-    <div style={{ width: "1920px" }}>
+    <div style={{ maxWidth: "1920px", width: "100%", margin: "0 auto 0 auto" }}>
       <Header />
       <Outlet />
       <Footer />

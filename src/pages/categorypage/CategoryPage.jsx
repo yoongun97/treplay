@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 
 function CategoryPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const { nation, category } = useParams();
+  const [user] = useAtom(userAtom);
 
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,16 +22,16 @@ function CategoryPage() {
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setSearch(e.currentTarget.value);
     }
   };
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -44,15 +47,15 @@ function CategoryPage() {
     return postsData;
   };
 
-  const { data: posts, error, isLoading } = useQuery('posts', fetchPosts);
+  const { data: posts, error, isLoading } = useQuery("posts", fetchPosts);
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    console.error("데이터를 가져올 수 없습니다", error);
+    return alert("데이터를 가져올 수 없습니다");
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
@@ -78,21 +81,21 @@ function CategoryPage() {
       </div>
       <Link to={`/create`}>글 작성하기</Link>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
         {currentPosts.map((post) => (
           //style 가로로 3개만 보여주기
-          <div key={post.id} style={{ flex: '0 0 calc(33.33% - 40px)' }}>
+          <div key={post.id} style={{ flex: "0 0 calc(33.33% - 40px)" }}>
             <Link
-              to={`/detail/${post.id}`}
+              to={user !== null ? `/detail/${post.id}` : "/login"}
               style={{
-                display: 'grid',
-                width: '500px',
-                height: '500px',
-                margin: '20px',
-                border: '1px solid black',
-                textDecoration: 'none',
-                color: 'black',
-                textAlign: 'center',
+                display: "grid",
+                width: "500px",
+                height: "500px",
+                margin: "20px",
+                border: "1px solid black",
+                textDecoration: "none",
+                color: "black",
+                textAlign: "center",
               }}
             >
               {post.author} <br />
@@ -101,10 +104,10 @@ function CategoryPage() {
                 alt="PostImgs"
                 src={post.postImgs}
                 style={{
-                  width: '250px',
-                  height: '250px',
-                  margin: 'auto',
-                  display: 'block',
+                  width: "250px",
+                  height: "250px",
+                  margin: "auto",
+                  display: "block",
                 }}
               />
               <br />

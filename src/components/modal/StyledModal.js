@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled, css } from "styled-components";
 
 export const CheckModal = styled.div`
   position: fixed;
@@ -12,6 +12,7 @@ export const CheckModal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 3;
 `;
 
 export const CloseBtn = styled.div`
@@ -22,6 +23,7 @@ export const CloseBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 export const CloseImg = styled.img`
@@ -62,12 +64,17 @@ export const ModalCheckBtn = styled.button`
   border-radius: 18px;
   background-color: transparent;
   font-size: 12px;
-  border: 1px solid #0a58be;
-  color: #0a58be;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.6;
-  }
+  border: 1px solid;
+  ${(props) =>
+    !props.disabled &&
+    css`
+      border: 1px solid #0a58be;
+      color: #0a58be;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.6;
+      }
+    `}
 `;
 
 export const ModalErrorBox = styled.div`
@@ -104,4 +111,8 @@ export const SuccessBtn = styled.button`
   color: white;
   font-size: 18px;
   font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.6;
+  }
 `;

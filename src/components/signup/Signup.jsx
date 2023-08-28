@@ -4,7 +4,8 @@ import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
 import { addDoc, collection } from "firebase/firestore";
-import Modal from "../modal/Modal";
+import NicknameModal from "../modal/NicknameModal";
+import EmailModal from "../modal/EmailModal";
 
 function Signup() {
   // input
@@ -14,6 +15,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [checkNumber, setCheckNumber] = useState("");
 
   // 중복확인 버튼 확인
   const [toCheck, setToCheck] = useState("");
@@ -25,6 +27,12 @@ function Signup() {
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
 
+  // error box 위치 상태
+  const [errorBox, setErrorBox] = useState("");
+
+  // error msg 선택
+  const [errorMsg, setErrorMsg] = useState("");
+
   const navigate = useNavigate();
 
   // 회원가입 함수
@@ -32,35 +40,49 @@ function Signup() {
     e.preventDefault();
     try {
       if (!email) {
-        alert("이메일을 입력해 주세요.");
-        return;
-      }
-      if (!password) {
-        alert("비밀번호를 입력해 주세요.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        alert(getErrorMessage("auth/wrong-password"));
+        setErrorBox("email");
+        setErrorMsg("이메일을 입력해 주세요.");
         return;
       }
       if (!name) {
-        alert("이름을 입력해 주세요");
+        setErrorBox("name");
+        setErrorMsg("이름을 입력해 주세요.");
         return;
       }
+      if (!password) {
+        setErrorBox("password");
+        setErrorMsg("비밀번호를 입력해 주세요.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setErrorBox("confirmPassword");
+        setErrorMsg(getErrorMessage("auth/wrong-password"));
+        return;
+      }
+
       if (!nickname) {
-        alert("닉네임을 입력해 주세요");
+        setErrorBox("nickname");
+        setErrorMsg("닉네임을 입력해 주세요.");
         return;
       }
       if (!phoneNumber) {
-        alert("전화번호를 입력해 주세요");
+        setErrorBox("phoneNumber");
+        setErrorMsg("전화번호를 입력해 주세요.");
         return;
       }
       if (isNaN(phoneNumber) === true) {
-        alert("번호는 '-'를 제외한 숫자만 입력해 주세요");
+        setErrorBox("phoneNumber");
+        setErrorMsg("번호는 '-'를 제외한 숫자만 입력해 주세요.");
+        return;
+      }
+      if (!checkNumber) {
+        setErrorBox("checkNumber");
+        setErrorMsg("인증번호를 입력해주세요.");
         return;
       }
       if (isChecked1 === false || isChecked2 === false) {
-        alert("약관에 동의해 주세요");
+        setErrorBox("");
+        alert("약관에 동의해 주세요.");
         return;
       } else {
         const userCredential = await createUserWithEmailAndPassword(
@@ -86,25 +108,21 @@ function Signup() {
       }
     } catch (error) {
       alert(getErrorMessage(error.code));
+      console.log(error.message);
     }
   };
 
   // 에러코드에 해당하는 오류메시지 return
   const getErrorMessage = (errorCode) => {
     switch (errorCode) {
-      case "auth/user-not-found":
-      case "auth/missing-email":
-        return "잘못된 이메일입니다.";
-      case "auth/missing-password":
-        return "잘못된 비밀번호입니다.";
+      case "auth/invalid-email":
+        return "잘못된 이메일 형식입니다.";
+      case "auth/weak-password":
+        return "비밀번호는 6글자 이상이어야 합니다.";
       case "auth/wrong-password":
         return "비밀번호가 일치하지 않습니다.";
       case "auth/email-already-in-use":
         return "이미 사용 중인 이메일입니다.";
-      case "auth/weak-password":
-        return "비밀번호는 6글자 이상이어야 합니다.";
-      case "auth/invalid-email":
-        return "잘못된 이메일 형식입니다.";
       case "auth/network-request-failed":
         return "네트워크 연결에 실패 하였습니다.";
       case "auth/internal-error":
@@ -120,11 +138,20 @@ function Signup() {
       setIsChecked1(!isChecked1);
     } else if (checkbox === 2) {
       setIsChecked2(!isChecked2);
+    } else {
+      setIsChecked1(!isChecked1);
+      setIsChecked2(!isChecked2);
     }
   };
 
+  // nicknameCheckHandler = async () => {
+  // 1. await 실제DB에서체크
+  // 2. setIsModalOpen(true);
+  // }
+
   return (
-    <s.SignupContainer>
+    <s.SignupContainer isModalOpen={isModalOpen}>
+      {isModalOpen && <s.Overlay isModalOpen={isModalOpen} />}
       <s.SignupTitle>회원가입</s.SignupTitle>
       <s.ProfileImgBox>
         <s.ProfileImg
@@ -165,6 +192,15 @@ function Signup() {
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "email" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
           <s.InputTitle>이름 </s.InputTitle>
           <s.InputCheck>
@@ -178,10 +214,20 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "name" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
           <s.InputTitle>비밀번호 </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
+              style={{ width: "95%" }}
               type="password"
               value={password}
               placeholder="6자리 이상 입력해주세요."
@@ -192,10 +238,20 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "password" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
-          <s.InputTitle>비밀번호 </s.InputTitle>
+          <s.InputTitle>비밀번호</s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
+              style={{ width: "95%" }}
               type="password"
               value={confirmPassword}
               placeholder="비밀번호 확인"
@@ -206,13 +262,15 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
-        <s.ErrorBox>
-          <s.ErrorMark
-            src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
-            alt="경고이미지"
-          />
-          <s.ErrorMsg>비밀번호가 일치 하지 않습니다.</s.ErrorMsg>
-        </s.ErrorBox>
+        {errorBox === "confirmPassword" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
           <s.InputTitle>닉네임 </s.InputTitle>
           <s.InputCheck>
@@ -236,6 +294,15 @@ function Signup() {
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "nickname" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
           <s.InputTitle>연락처 </s.InputTitle>
           <s.InputCheck>
@@ -250,25 +317,45 @@ function Signup() {
             <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "phoneNumber" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.InputBox>
           <s.InputTitle>인증번호 </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
               type="number"
-              // value={}
-              onChange={() => {}}
+              value={checkNumber}
+              onChange={(e) => {
+                setCheckNumber(e.target.value);
+              }}
             />
             <s.CheckBtn onClick={() => {}}>확인</s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
+        {errorBox === "checkNumber" && (
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+          </s.ErrorBox>
+        )}
         <s.AgreementContainer>
           <s.AgreementTitleBox>
             <s.AgreementCheckBox
               style={{ marginTop: "14px", marginBottom: "14px" }}
               type="checkbox"
-              checked={isChecked1}
+              checked={isChecked1 && isChecked2}
               onChange={() => {
-                checkboxHandler(1);
+                checkboxHandler(0);
               }}
             />
             <s.AgreementTitle>이용약관 동의</s.AgreementTitle>
@@ -375,18 +462,20 @@ function Signup() {
           가입하기
         </s.SignupBtn>
       </form>
-      {isModalOpen ? (
-        <Modal
-          email={email}
-          setEmail={setEmail}
-          nickname={nickname}
-          setNickname={setNickname}
-          toCheck={toCheck}
-          setIsModalOpen={setIsModalOpen}
-        />
-      ) : (
-        <></>
-      )}
+      {isModalOpen &&
+        (toCheck === "이메일" ? (
+          <EmailModal
+            email={email}
+            setEmail={setEmail}
+            setIsModalOpen={setIsModalOpen}
+          />
+        ) : (
+          <NicknameModal
+            nickname={nickname}
+            setNickname={setNickname}
+            setIsModalOpen={setIsModalOpen}
+          />
+        ))}
     </s.SignupContainer>
   );
 }
