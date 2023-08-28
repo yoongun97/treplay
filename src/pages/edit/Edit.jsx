@@ -15,6 +15,9 @@ const Edit = () => {
   const [editDetail, setEditDetail] = useState('');
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
+  //이미지 선택 이름,미리보기
+  const [selectedFileNames, setSelectedFileNames] = useState([]);
+  const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +39,13 @@ const Edit = () => {
 
   const handleImageChange = (e) => {
     const selectedImages = Array.from(e.target.files);
+    //이미지 선택 이름,미리보기
+    const fileNames = selectedImages.map((image) => image.name);
+    setSelectedFileNames(fileNames);
+
+    const previews = selectedImages.map((image) => URL.createObjectURL(image));
+    setSelectedFilePreviews(previews);
+
     setEditImage(selectedImages);
   };
 
@@ -58,6 +68,16 @@ const Edit = () => {
     } catch (error) {
       console.error('이미지 삭제 오류:', error);
     }
+  };
+  //미리보기 이미지 삭제
+  const handleImageDeletePreview = (index) => {
+    setSelectedFilePreviews((prevPreviews) =>
+      prevPreviews.filter((_, i) => i !== index)
+    );
+    setSelectedFileNames((prevNames) =>
+      prevNames.filter((_, i) => i !== index)
+    );
+    setEditImage((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const handlePostSave = async () => {
@@ -112,6 +132,21 @@ const Edit = () => {
           <textarea value={editDetail} onChange={handlePostChange} />
           <br />
           <input type="file" onChange={handleImageChange} multiple />
+          <div>
+            {selectedFilePreviews.map((preview, index) => (
+              <div key={index}>
+                <img
+                  src={preview}
+                  alt={`미리보기 이미지 ${index + 1}`}
+                  style={{ width: '100px', height: '100px' }}
+                />
+                <p>{selectedFileNames[index]}</p>
+                <button onClick={() => handleImageDeletePreview(index)}>
+                  x
+                </button>
+              </div>
+            ))}
+          </div>
           <br />
           <button onClick={handlePostSave}>저장</button>
         </div>
