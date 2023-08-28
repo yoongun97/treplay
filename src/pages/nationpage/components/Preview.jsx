@@ -84,14 +84,14 @@ const Preview = ({
                 <h3>{post.placeName}</h3>
                 {/* 추천/비추천 개수 보여줌 */}
                 <LikesContainer>
-                  <div className="likesBox">
+                  <LikesBox>
                     <img src="icon/like_icon.svg" alt="likesIcon"></img>
                     <span>{likedCount.length}</span>
-                  </div>
-                  <div className="dislikesBox">
+                  </LikesBox>
+                  <DislikesBox>
                     <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
                     <span>{dislikedCount.length}</span>
-                  </div>
+                  </DislikesBox>
                 </LikesContainer>
               </PreviewListBox>
             );
@@ -161,6 +161,12 @@ const PreviewListBox = styled(Link)`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+
+  & > h3 {
+    margin: 20px 0px 16px;
+    font-size: 18px;
+    font-weight: 500;
+  }
 `;
 
 const ImageBox = styled.div`
@@ -174,22 +180,40 @@ const ImageBox = styled.div`
 
 const LikesContainer = styled.div`
   display: flex;
-  gap: 8px;
-
-  margin-top: 20px;
+  align-items: center;
+  height: 38px;
+  padding: 0px 20px;
+  border-radius: 10px;
+  border: 1px solid #222;
   & > div {
     display: flex;
     align-items: center;
-    height: 38px;
-    padding: 6px 10px;
-    border-radius: 10px;
-    border: 1px solid #222;
     font-size: 16px;
     font-weight: 300;
-    line-height: 38px;
   }
 
   & > div > img {
     margin-right: 12px;
   }
+`;
+
+const LikesBox = styled.div`
+  position: relative;
+  padding-right: 10px;
+  color: #0a58be;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: auto;
+    bottom: auto;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background-color: #222;
+  }
+`;
+const DislikesBox = styled.div`
+  padding-left: 10px;
+  color: #fcd71e;
 `;
