@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +33,16 @@ function Signup() {
   // error msg 선택
   const [errorMsg, setErrorMsg] = useState("");
 
+  // focus 줄 input 참조
+  const emailInputRef = useRef();
+  const nameInputRef = useRef();
+  const passwordInputRef = useRef();
+  const confirmpwInputRef = useRef();
+  const nicknameInputRef = useRef();
+  const phonenumberInputRef = useRef();
+  const checknumberInputRef = useRef();
+  const checkboxInputRef = useRef();
+
   const navigate = useNavigate();
 
   // 회원가입 함수
@@ -42,47 +52,56 @@ function Signup() {
       if (!email) {
         setErrorBox("email");
         setErrorMsg("이메일을 입력해 주세요.");
+        emailInputRef.current.focus();
         return;
       }
       if (!name) {
         setErrorBox("name");
         setErrorMsg("이름을 입력해 주세요.");
+        nameInputRef.current.focus();
         return;
       }
       if (!password) {
         setErrorBox("password");
         setErrorMsg("비밀번호를 입력해 주세요.");
+        passwordInputRef.current.focus();
         return;
       }
       if (password !== confirmPassword) {
         setErrorBox("confirmPassword");
         setErrorMsg(getErrorMessage("auth/wrong-password"));
+        confirmpwInputRef.current.focus();
         return;
       }
 
       if (!nickname) {
         setErrorBox("nickname");
         setErrorMsg("닉네임을 입력해 주세요.");
+        nicknameInputRef.current.focus();
         return;
       }
       if (!phoneNumber) {
         setErrorBox("phoneNumber");
         setErrorMsg("전화번호를 입력해 주세요.");
+        phonenumberInputRef.current.focus();
         return;
       }
       if (isNaN(phoneNumber) === true) {
         setErrorBox("phoneNumber");
         setErrorMsg("번호는 '-'를 제외한 숫자만 입력해 주세요.");
+        phonenumberInputRef.current.focus();
         return;
       }
       if (!checkNumber) {
         setErrorBox("checkNumber");
         setErrorMsg("인증번호를 입력해주세요.");
+        checknumberInputRef.current.focus();
         return;
       }
       if (isChecked1 === false || isChecked2 === false) {
         setErrorBox("");
         alert("약관에 동의해 주세요.");
+        checkboxInputRef.current.focus();
         return;
       } else {
         const userCredential = await createUserWithEmailAndPassword(
@@ -176,9 +195,9 @@ function Signup() {
               placeholder="이메일주소"
               onChange={(e) => {
                 setEmail(e.target.value);
+                setErrorBox("");
               }}
-              autoFocus
-              autoComplete="email"
+              ref={emailInputRef}
             />
             <s.CheckBtn
               disabled={!email}
@@ -210,7 +229,9 @@ function Signup() {
               placeholder="이름을 입력해 주세요."
               onChange={(e) => {
                 setName(e.target.value);
+                setErrorBox("");
               }}
+              ref={nameInputRef}
             />
           </s.InputCheck>
         </s.InputBox>
@@ -233,8 +254,9 @@ function Signup() {
               placeholder="6자리 이상 입력해주세요."
               onChange={(e) => {
                 setPassword(e.target.value);
+                setErrorBox("");
               }}
-              autoComplete="password"
+              ref={passwordInputRef}
             />
           </s.InputCheck>
         </s.InputBox>
@@ -257,8 +279,9 @@ function Signup() {
               placeholder="비밀번호 확인"
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
+                setErrorBox("");
               }}
-              autoComplete="password"
+              ref={confirmpwInputRef}
             />
           </s.InputCheck>
         </s.InputBox>
@@ -280,7 +303,9 @@ function Signup() {
               placeholder="닉네임을 입력해 주세요."
               onChange={(e) => {
                 setNickname(e.target.value);
+                setErrorBox("");
               }}
+              ref={nicknameInputRef}
             />
             <s.CheckBtn
               disabled={!nickname}
@@ -312,7 +337,9 @@ function Signup() {
               placeholder="'-'없이 숫자만 입력해 주세요"
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
+                setErrorBox("");
               }}
+              ref={phonenumberInputRef}
             />
             <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn>
           </s.InputCheck>
@@ -334,7 +361,9 @@ function Signup() {
               value={checkNumber}
               onChange={(e) => {
                 setCheckNumber(e.target.value);
+                setErrorBox("");
               }}
+              ref={checknumberInputRef}
             />
             <s.CheckBtn onClick={() => {}}>확인</s.CheckBtn>
           </s.InputCheck>
@@ -357,6 +386,7 @@ function Signup() {
               onChange={() => {
                 checkboxHandler(0);
               }}
+              ref={checkboxInputRef}
             />
             <s.AgreementTitle>이용약관 동의</s.AgreementTitle>
           </s.AgreementTitleBox>
