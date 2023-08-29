@@ -37,6 +37,7 @@ const CategoryButtonBox = styled.div`
 `;
 
 const CategoryBox = styled(Link)`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,4 +49,46 @@ const CategoryBox = styled(Link)`
   font-size: 20px;
   font-weight: 400;
   color: white;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &:first-child {
+    background-image: url(image/tourPlace.jpg);
+    background-position: bottom;
+  }
+
+  &:nth-child(2) {
+    background-image: url(image/food.jpg);
+    background-position: top;
+  }
+  &:last-child {
+    background-image: url(image/hotel.jpg);
+    background-position: bottom;
+  }
+
+  & > span {
+    z-index: 10;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 60%;
+    background-color: rgba(0, 0, 0, 0.6);
+
+    transition: 0.3s;
+  }
+
+  &:hover::after {
+    background-color: transparent;
+  }
+
+  &:hover > span {
+    display: none;
+  }
+  /* 추후 수정방향에 따라 변경필요 */
 `;

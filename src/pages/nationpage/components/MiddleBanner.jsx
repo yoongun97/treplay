@@ -1,17 +1,17 @@
 import React from "react";
 import { styled } from "styled-components";
+import MoreInfoButton from "./MoreInfoButton";
 
 const MiddleBanner = () => {
   return (
     <MiddleBannerContainer>
-      <ImageBox>이미지1</ImageBox>
-      <ImageBox>이미지2</ImageBox>
+      <ImageBox />
+      <ImageBox />
       <MiddleBannerPhrasesBox>
         <h2>모여봐요 또갈집</h2>
         <h3>또 다른 프로필을 구경해 보세요</h3>
         <div>
           <span>
-            {" "}
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
             numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
             sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
@@ -21,10 +21,7 @@ const MiddleBanner = () => {
             saepe sunt soluta possimus esse?
           </span>
         </div>
-        <MoreInfoButton>
-          <span>더 알아보기</span>
-          <span>{`>`}</span>
-        </MoreInfoButton>
+        <MoreInfoButton to={"/"}></MoreInfoButton>
       </MiddleBannerPhrasesBox>
     </MiddleBannerContainer>
   );
@@ -44,8 +41,16 @@ const ImageBox = styled.div`
   height: 400px;
   border-radius: 30px;
   background-color: #999;
+  background-position: center;
+  background-size: cover;
 
   &:first-child {
+    background-image: url("https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80");
+    margin-right: 20px;
+  }
+
+  &:nth-child(2) {
+    background-image: url("https://images.unsplash.com/photo-1564053489865-3f7ddbf8551b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1144&q=80");
     margin-right: 20px;
   }
 `;
@@ -77,26 +82,5 @@ const MiddleBannerPhrasesBox = styled.div`
       -webkit-box-orient: vertical;
       word-break: keep-all;
     }
-  }
-`;
-
-const MoreInfoButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  width: 180px;
-  height: 52px;
-  border-radius: 60px;
-  border: 1px solid #0a58be;
-  background-color: #fff;
-  color: #0a58be;
-  font-size: 18px;
-  font-weight: 400;
-  transition: 0.3s;
-
-  &:hover {
-    background-color: #0a58be;
-    color: #fff;
   }
 `;

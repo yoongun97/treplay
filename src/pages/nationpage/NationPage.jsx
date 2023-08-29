@@ -1,23 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Category from "./components/Category";
 import MiddleBanner from "./components/MiddleBanner";
 import Preview from "./components/Preview";
 import EventBanner from "./components/EventBanner";
 import BestPlace from "./components/BestPlace";
 import MainCarousel from "../../components/imageslide/MainCarousel";
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { useQuery } from "react-query";
 
 function NationPage() {
-  // category 파라미터를 가져옴
+  const [posts, setPosts] = useState([]);
+  const [allLikedData, setAllLikedData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("숙박");
+
+  const fetchData = async () => {
+    window.scrollTo(0, 0);
+    // 처음 화면 접속 시 최상단으로 이동하게 함
+    const postsQ = query(collection(db, "posts"));
+    const postsQuerySnapshot = await getDocs(postsQ);
+    const postsData = postsQuerySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    //모든 포스트 데이터 저장
+    setPosts(postsData);
+
+    const likedQ = query(collection(db, "likes"));
+    const likedQuerySnapshot = await getDocs(likedQ);
+    const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
+    // 모든 좋아요 데이터 저장
+    setAllLikedData(likedData);
+  };
+  useEffect(() => fetchData, []);
+
+  // 리액트 쿼리로 로딩/에러 처리
+
+  const { isLoading, iserror, error } = useQuery("userData", fetchData);
+
+  if (isLoading) {
+    return <div>로딩 중입니다...</div>;
+  }
+
+  if (iserror) {
+    return alert(`에러 발생! Error Code: ${error.message}`);
+  }
 
   return (
     <div className="Container">
-      {/* 최상위 이미지 배너 슬라이드 삽입 */}
       <MainCarousel />
       <Category />
       <MiddleBanner />
-      <Preview />
+      <Preview
+        posts={posts}
+        allLikedData={allLikedData}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
       <EventBanner />
-      <BestPlace />
+      <BestPlace posts={posts} allLikedData={allLikedData} />
     </div>
   );
 }
