@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { styled } from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { styled } from 'styled-components';
 
 const CategoryLikes = (props) => {
   const { id } = props;
@@ -10,13 +10,13 @@ const CategoryLikes = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const q = query(collection(db, "likes"), where("postId", "==", id));
+      const q = query(collection(db, 'likes'), where('postId', '==', id));
       console.log({ id });
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => doc.data());
       // 또가요와 안가요 누적수
-      const likedData = data.filter((doc) => doc.state === "like");
-      const dislikedData = data.filter((doc) => doc.state === "dislike");
+      const likedData = data.filter((doc) => doc.state === 'like');
+      const dislikedData = data.filter((doc) => doc.state === 'dislike');
       setLikesCount(likedData.length);
       setDislikesCount(dislikedData.length);
     };
@@ -27,11 +27,17 @@ const CategoryLikes = (props) => {
   return (
     <LikesContainer>
       <LikesBox>
-        <img src="icon/like_icon.svg" alt="likesIcon"></img>
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
+          alt="likesIcon"
+        ></img>
         <span>{likesCount}</span>
       </LikesBox>
       <DislikesBox>
-        <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
+          alt="dislikesIcon"
+        ></img>
         <span>{dislikesCount}</span>
       </DislikesBox>
     </LikesContainer>
@@ -65,7 +71,7 @@ const LikesBox = styled.div`
   color: #0a58be;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: auto;
     bottom: auto;

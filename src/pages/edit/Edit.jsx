@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db, storage } from '../../firebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import * as S from './StyledEdit';
 import {
   getDownloadURL,
   ref,
@@ -18,16 +19,20 @@ const Edit = () => {
   //이미지 선택 이름,미리보기
   const [selectedFileNames, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
+  //장소와 카테고리 받기
+  const [nation, setNation] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       const editPostData = doc(db, 'posts', id);
       const docSnapshot = await getDoc(editPostData);
-      //detail페이지에서 전달 받은 텍스트
+      //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
         setpost({ id: docSnapshot.id, ...docSnapshot.data() });
         setEditDetail(docSnapshot.data().postContent);
-        console.log(docSnapshot.data().postContent);
+        setNation(docSnapshot.data().nation);
+        setCategory(docSnapshot.data().category);
       }
     };
     fetchData();
@@ -116,39 +121,62 @@ const Edit = () => {
     <div>
       {post ? (
         <div>
-          <div>Edit Post</div>
-          <div>
+          <h2>
+            {nation}의 {category}
+          </h2>
+          <S.ImageContainer>
             {post.postImgs.map((imageUrl) => (
-              <div key={imageUrl}>
+              <S.PostImg key={imageUrl}>
                 <img
                   src={imageUrl}
                   alt="디테일 이미지"
-                  style={{ width: '200px', height: '200px' }}
-                />
-                <button onClick={() => handleImageDelete(imageUrl)}>x</button>
-              </div>
-            ))}
-          </div>
-          <textarea value={editDetail} onChange={handlePostChange} />
-          <br />
-          <input type="file" onChange={handleImageChange} multiple />
-          <div>
-            {selectedFilePreviews.map((preview, index) => (
-              <div key={index}>
-                <img
-                  src={preview}
-                  alt={`미리보기 이미지 ${index + 1}`}
                   style={{ width: '100px', height: '100px' }}
                 />
-                <p>{selectedFileNames[index]}</p>
-                <button onClick={() => handleImageDeletePreview(index)}>
-                  x
-                </button>
-              </div>
+                <button onClick={() => handleImageDelete(imageUrl)}>x</button>
+              </S.PostImg>
             ))}
-          </div>
-          <br />
-          <button onClick={handlePostSave}>저장</button>
+          </S.ImageContainer>
+
+          <S.EditText value={editDetail} onChange={handlePostChange} />
+          <S.EditContainerWrapper>
+            <S.EditContainer>
+              <h3>첨부파일</h3>
+              <S.ImageAddButtonLabel htmlFor="fileInput">
+                파일 추가
+              </S.ImageAddButtonLabel>
+              <S.ImageAddButton
+                type="file"
+                id="fileInput"
+                onChange={handleImageChange}
+                multiple
+                style={{ display: 'none' }}
+              />
+              <S.ImageAddContainer>
+                {selectedFilePreviews.map((preview, index) => (
+                  <S.AdditionalImageContainer key={index}>
+                    <S.ImagePreview>
+                      <img
+                        src={preview}
+                        alt={`미리보기 이미지`}
+                        style={{ width: '100px', height: '100px' }}
+                      />
+                    </S.ImagePreview>
+                    <S.ImageInfo>
+                      <S.ImageTitle>{selectedFileNames[index]}</S.ImageTitle>
+                      <S.DeleteButton
+                        onClick={() => handleImageDeletePreview(index)}
+                      >
+                        x
+                      </S.DeleteButton>
+                    </S.ImageInfo>
+                  </S.AdditionalImageContainer>
+                ))}
+              </S.ImageAddContainer>
+            </S.EditContainer>
+            <S.ButtonContainer>
+              <button onClick={handlePostSave}>저장</button>
+            </S.ButtonContainer>
+          </S.EditContainerWrapper>
         </div>
       ) : (
         <div>데이터 가져오는 중...</div>
