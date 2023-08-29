@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { db, storage } from '../../firebaseConfig';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { db, storage } from "../../firebaseConfig";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import {
   getDownloadURL,
   ref,
   uploadBytes,
   deleteObject,
-} from 'firebase/storage';
+} from "firebase/storage";
+import { styled } from "styled-components";
 
 const Edit = () => {
   const { id } = useParams();
   const [post, setpost] = useState(null);
-  const [editDetail, setEditDetail] = useState('');
+  const [editDetail, setEditDetail] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
@@ -21,7 +22,7 @@ const Edit = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const editPostData = doc(db, 'posts', id);
+      const editPostData = doc(db, "posts", id);
       const docSnapshot = await getDoc(editPostData);
       //detail페이지에서 전달 받은 텍스트
       if (docSnapshot.exists()) {
@@ -50,7 +51,7 @@ const Edit = () => {
   };
 
   const handleImageDelete = async (imageUrl) => {
-    console.log('Deleting image:', imageUrl);
+    console.log("Deleting image:", imageUrl);
     try {
       // 이미지 Storage에서 삭제
       const imageDelete = ref(storage, imageUrl);
@@ -60,13 +61,13 @@ const Edit = () => {
       const updatedImageUrls = post.postImgs.filter((url) => url !== imageUrl);
 
       // Firestore 데이터베이스 업데이트
-      const editData = doc(db, 'posts', id);
+      const editData = doc(db, "posts", id);
       await updateDoc(editData, { postImgs: updatedImageUrls });
 
       // 컴포넌트의 상태 업데이트
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
-      console.error('이미지 삭제 오류:', error);
+      console.error("이미지 삭제 오류:", error);
     }
   };
   //미리보기 이미지 삭제
@@ -82,7 +83,7 @@ const Edit = () => {
 
   const handlePostSave = async () => {
     try {
-      const editData = doc(db, 'posts', id);
+      const editData = doc(db, "posts", id);
       // 업데이트할 필드와 값을 담을 빈 객체 생성
       const updateData = {};
 
@@ -108,53 +109,99 @@ const Edit = () => {
 
       navigate(`/detail/${id}`);
     } catch (error) {
-      alert('게시물 수정 오류');
+      alert("게시물 수정 오류");
       console.log(error);
     }
   };
   return (
-    <div>
+    <EditContainer>
       {post ? (
-        <div>
-          <div>Edit Post</div>
-          <div>
-            {post.postImgs.map((imageUrl) => (
-              <div key={imageUrl}>
-                <img
-                  src={imageUrl}
-                  alt="디테일 이미지"
-                  style={{ width: '200px', height: '200px' }}
-                />
-                <button onClick={() => handleImageDelete(imageUrl)}>x</button>
-              </div>
-            ))}
-          </div>
-          <textarea value={editDetail} onChange={handlePostChange} />
-          <br />
-          <input type="file" onChange={handleImageChange} multiple />
-          <div>
-            {selectedFilePreviews.map((preview, index) => (
-              <div key={index}>
-                <img
-                  src={preview}
-                  alt={`미리보기 이미지 ${index + 1}`}
-                  style={{ width: '100px', height: '100px' }}
-                />
-                <p>{selectedFileNames[index]}</p>
-                <button onClick={() => handleImageDeletePreview(index)}>
-                  x
-                </button>
-              </div>
-            ))}
-          </div>
-          <br />
-          <button onClick={handlePostSave}>저장</button>
-        </div>
+        <EditContainerInner>
+          <h2>{post.placeName}</h2>
+          <StyledTextarea value={editDetail} onChange={handlePostChange} />
+          <ImageEditContainer>
+            <FileInputBox type="file" onChange={handleImageChange} multiple />
+            <PreviewImagesContainer>
+              {post.postImgs.map((imageUrl) => (
+                <ImageBox key={imageUrl}>
+                  <img src={imageUrl} alt="디테일 이미지" />
+                  <button onClick={() => handleImageDelete(imageUrl)}>x</button>
+                </ImageBox>
+              ))}
+              {selectedFilePreviews.map((preview, index) => (
+                <ImageBox key={index}>
+                  <img src={preview} alt={`미리보기 이미지 ${index + 1}`} />
+                  {/* <p>{selectedFileNames[index]}</p> */}
+                  <button onClick={() => handleImageDeletePreview(index)}>
+                    x
+                  </button>
+                </ImageBox>
+              ))}
+            </PreviewImagesContainer>
+          </ImageEditContainer>
+          <SubmitButton onClick={handlePostSave}>저장</SubmitButton>
+        </EditContainerInner>
       ) : (
         <div>데이터 가져오는 중...</div>
       )}
-    </div>
+    </EditContainer>
   );
 };
 
 export default Edit;
+
+const EditContainer = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+const EditContainerInner = styled.div`
+  width: 1280px;
+  max-width: 1280px;
+  margin: 0 auto;
+`;
+const StyledTextarea = styled.textarea`
+  width: 80%;
+  height: 300px;
+`;
+const ImageEditContainer = styled.div`
+  width: 50%;
+  margin: 0 auto;
+`;
+const FileInputBox = styled.input`
+  margin: 20px auto;
+`;
+
+const PreviewImagesContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  justify-content: center;
+  gap: 20px;
+`;
+const ImageBox = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: #cdcdcd;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  & > button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+  }
+`;
+const SubmitButton = styled.div`
+  width: 150px;
+  height: 30px;
+  margin: 20px auto;
+  border-radius: 15px;
+  background-color: #999;
+  cursor: pointer;
+`;
