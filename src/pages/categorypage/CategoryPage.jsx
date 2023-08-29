@@ -92,6 +92,11 @@ function CategoryPage() {
               <PostBox to={`/detail/${post.id}`}>
                 <ImageBox alt="PostImgs" src={post.postImgs} />
                 <h4>{post.placeName}</h4>
+                <h5>{post.placeLocation}</h5>
+                <p>
+                  <span># </span>
+                  {post.postOneLineContent}
+                </p>
                 <CategoryLikes id={post.id} />
               </PostBox>
             </div>
@@ -155,13 +160,33 @@ const PostBox = styled(Link)`
   flex-direction: column;
   align-items: flex-start;
   width: 380px;
-  height: 480px;
+  text-align: left;
 
   & > h4 {
-    margin: 20px 0 16px;
+    margin-top: 20px;
     font-size: 16px;
     font-weight: 500;
     color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > h5 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > p {
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #777;
   }
 `;
 
