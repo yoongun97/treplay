@@ -77,13 +77,24 @@ function CategoryPage() {
         <h3>우리 동네 베스트 추천 장소</h3>
         <Search onSearch={handleSearch} />
       </PhrasesContainer>
-      {!!user ? (
-        <WriteButtonContainer>
-          <Link to={`/create`}>글쓰기</Link>
-        </WriteButtonContainer>
-      ) : (
-        <></>
-      )}
+      <MiddleContainer>
+        {/* FilterContainer에 정렬기능 추가 */}
+        <FilterContainer>
+          <LatestFilterButton>최신순</LatestFilterButton>
+          <LikedFilterButton>인기순</LikedFilterButton>
+        </FilterContainer>
+        {!!user ? (
+          <WriteButton to={`/create`}>
+            <img
+              src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
+              alt="writing_icon"
+            ></img>
+            <span>글쓰기</span>
+          </WriteButton>
+        ) : (
+          <></>
+        )}
+      </MiddleContainer>
       {/* //수정 */}
       <PostsContainer>
         {(filteredPosts.length > 0 ? filteredPosts : currentPosts).map(
@@ -141,9 +152,37 @@ const PhrasesContainer = styled.div`
     color: #222;
   }
 `;
+const MiddleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
 
-const WriteButtonContainer = styled.div`
+const FilterContainer = styled.div`
+  display: flex;
+  gap: 12px;
+
+  & > div {
+    width: 105px;
+    height: 34px;
+    border-radius: 30px;
+    border: 1px solid #e5e5e5;
+  }
+`;
+
+const LatestFilterButton = styled.div``;
+const LikedFilterButton = styled.div``;
+const WriteButton = styled(Link)`
   align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #0a58be;
+  color: #fff;
   text-align: center;
   margin-bottom: 30px;
 `;
