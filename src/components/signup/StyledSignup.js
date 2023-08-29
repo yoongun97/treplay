@@ -15,7 +15,7 @@ export const Overlay = styled.div`
 `;
 
 export const SignupContainer = styled.div`
-  margin: 150px auto auto auto;
+  margin: 150px auto 130px;
   width: 500px;
   display: flex;
   flex-direction: column;
