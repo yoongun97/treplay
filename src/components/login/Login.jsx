@@ -58,68 +58,68 @@ function Login() {
   };
 
   return (
-    <s.LoginContainer>
-      <s.EmailLoginBox>
-        <s.LoginTitle>로그인</s.LoginTitle>
-        <s.InputForm>
-          <s.InputBox>
-            <s.InfoInput
-              type="email"
-              value={email}
-              placeholder="이메일을 입력해주세요"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              autoFocus
-              autoComplete="email"
-            />
-          </s.InputBox>
-          <s.InputBox>
-            <s.InfoInput
-              type="password"
-              value={password}
-              placeholder="비밀번호를 입력해주세요"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              autoComplete="password"
-            />
-          </s.InputBox>
-          <s.BtnBox>
-            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
-              아이디 찾기
-            </s.NaviBtn>
-            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
-              비밀번호 찾기
-            </s.NaviBtn>
-            <s.NaviBtn
-              onClick={() => {
-                navigate("/signup");
+    <s.MainContainer>
+      <s.LoginContainer>
+        <s.EmailLoginBox>
+          <s.LoginTitle>로그인</s.LoginTitle>
+          <s.InputForm>
+            <s.InputBox>
+              <s.InfoInput
+                type="email"
+                value={email}
+                placeholder="이메일을 입력해주세요"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                autoFocus
+                autoComplete="email"
+              />
+            </s.InputBox>
+            <s.InputBox>
+              <s.InfoInput
+                type="password"
+                value={password}
+                placeholder="비밀번호를 입력해주세요"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                autoComplete="password"
+              />
+            </s.InputBox>
+            <s.BtnBox>
+              <s.NaviBtn>아이디 찾기</s.NaviBtn>
+              <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
+              <s.NaviBtn
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                회원가입
+              </s.NaviBtn>
+            </s.BtnBox>
+            <s.LoginBtn
+              type="submit"
+              onClick={(e) => {
+                loginHandler(e);
               }}
             >
-              회원가입
-            </s.NaviBtn>
-          </s.BtnBox>
-          <s.LoginBtn
-            type="submit"
-            onClick={(e) => {
-              loginHandler(e);
-            }}
-          >
-            로그인
-          </s.LoginBtn>
-        </s.InputForm>
-      </s.EmailLoginBox>
+              로그인
+            </s.LoginBtn>
+          </s.InputForm>
+        </s.EmailLoginBox>
 
-      <s.SnsLoginContainer>
-        <s.SnsLoginTitle>SNS 계정으로 로그인</s.SnsLoginTitle>
-        <s.SnsContainer>
-          <FacebookLogin />
-          <GoogleLogin />
-          <NaverLogin />
-        </s.SnsContainer>
-      </s.SnsLoginContainer>
-    </s.LoginContainer>
+        <s.SnsLoginContainer>
+          <s.SnsLoginTitle>
+            <span>SNS 계정으로 로그인</span>
+          </s.SnsLoginTitle>
+          <s.SnsContainer>
+            <FacebookLogin />
+            <GoogleLogin />
+            <NaverLogin />
+          </s.SnsContainer>
+        </s.SnsLoginContainer>
+      </s.LoginContainer>
+    </s.MainContainer>
   );
 }
 

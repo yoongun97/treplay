@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
-
+export const MainContainer = styled.div`
+  width: 100%;
+`;
 export const LoginContainer = styled.div`
-  margin: 150px auto auto auto;
+  margin: 150px auto 300px;
   width: 500px;
   display: flex;
   flex-direction: column;
@@ -55,6 +57,31 @@ export const NaviBtn = styled.span`
   font-size: 14px;
   padding-left: 8px;
   padding-right: 8px;
+  cursor: pointer;
+
+  &:nth-child(2) {
+    position: relative;
+  }
+  &:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 1px;
+    height: 12px;
+    background-color: #222;
+    transform: translateY(-50%);
+  }
+  &:nth-child(2)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 12px;
+    background-color: #222;
+    transform: translateY(-50%);
+  }
 `;
 
 export const LoginBtn = styled.button`
@@ -69,31 +96,46 @@ export const LoginBtn = styled.button`
 `;
 
 export const SnsLoginContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 500px;
-  height: 100px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    width: 100%;
+    height: 1px;
+    transform: translateY(-50%);
+    background-color: #d9d9d9;
+    z-index: 1;
+  }
 `;
 
-export const SnsLoginTitle = styled.span`
-  height: 22px;
-  text-align: center;
-  font-size: 12px;
-  color: #777777;
+export const SnsLoginTitle = styled.div`
+  padding: 0 20px;
   margin-bottom: 26px;
+  background-color: #fff;
+  z-index: 10;
+
+  & > span {
+    color: #777777;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 22px;
+  }
 `;
 
 export const SnsContainer = styled.div`
   display: flex;
-  height: 52px;
+  gap: 40px;
 `;
 
 export const SnsBtn = styled.div`
-  height: 52px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
 `;
 
 export const SnsImg = styled.img`
@@ -102,8 +144,7 @@ export const SnsImg = styled.img`
 `;
 
 export const SnsMent = styled.p`
-  height: 22px;
+  line-height: 22px;
   font-size: 11px;
-  margin-left: 20px;
-  margin-right: 20px;
+  font-weight: 400;
 `;

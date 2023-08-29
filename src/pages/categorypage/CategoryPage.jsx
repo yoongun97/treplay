@@ -48,7 +48,11 @@ function CategoryPage() {
     return postsData;
   };
 
-  const { data: posts, error, isLoading } = useQuery("posts", fetchPosts);
+  const {
+    data: posts,
+    error,
+    isLoading,
+  } = useQuery(["posts", category], fetchPosts);
 
   if (error) {
     console.error("데이터를 가져올 수 없습니다", error);
@@ -140,7 +144,7 @@ const PhrasesContainer = styled.div`
 const WriteButtonContainer = styled.div`
   align-self: flex-end;
   text-align: center;
-  margin: 60px 0 30px;
+  margin-bottom: 30px;
 `;
 const SearchBox = styled(Link)`
   display: flex;
@@ -151,6 +155,7 @@ const SearchBox = styled(Link)`
   padding-left: 20px;
   border: 1px solid #0a58be;
   border-radius: 30px;
+  margin-bottom: 60px;
 
   & > input {
     outline: none;
@@ -175,7 +180,7 @@ const SearchBox = styled(Link)`
   & > div > div {
     width: 24px;
     height: 24px;
-    background-image: url(icon/search_icon.svg);
+    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
   }
 `;
 

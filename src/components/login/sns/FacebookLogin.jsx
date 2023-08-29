@@ -17,7 +17,10 @@ function FacebookLogin() {
 
   return (
     <SnsBtn onClick={handleFacebookLogin}>
-      <SnsImg src="" alt="" />
+      <SnsImg
+        src={`${process.env.PUBLIC_URL}/image/facebook_icon.png`}
+        alt="facebook_icon"
+      />
       <SnsMent>페이스북 로그인</SnsMent>
     </SnsBtn>
   );

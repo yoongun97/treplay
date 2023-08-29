@@ -53,14 +53,16 @@ const PrevButton = styled.div`
   width: 24px;
   height: 24px;
   margin-right: 16px;
-  background: url(icon/left-arrow-gray.svg) no-repeat center / 100%;
+  background: url(${process.env.PUBLIC_URL}/icon/left_arrow_gray.svg) no-repeat
+    center / 100%;
   cursor: pointer;
 `;
 const NextButton = styled.div`
   width: 24px;
   height: 24px;
   margin-left: 16px;
-  background: url(icon/right-arrow-gray.svg) no-repeat center / 100%;
+  background: url(${process.env.PUBLIC_URL}/icon/right_arrow_gray.svg) no-repeat
+    center / 100%;
   cursor: pointer;
 `;
 

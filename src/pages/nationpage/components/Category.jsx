@@ -55,16 +55,16 @@ const CategoryBox = styled(Link)`
   background-size: cover;
 
   &:first-child {
-    background-image: url(image/tourPlace.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/tourPlace.jpg);
     background-position: bottom;
   }
 
   &:nth-child(2) {
-    background-image: url(image/food.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/food.jpg);
     background-position: top;
   }
   &:last-child {
-    background-image: url(image/hotel.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/hotel.jpg);
     background-position: bottom;
   }
 
