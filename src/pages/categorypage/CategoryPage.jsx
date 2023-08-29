@@ -76,6 +76,7 @@ function CategoryPage() {
             onChange={handleSearchInputChange}
             onKeyDown={handleSearchInputKeyDown}
           />
+
           <div>
             <div></div>
           </div>

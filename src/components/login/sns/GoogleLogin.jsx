@@ -1,6 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { SnsBtn, SnsImg, SnsMent } from "../StyledLogin";
 
 function GoogleLogin() {
   const navigate = useNavigate();
@@ -15,9 +16,10 @@ function GoogleLogin() {
   };
 
   return (
-    <div>
-      <button onClick={handleGoogleLogin}>Google</button>
-    </div>
+    <SnsBtn onClick={handleGoogleLogin}>
+      <SnsImg src="" alt="" />
+      <SnsMent>구글 로그인</SnsMent>
+    </SnsBtn>
   );
 }
 

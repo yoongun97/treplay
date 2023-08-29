@@ -43,6 +43,7 @@ function DetailPage() {
     }
   };
 
+  // 게시물 삭제
   const deleteMutation = useMutation(async (post) => {
     const postRef = doc(db, 'posts', post.id);
     await deleteDoc(postRef);
