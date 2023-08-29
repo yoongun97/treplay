@@ -164,7 +164,7 @@ const PostBox = styled(Link)`
 
   & > h4 {
     margin-top: 20px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
     color: #222;
     overflow: hidden;
