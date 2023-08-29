@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as s from "./StyledLogin";
 import FacebookLogin from "./sns/FacebookLogin";
 import GoogleLogin from "./sns/GoogleLogin";
+import NaverLogin from "./sns/NaverLogin";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -57,58 +58,68 @@ function Login() {
   };
 
   return (
-    <div className="LoginContainer">
-      <div>
-        <div>Logo img</div>
+    <s.LoginContainer>
+      <s.EmailLoginBox>
+        <s.LoginTitle>로그인</s.LoginTitle>
         <s.InputForm>
-          <div className="EmailInputBox">
-            <span>이메일: </span>
-            <input
+          <s.InputBox>
+            <s.InfoInput
               type="email"
               value={email}
-              placeholder="이메일을 입력해 주세요 (ex: treplay@treplay.com)"
+              placeholder="이메일을 입력해주세요"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
               autoFocus
               autoComplete="email"
             />
-          </div>
-          <div className="PasswordInputBox">
-            <span>비밀번호: </span>
-            <input
+          </s.InputBox>
+          <s.InputBox>
+            <s.InfoInput
               type="password"
               value={password}
-              placeholder="비밀번호를 입력해 주세요"
+              placeholder="비밀번호를 입력해주세요"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
               autoComplete="password"
             />
-          </div>
-          <button
+          </s.InputBox>
+          <s.BtnBox>
+            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
+              아이디 찾기
+            </s.NaviBtn>
+            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
+              비밀번호 찾기
+            </s.NaviBtn>
+            <s.NaviBtn
+              onClick={() => {
+                navigate("/signup");
+              }}
+            >
+              회원가입
+            </s.NaviBtn>
+          </s.BtnBox>
+          <s.LoginBtn
             type="submit"
             onClick={(e) => {
               loginHandler(e);
             }}
           >
             로그인
-          </button>
+          </s.LoginBtn>
         </s.InputForm>
-        <div className="LinkContainer">
-          <Link to="/signup">회원가입</Link>
-        </div>
-      </div>
+      </s.EmailLoginBox>
 
-      <div className="SocialLoginContainer">
-        <p>SNS 계정으로 로그인 하기</p>
+      <s.SnsLoginContainer>
+        <s.SnsLoginTitle>SNS 계정으로 로그인</s.SnsLoginTitle>
         <s.SnsContainer>
-          <GoogleLogin />
           <FacebookLogin />
-          <div>Naver</div>
+          <GoogleLogin />
+          <NaverLogin />
         </s.SnsContainer>
-      </div>
-    </div>
+      </s.SnsLoginContainer>
+    </s.LoginContainer>
   );
 }
 

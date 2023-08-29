@@ -24,6 +24,8 @@ export const SignupContainer = styled.div`
 
 export const SignupTitle = styled.h2`
   color: black;
+  font-size: 32px;
+  font-weight: 600;
 `;
 
 export const ProfileImgBox = styled.div`
