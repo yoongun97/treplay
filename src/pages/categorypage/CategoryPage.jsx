@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import { styled } from 'styled-components';
-import Search from '../../components/search/Search';
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import { styled } from "styled-components";
+import Search from "../../components/search/Search";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -22,9 +22,9 @@ function CategoryPage() {
   const handleSearch = (searchQuery) => {
     const searchResults = posts.filter((post) =>
       post.placeName
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
-        .includes(searchQuery.toLowerCase().replace(' ', ''))
+        .includes(searchQuery.toLowerCase().replace(" ", ""))
     );
     setCurrentPage(1);
     setFilteredPosts(searchResults);
@@ -32,9 +32,9 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -54,15 +54,15 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(['posts', category], fetchPosts);
+  } = useQuery(["posts", category], fetchPosts);
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    console.error("데이터를 가져올 수 없습니다", error);
+    return alert("데이터를 가져올 수 없습니다");
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
@@ -142,42 +142,6 @@ const WriteButtonContainer = styled.div`
   text-align: center;
   margin-bottom: 30px;
 `;
-// const SearchBox = styled(Link)`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   width: 580px;
-//   height: 60px;
-//   padding-left: 20px;
-//   border: 1px solid #0a58be;
-//   border-radius: 30px;
-
-//   & > input {
-//     outline: none;
-//     border: none;
-//     font-size: 16px;
-//     font-weight: 400;
-//     color: #222;
-//     width: 480px;
-//     height: 100%;
-//     background: transparent;
-//   }
-
-//   & > div {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     width: 60px;
-//     height: 60px;
-//     border-radius: 24px;
-//     background-color: #0a58be;
-//   }
-//   & > div > div {
-//     width: 24px;
-//     height: 24px;
-//     background-image: url(icon/search_icon.svg);
-//   }
-// `;
 
 const PostsContainer = styled.div`
   display: grid;
