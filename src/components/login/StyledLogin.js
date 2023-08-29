@@ -1,9 +1,12 @@
 import { styled } from "styled-components";
 export const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: calc(100vh - 90px);
 `;
 export const LoginContainer = styled.div`
-  margin: 150px auto 300px;
   width: 500px;
   display: flex;
   flex-direction: column;

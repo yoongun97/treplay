@@ -37,7 +37,7 @@ const MainContainer = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 90px);
   background: url(${process.env.PUBLIC_URL}/image/mainBg.jpg) no-repeat top
     center / cover;
   z-index: 1;
