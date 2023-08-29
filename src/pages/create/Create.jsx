@@ -7,8 +7,6 @@ import PlaceSearch from "../../components/place/PlaceSearch";
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
-  const [content, setContent] = useState("");
-  const [oneLineContent, setOneLineContent] = useState("");
 
   return (
     <>
@@ -19,7 +17,6 @@ function Create() {
       <PlaceSearch />
       <div>
         <textarea
-          value={post.postContent}
           placeholder="내용을 작성하는 공간입니다."
           onChange={(e) => {
             setPost({ ...post, postContent: e.target.value });
@@ -27,7 +24,6 @@ function Create() {
         ></textarea>
         <input
           type="text"
-          value={post.postOneLineContent}
           placeholder="10자 이내의 한줄평을 남겨 주세요"
           maxLength="10"
           onChange={(e) => {
