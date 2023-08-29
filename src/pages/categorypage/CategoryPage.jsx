@@ -14,25 +14,17 @@ function CategoryPage() {
   const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
-  // const [search, setSearch] = useState('');
 
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
 
-  // const handleSearchInputChange = (e) => {
-  //   setSearch(e.target.value);
-  // };
-
-  // const handleSearchInputKeyDown = (e) => {
-  //   if (e.key === 'Enter') {
-  //     setSearch(e.currentTarget.value);
-  //   }
-  // };
-
   const handleSearch = (searchQuery) => {
     const searchResults = posts.filter((post) =>
-      post.placeName.toLowerCase().includes(searchQuery.toLowerCase())
+      post.placeName
+        .replace(' ', '')
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase().replace(' ', ''))
     );
     setCurrentPage(1);
     setFilteredPosts(searchResults);
@@ -83,17 +75,6 @@ function CategoryPage() {
       <PhrasesContainer>
         <h2>{category}</h2>
         <h3>우리 동네 베스트 추천 장소</h3>
-        {/* <SearchBox>
-          <input
-            placeholder="찾으시는 장소를 검색해주세요"
-            value={search}
-            onChange={handleSearchInputChange}
-            onKeyDown={handleSearchInputKeyDown}
-          />
-          <div>
-            <div></div>
-          </div>
-        </SearchBox> */}
         <Search onSearch={handleSearch} />
       </PhrasesContainer>
       {!!user ? (
@@ -103,18 +84,6 @@ function CategoryPage() {
       ) : (
         <></>
       )}
-      {/* <PostsContainer>
-        {currentPosts.map((post) => (
-          //style 가로로 3개만 보여주기
-          <div>
-            <PostBox to={`/detail/${post.id}`}>
-              <ImageBox alt="PostImgs" src={post.postImgs} />
-              <h4>{post.placeName}</h4>
-              <CategoryLikes id={post.id} />
-            </PostBox>
-          </div>
-        ))}
-      </PostsContainer> */}
       {/* //수정 */}
       <PostsContainer>
         {(filteredPosts.length > 0 ? filteredPosts : currentPosts).map(
@@ -171,7 +140,7 @@ const PhrasesContainer = styled.div`
 const WriteButtonContainer = styled.div`
   align-self: flex-end;
   text-align: center;
-  margin: 60px 0 30px;
+  margin-bottom: 30px;
 `;
 // const SearchBox = styled(Link)`
 //   display: flex;

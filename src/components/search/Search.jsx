@@ -67,6 +67,6 @@ const SearchBox = styled(Link)`
   & > div > div {
     width: 24px;
     height: 24px;
-    background-image: url(icon/search_icon.svg);
+    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
   }
 `;

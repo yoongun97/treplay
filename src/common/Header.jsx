@@ -89,7 +89,8 @@ const HomeLink = styled(Link)`
   display: block;
   width: 142px;
   height: 46px;
-  background: url(image/logo.png) no-repeat center / contain;
+  background: url(${process.env.PUBLIC_URL}/image/logo.png) no-repeat center /
+    contain;
 `;
 
 const CategoryContainer = styled.div`

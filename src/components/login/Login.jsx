@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as s from "./StyledLogin";
 import FacebookLogin from "./sns/FacebookLogin";
 import GoogleLogin from "./sns/GoogleLogin";
+import NaverLogin from "./sns/NaverLogin";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -57,58 +58,68 @@ function Login() {
   };
 
   return (
-    <div className="LoginContainer">
-      <div>
-        <div>Logo img</div>
-        <s.InputForm>
-          <div className="EmailInputBox">
-            <span>이메일: </span>
-            <input
-              type="email"
-              value={email}
-              placeholder="이메일을 입력해 주세요 (ex: treplay@treplay.com)"
-              onChange={(e) => {
-                setEmail(e.target.value);
+    <s.MainContainer>
+      <s.LoginContainer>
+        <s.EmailLoginBox>
+          <s.LoginTitle>로그인</s.LoginTitle>
+          <s.InputForm>
+            <s.InputBox>
+              <s.InfoInput
+                type="email"
+                value={email}
+                placeholder="이메일을 입력해주세요"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                autoFocus
+                autoComplete="email"
+              />
+            </s.InputBox>
+            <s.InputBox>
+              <s.InfoInput
+                type="password"
+                value={password}
+                placeholder="비밀번호를 입력해주세요"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                autoComplete="password"
+              />
+            </s.InputBox>
+            <s.BtnBox>
+              <s.NaviBtn>아이디 찾기</s.NaviBtn>
+              <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
+              <s.NaviBtn
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                회원가입
+              </s.NaviBtn>
+            </s.BtnBox>
+            <s.LoginBtn
+              type="submit"
+              onClick={(e) => {
+                loginHandler(e);
               }}
-              autoFocus
-              autoComplete="email"
-            />
-          </div>
-          <div className="PasswordInputBox">
-            <span>비밀번호: </span>
-            <input
-              type="password"
-              value={password}
-              placeholder="비밀번호를 입력해 주세요"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              autoComplete="password"
-            />
-          </div>
-          <button
-            type="submit"
-            onClick={(e) => {
-              loginHandler(e);
-            }}
-          >
-            로그인
-          </button>
-        </s.InputForm>
-        <div className="LinkContainer">
-          <Link to="/signup">회원가입</Link>
-        </div>
-      </div>
+            >
+              로그인
+            </s.LoginBtn>
+          </s.InputForm>
+        </s.EmailLoginBox>
 
-      <div className="SocialLoginContainer">
-        <p>SNS 계정으로 로그인 하기</p>
-        <s.SnsContainer>
-          <GoogleLogin />
-          <FacebookLogin />
-          <div>Naver</div>
-        </s.SnsContainer>
-      </div>
-    </div>
+        <s.SnsLoginContainer>
+          <s.SnsLoginTitle>
+            <span>SNS 계정으로 로그인</span>
+          </s.SnsLoginTitle>
+          <s.SnsContainer>
+            <FacebookLogin />
+            <GoogleLogin />
+            <NaverLogin />
+          </s.SnsContainer>
+        </s.SnsLoginContainer>
+      </s.LoginContainer>
+    </s.MainContainer>
   );
 }
 
