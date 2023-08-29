@@ -105,6 +105,7 @@ export const CheckBtn = styled.button`
   background-color: transparent;
   font-size: 12px;
   border: 1px solid;
+  transition: 0.3s;
   ${(props) =>
     !props.disabled &&
     css`
@@ -172,14 +173,12 @@ export const AgreementBox = styled.div`
 `;
 
 export const AgreementSubtitleBox = styled.div`
-  width: 210px;
   height: 26px;
   display: flex;
   margin-bottom: 8px;
 `;
 
 export const AgreementSubtitle = styled.p`
-  widht: 99px;
   height: 26px;
   font-weight: 500;
   font-size: 16px;
@@ -205,7 +204,7 @@ export const AgreementContent = styled.p`
   &::-webkit-scrollbar-thumb {
     background-color: #d9d9d9; /* 스크롤바의 색상 */
   }
-  &: hover {
+  &:hover {
     color: #777777;
   }
 `;
