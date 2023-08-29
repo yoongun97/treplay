@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { auth, db } from "../../firebaseConfig";
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import { auth, db } from '../../firebaseConfig';
 import {
   addDoc,
   collection,
@@ -10,29 +10,33 @@ import {
   getDocs,
   query,
   where,
-} from "firebase/firestore";
+  updateDoc,
+} from 'firebase/firestore';
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const [, setComments] = useState([]);
   const currentUser = auth.currentUser;
+
+  const [editingCommentId, setEditingCommentId] = useState(null); // 이 부분을 추가해주세요
+  const [editedComment, setEditedComment] = useState(''); // 이 부분을 추가해주세요
 
   const {
     data: post,
     isLoading,
     isError,
     error,
-  } = useQuery("post", async () => {
-    const postRef = doc(db, "posts", id);
+  } = useQuery('post', async () => {
+    const postRef = doc(db, 'posts', id);
     const docSnapshot = await getDoc(postRef);
     //firebase 에서 댓글 불러오기
     if (docSnapshot.exists()) {
       const commentsRef = query(
-        collection(db, "comments"),
-        where("postId", "==", id)
+        collection(db, 'comments'),
+        where('postId', '==', id)
       );
       const commentsSnapshot = await getDocs(commentsRef);
       const commentsData = [];
@@ -47,7 +51,7 @@ function Comments({ id }) {
         //firebase 에서 댓글 불러오기
       };
     } else {
-      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
+      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
     }
   });
 
@@ -64,7 +68,7 @@ function Comments({ id }) {
 
   const commentSubmit = async (e) => {
     e.preventDefault();
-    if (comment === "") {
+    if (comment === '') {
       return;
     }
 
@@ -75,29 +79,65 @@ function Comments({ id }) {
         userId: currentUser.uid,
         author: currentUser.displayName,
       };
-      const docRef = await addDoc(collection(db, "comments"), newComment);
+      const docRef = await addDoc(collection(db, 'comments'), newComment);
       setComments([...post.comments, { id: docRef.id, ...newComment }]);
-      setComment("");
-      queryClient.invalidateQueries("post");
+      setComment('');
+      queryClient.invalidateQueries('post');
     } catch (error) {
-      console.error("댓글 추가 에러: ", error);
+      console.error('댓글 추가 에러: ', error);
     }
   };
 
   //댓글삭제
   const handleDeleteComment = async (commentId) => {
     try {
-      await deleteDoc(doc(db, "comments", commentId));
+      await deleteDoc(doc(db, 'comments', commentId));
       setComments(post.comments.filter((comment) => comment.id !== commentId));
-      queryClient.invalidateQueries("post");
+      queryClient.invalidateQueries('post');
     } catch (error) {
-      console.error("댓글 삭제 에러: ", error);
+      console.error('댓글 삭제 에러: ', error);
+    }
+  };
+
+  const startEditComment = (commentId, commentText) => {
+    // 이 부분을 추가해주세요
+    setEditingCommentId(commentId);
+    setEditedComment(commentText);
+  };
+
+  const cancelEditComment = () => {
+    // 이 부분을 추가해주세요
+    setEditingCommentId(null);
+    setEditedComment('');
+  };
+
+  const updateEditedComment = (e) => {
+    // 이 부분을 추가해주세요
+    setEditedComment(e.target.value);
+  };
+
+  const saveEditedComment = async (commentId) => {
+    // 이 부분을 추가해주세요
+    if (editedComment === '') {
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, 'comments', commentId), {
+        comment: editedComment,
+      });
+
+      setEditingCommentId(null);
+      setEditedComment('');
+      queryClient.invalidateQueries('post');
+    } catch (error) {
+      console.error('댓글 수정 에러: ', error);
     }
   };
 
   return (
     <span
-      style={{ width: "800px", height: "300px", border: "1px solid black" }}
+      style={{ width: '800px', height: '300px', border: '1px solid black' }}
     >
       <form onSubmit={commentSubmit}>
         <textarea
@@ -112,14 +152,38 @@ function Comments({ id }) {
         {post.comments?.map((comment) => (
           <div key={comment.id}>
             <div>
-              {comment.author}
-              <div>{comment.comment}</div>
+              {editingCommentId === comment.id ? (
+                <>
+                  <textarea
+                    value={editedComment}
+                    onChange={updateEditedComment}
+                  />
+                  <button onClick={() => saveEditedComment(comment.id)}>
+                    저장
+                  </button>
+                  <button onClick={cancelEditComment}>취소</button>
+                </>
+              ) : (
+                <>
+                  {comment.author}
+                  <div>{comment.comment}</div>
+                  {currentUser && comment.userId === currentUser.uid && (
+                    <>
+                      <button
+                        onClick={() =>
+                          startEditComment(comment.id, comment.comment)
+                        }
+                      >
+                        수정
+                      </button>
+                      <button onClick={() => handleDeleteComment(comment.id)}>
+                        삭제
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
             </div>
-            {currentUser && comment.userId === currentUser.uid && (
-              <button onClick={() => handleDeleteComment(comment.id)}>
-                삭제
-              </button>
-            )}
           </div>
         ))}
       </div>

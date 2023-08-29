@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
+import React, { useState, useEffect } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { styled } from "styled-components";
 
 const CategoryLikes = (props) => {
   const { id } = props;
@@ -9,13 +10,13 @@ const CategoryLikes = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const q = query(collection(db, 'likes'), where('postId', '==', id));
+      const q = query(collection(db, "likes"), where("postId", "==", id));
       console.log({ id });
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => doc.data());
       // 또가요와 안가요 누적수
-      const likedData = data.filter((doc) => doc.state === 'like');
-      const dislikedData = data.filter((doc) => doc.state === 'dislike');
+      const likedData = data.filter((doc) => doc.state === "like");
+      const dislikedData = data.filter((doc) => doc.state === "dislike");
       setLikesCount(likedData.length);
       setDislikesCount(dislikedData.length);
     };
@@ -24,11 +25,57 @@ const CategoryLikes = (props) => {
   }, [id]);
 
   return (
-    <div>
-      <span>또가요({likesCount})</span>
-      <span>안가요({dislikesCount})</span>
-    </div>
+    <LikesContainer>
+      <LikesBox>
+        <img src="icon/like_icon.svg" alt="likesIcon"></img>
+        <span>{likesCount}</span>
+      </LikesBox>
+      <DislikesBox>
+        <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
+        <span>{dislikesCount}</span>
+      </DislikesBox>
+    </LikesContainer>
   );
 };
 
 export default CategoryLikes;
+
+const LikesContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0px 20px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  & > div {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  & > div > img {
+    margin-right: 12px;
+  }
+`;
+
+const LikesBox = styled.div`
+  position: relative;
+  padding-right: 10px;
+  color: #0a58be;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: auto;
+    bottom: auto;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background-color: #222;
+  }
+`;
+const DislikesBox = styled.div`
+  padding-left: 10px;
+  color: #fcd71e;
+`;

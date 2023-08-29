@@ -55,6 +55,7 @@ export const NaviBtn = styled.span`
   font-size: 14px;
   padding-left: 8px;
   padding-right: 8px;
+  cursor: pointer;
 `;
 
 export const LoginBtn = styled.button`
@@ -94,6 +95,7 @@ export const SnsBtn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const SnsImg = styled.img`
