@@ -7,7 +7,8 @@
   box-sizing: border-box;
 }
 body {
-  min-width: 1280px;
+  width: 100%;
+  min-width: 1900px;
   color: #222;
 }
 
@@ -27,3 +28,7 @@ a {
 }
 
 /* a 태그 (Link) 로 한 것들 모두 위 효과 적용됨 */
+
+button {
+  cursor: pointer;
+}
