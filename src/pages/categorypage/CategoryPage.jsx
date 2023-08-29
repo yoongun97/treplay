@@ -13,7 +13,6 @@ function CategoryPage() {
   const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
 
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,7 +48,11 @@ function CategoryPage() {
     return postsData;
   };
 
-  const { data: posts, error, isLoading } = useQuery("posts", fetchPosts);
+  const {
+    data: posts,
+    error,
+    isLoading,
+  } = useQuery(["posts", category], fetchPosts);
 
   if (error) {
     console.error("데이터를 가져올 수 없습니다", error);
@@ -79,6 +82,7 @@ function CategoryPage() {
             onChange={handleSearchInputChange}
             onKeyDown={handleSearchInputKeyDown}
           />
+
           <div>
             <div></div>
           </div>
@@ -94,16 +98,8 @@ function CategoryPage() {
       <PostsContainer>
         {currentPosts.map((post) => (
           //style 가로로 3개만 보여주기
-          <div key={post.id}>
-            <PostBox
-              onClick={() => {
-                if (user === null) {
-                  navigate("/login");
-                } else {
-                  navigate(`/detail/${post.id}`);
-                }
-              }}
-            >
+          <div>
+            <PostBox to={`/detail/${post.id}`}>
               <ImageBox alt="PostImgs" src={post.postImgs} />
               <h4>{post.placeName}</h4>
               <CategoryLikes id={post.id} />
@@ -150,7 +146,7 @@ const PhrasesContainer = styled.div`
 const WriteButtonContainer = styled.div`
   align-self: flex-end;
   text-align: center;
-  margin: 60px 0 30px;
+  margin-bottom: 30px;
 `;
 const SearchBox = styled(Link)`
   display: flex;
@@ -161,6 +157,7 @@ const SearchBox = styled(Link)`
   padding-left: 20px;
   border: 1px solid #0a58be;
   border-radius: 30px;
+  margin-bottom: 60px;
 
   & > input {
     outline: none;
@@ -185,7 +182,7 @@ const SearchBox = styled(Link)`
   & > div > div {
     width: 24px;
     height: 24px;
-    background-image: url(icon/search_icon.svg);
+    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
   }
 `;
 

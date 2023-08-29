@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import React from "react";
 import { userAtom } from "../store/userAtom";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { styled } from "styled-components";
 
@@ -9,13 +9,11 @@ const Header = () => {
   const { nation } = useParams();
   const [user] = useAtom(userAtom);
   const auth = getAuth();
-  const navigate = useNavigate();
 
   const logoutHandler = () => {
     signOut(auth)
       .then(() => {
         alert("로그아웃 되었습니다");
-        navigate("/");
       })
       .catch(() => {
         alert("로그아웃에 실패하였습니다. 다시 시도해 주세요");
@@ -89,7 +87,8 @@ const HomeLink = styled(Link)`
   display: block;
   width: 142px;
   height: 46px;
-  background: url(image/logo.png) no-repeat center / contain;
+  background: url(${process.env.PUBLIC_URL}/image/logo.png) no-repeat center /
+    contain;
 `;
 
 const CategoryContainer = styled.div`

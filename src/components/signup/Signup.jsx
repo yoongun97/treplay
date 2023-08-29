@@ -126,7 +126,20 @@ function Signup() {
         navigate("/");
       }
     } catch (error) {
-      alert(getErrorMessage(error.code));
+      if (
+        error.code === "auth/invalid-email" ||
+        error.code === "auth/email-already-in-use"
+      ) {
+        setErrorBox("email");
+        setErrorMsg("중복확인을 해주세요");
+        emailInputRef.current.focus();
+      } else if (error.code === "auth/weak-password") {
+        setErrorBox("password");
+        setErrorMsg(getErrorMessage(error.code));
+        passwordInputRef.current.focus();
+      } else {
+        alert(getErrorMessage(error.code));
+      }
       console.log(error.message);
     }
   };
@@ -163,11 +176,6 @@ function Signup() {
     }
   };
 
-  // nicknameCheckHandler = async () => {
-  // 1. await 실제DB에서체크
-  // 2. setIsModalOpen(true);
-  // }
-
   return (
     <s.SignupContainer isModalOpen={isModalOpen}>
       {isModalOpen && <s.Overlay isModalOpen={isModalOpen} />}
@@ -198,6 +206,7 @@ function Signup() {
                 setErrorBox("");
               }}
               ref={emailInputRef}
+              autoFocus
             />
             <s.CheckBtn
               disabled={!email}

@@ -1,22 +1,23 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import Layout from './common/Layout';
-import MainPage from './pages/mainpage/MainPage';
-import NationPage from './pages/nationpage/NationPage';
-import CategoryPage from './pages/categorypage/CategoryPage';
-import DetailPage from './pages/detailpage/DetailPage';
-import Create from './pages/create/Create';
-import Edit from './pages/edit/Edit';
-import MyPage from './pages/mypage/MyPage';
-import Login from './components/login/Login';
-import Signup from './components/signup/Signup';
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
-import { userAtom } from './store/userAtom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { Routes, Route, Link } from "react-router-dom";
+import Layout from "./common/Layout";
+import MainPage from "./pages/mainpage/MainPage";
+import NationPage from "./pages/nationpage/NationPage";
+import CategoryPage from "./pages/categorypage/CategoryPage";
+import DetailPage from "./pages/detailpage/DetailPage";
+import Create from "./pages/create/Create";
+import Edit from "./pages/edit/Edit";
+import MyPage from "./pages/mypage/MyPage";
+import Login from "./components/login/Login";
+import Signup from "./components/signup/Signup";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "./store/userAtom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import SuggestSignup from "./components/signup/suggestSignup";
 
 function App() {
-  const [, setUser] = useAtom(userAtom); // userAtom 사용
+  const [user, setUser] = useAtom(userAtom); // userAtom 사용
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
@@ -36,7 +37,11 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
+        {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
+        <Route
+          path="/detail/:id"
+          element={user ? <DetailPage /> : <SuggestSignup />}
+        />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />

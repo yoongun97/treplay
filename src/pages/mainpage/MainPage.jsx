@@ -37,8 +37,9 @@ const MainContainer = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
-  height: 100vh;
-  background: url("image/mainBg.jpg") no-repeat top center / cover;
+  height: calc(100vh - 90px);
+  background: url(${process.env.PUBLIC_URL}/image/mainBg.jpg) no-repeat top
+    center / cover;
   z-index: 1;
 
   &::after {
@@ -79,14 +80,14 @@ const ButtonContainer = styled.div`
 const PrevButton = styled.div`
   width: 30px;
   height: 30px;
-  background-image: url(icon/left_arrow_white.svg);
+  background-image: url(${process.env.PUBLIC_URL}/icon/left_arrow_white.svg);
   cursor: pointer;
 `;
 
 const NextButton = styled.div`
   width: 30px;
   height: 30px;
-  background-image: url(icon/right_arrow_white.svg);
+  background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_white.svg);
   background-size: cover;
   cursor: pointer;
 `;
@@ -117,15 +118,15 @@ const StyledButton = styled(Link)`
   cursor: pointer;
 
   &:first-child {
-    background-image: url(image/korea.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
   }
 
   &:nth-child(2) {
-    background-image: url(image/japan.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
   }
 
   &:nth-child(3) {
-    background-image: url(image/america.jpg);
+    background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
   }
 
   &::after {

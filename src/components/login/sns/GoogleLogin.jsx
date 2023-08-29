@@ -17,7 +17,10 @@ function GoogleLogin() {
 
   return (
     <SnsBtn onClick={handleGoogleLogin}>
-      <SnsImg src="" alt="" />
+      <SnsImg
+        src={`${process.env.PUBLIC_URL}/image/google_icon.png`}
+        alt="google_icon"
+      />
       <SnsMent>구글 로그인</SnsMent>
     </SnsBtn>
   );

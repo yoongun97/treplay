@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as s from "./StyledLogin";
 import FacebookLogin from "./sns/FacebookLogin";
 import GoogleLogin from "./sns/GoogleLogin";
@@ -11,17 +11,27 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // error msg 선택
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // focus 줄 input 참조
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
   const navigate = useNavigate();
+  const location = useLocation(); // useLocation 훅을 사용하여 이전 페이지 정보 가져오기
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
       if (!email) {
-        alert("이메일을 입력해주세요.");
+        setErrorMsg("이메일을 입력해 주세요.");
+        emailInputRef.current.focus();
         return;
       }
       if (!password) {
-        alert("비밀번호를 입력해주세요.");
+        setErrorMsg("비밀번호를 입력해 주세요.");
+        passwordInputRef.current.focus();
         return;
       }
       const userCredential = await signInWithEmailAndPassword(
@@ -31,9 +41,19 @@ function Login() {
       );
       alert("로그인에 성공하셨습니다.");
 
-      navigate("/");
+      // 이전 페이지로 이동
+      navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
     } catch (error) {
-      alert(getErrorMessage(error.code));
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/invalid-email" ||
+        error.code === "auth/wrong-password"
+      ) {
+        setErrorMsg("아이디 또는 비밀번호를 확인해주세요");
+      } else {
+        alert(getErrorMessage(error.code));
+      }
+
       console.log(error.code);
     }
   };
@@ -69,9 +89,11 @@ function Login() {
               placeholder="이메일을 입력해주세요"
               onChange={(e) => {
                 setEmail(e.target.value);
+                setErrorMsg("");
               }}
               autoFocus
               autoComplete="email"
+              ref={emailInputRef}
             />
           </s.InputBox>
           <s.InputBox>
@@ -81,17 +103,24 @@ function Login() {
               placeholder="비밀번호를 입력해주세요"
               onChange={(e) => {
                 setPassword(e.target.value);
+                setErrorMsg("");
               }}
               autoComplete="password"
+              ref={passwordInputRef}
             />
           </s.InputBox>
+          {errorMsg && (
+            <s.ErrorBox>
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+                alt="경고이미지"
+              />
+              <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+            </s.ErrorBox>
+          )}
           <s.BtnBox>
-            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
-              아이디 찾기
-            </s.NaviBtn>
-            <s.NaviBtn style={{ borderRight: "2px solid #222222" }}>
-              비밀번호 찾기
-            </s.NaviBtn>
+            <s.NaviBtn>아이디 찾기</s.NaviBtn>
+            <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
             <s.NaviBtn
               onClick={() => {
                 navigate("/signup");

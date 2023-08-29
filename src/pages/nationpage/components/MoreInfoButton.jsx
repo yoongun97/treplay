@@ -37,11 +37,11 @@ const StyledButton = styled(Link)`
   & > div {
     width: 24px;
     height: 24px;
-    background-image: url("icon/right_arrow_blue.svg");
+    background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_blue.svg);
     transition: 0.3s;
   }
 
   &:hover > div {
-    background-image: url("icon/right_arrow_white.svg");
+    background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_white.svg);
   }
 `;
