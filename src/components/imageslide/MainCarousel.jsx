@@ -1,14 +1,16 @@
+
 import React from "react";
 import Slider from "react-slick";
 import "./slick.css";
 import { styled } from "styled-components";
+
 
 function SampleArrow(props) {
   const { className, style, onClick } = props;
   return (
     <div
       className={className}
-      style={{ ...style, display: "none" }}
+      style={{ ...style, display: 'none' }}
       onClick={onClick}
     />
   );
@@ -26,16 +28,18 @@ function MainCarousel() {
     pauseOnHover: true,
     nextArrow: <SampleArrow />,
     prevArrow: <SampleArrow />,
+
     appendDots: (dots) => <ul style={{ listStyle: "none" }}>{dots}</ul>,
     dotsClass: "dots_custom",
+
   };
   return (
     <div className="CarouselContainer">
       <StyledSlider
         {...settings}
         style={{
-          height: "700px",
-          width: "100%",
+          height: '700px',
+          width: '100%',
         }}
       >
         <ImageContainer>
