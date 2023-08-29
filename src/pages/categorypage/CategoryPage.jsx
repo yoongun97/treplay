@@ -1,38 +1,40 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import PageNation from "../../components/pageNation/PageNation";
-import CategoryLikes from "./CategoryLikes";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import { styled } from "styled-components";
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import { styled } from 'styled-components';
+import Search from '../../components/search/Search';
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
-  const [search, setSearch] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 1; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
 
-  const handleSearchInputChange = (e) => {
-    setSearch(e.target.value);
-  };
-
-  const handleSearchInputKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setSearch(e.currentTarget.value);
-    }
+  const handleSearch = (searchQuery) => {
+    const searchResults = posts.filter((post) =>
+      post.placeName
+        .replace(' ', '')
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase().replace(' ', ''))
+    );
+    setCurrentPage(1);
+    setFilteredPosts(searchResults);
   };
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, "posts"),
-      where("nation", "==", nation),
-      where("category", "==", category)
+      collection(db, 'posts'),
+      where('nation', '==', nation),
+      where('category', '==', category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -52,15 +54,15 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(["posts", category], fetchPosts);
+  } = useQuery(['posts', category], fetchPosts);
 
   if (error) {
-    console.error("데이터를 가져올 수 없습니다", error);
-    return alert("데이터를 가져올 수 없습니다");
+    console.error('데이터를 가져올 수 없습니다', error);
+    return alert('데이터를 가져올 수 없습니다');
   }
 
   if (isLoading) {
-    return "정보를 가져오고 있습니다.";
+    return '정보를 가져오고 있습니다.';
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
@@ -73,18 +75,7 @@ function CategoryPage() {
       <PhrasesContainer>
         <h2>{category}</h2>
         <h3>우리 동네 베스트 추천 장소</h3>
-        <SearchBox>
-          <input
-            placeholder="찾으시는 장소를 검색해주세요"
-            value={search}
-            onChange={handleSearchInputChange}
-            onKeyDown={handleSearchInputKeyDown}
-          />
-
-          <div>
-            <div></div>
-          </div>
-        </SearchBox>
+        <Search onSearch={handleSearch} />
       </PhrasesContainer>
       {!!user ? (
         <WriteButtonContainer>
@@ -93,21 +84,26 @@ function CategoryPage() {
       ) : (
         <></>
       )}
+      {/* //수정 */}
       <PostsContainer>
-        {currentPosts.map((post) => (
-          //style 가로로 3개만 보여주기
-          <div>
-            <PostBox to={`/detail/${post.id}`}>
-              <ImageBox alt="PostImgs" src={post.postImgs} />
-              <h4>{post.placeName}</h4>
-              <CategoryLikes id={post.id} />
-            </PostBox>
-          </div>
-        ))}
+        {(filteredPosts.length > 0 ? filteredPosts : currentPosts).map(
+          (post) => (
+            <div key={post.id}>
+              <PostBox to={`/detail/${post.id}`}>
+                <ImageBox alt="PostImgs" src={post.postImgs} />
+                <h4>{post.placeName}</h4>
+                <CategoryLikes id={post.id} />
+              </PostBox>
+            </div>
+          )
+        )}
       </PostsContainer>
       <PageNation
         postsViewPage={postsViewPage}
-        totalPosts={posts.length}
+        // totalPosts={posts.length}
+        totalPosts={
+          filteredPosts.length > 0 ? filteredPosts.length : posts.length
+        }
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
       />
@@ -146,43 +142,42 @@ const WriteButtonContainer = styled.div`
   text-align: center;
   margin-bottom: 30px;
 `;
-const SearchBox = styled(Link)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 580px;
-  height: 60px;
-  padding-left: 20px;
-  border: 1px solid #0a58be;
-  border-radius: 30px;
-  margin-bottom: 60px;
+// const SearchBox = styled(Link)`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   width: 580px;
+//   height: 60px;
+//   padding-left: 20px;
+//   border: 1px solid #0a58be;
+//   border-radius: 30px;
 
-  & > input {
-    outline: none;
-    border: none;
-    font-size: 16px;
-    font-weight: 400;
-    color: #222;
-    width: 480px;
-    height: 100%;
-    background: transparent;
-  }
+//   & > input {
+//     outline: none;
+//     border: none;
+//     font-size: 16px;
+//     font-weight: 400;
+//     color: #222;
+//     width: 480px;
+//     height: 100%;
+//     background: transparent;
+//   }
 
-  & > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 24px;
-    background-color: #0a58be;
-  }
-  & > div > div {
-    width: 24px;
-    height: 24px;
-    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
-  }
-`;
+//   & > div {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     width: 60px;
+//     height: 60px;
+//     border-radius: 24px;
+//     background-color: #0a58be;
+//   }
+//   & > div > div {
+//     width: 24px;
+//     height: 24px;
+//     background-image: url(icon/search_icon.svg);
+//   }
+// `;
 
 const PostsContainer = styled.div`
   display: grid;

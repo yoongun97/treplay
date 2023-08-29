@@ -19,16 +19,20 @@ const Edit = () => {
   //이미지 선택 이름,미리보기
   const [selectedFileNames, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
+  //장소와 카테고리 받기
+  const [nation, setNation] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       const editPostData = doc(db, "posts", id);
       const docSnapshot = await getDoc(editPostData);
-      //detail페이지에서 전달 받은 텍스트
+      //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
         setpost({ id: docSnapshot.id, ...docSnapshot.data() });
         setEditDetail(docSnapshot.data().postContent);
-        console.log(docSnapshot.data().postContent);
+        setNation(docSnapshot.data().nation);
+        setCategory(docSnapshot.data().category);
       }
     };
     fetchData();
