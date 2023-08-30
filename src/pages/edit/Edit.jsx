@@ -13,15 +13,16 @@ import { styled } from "styled-components";
 const Edit = () => {
   const { id } = useParams();
   const [post, setpost] = useState(null);
-  const [editDetail, setEditDetail] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [editOneLineContent, setEditOneLineContent] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
   const [selectedFileNames, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   //장소와 카테고리 받기
-  const [nation, setNation] = useState('');
-  const [category, setCategory] = useState('');
+  const [nation, setNation] = useState("");
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +31,8 @@ const Edit = () => {
       //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
         setpost({ id: docSnapshot.id, ...docSnapshot.data() });
-        setEditDetail(docSnapshot.data().postContent);
+        setEditContent(docSnapshot.data().postContent);
+        setEditOneLineContent(docSnapshot.data().postOneLineContent);
         setNation(docSnapshot.data().nation);
         setCategory(docSnapshot.data().category);
       }
@@ -38,8 +40,12 @@ const Edit = () => {
     fetchData();
   }, [id]);
 
-  const handlePostChange = (e) => {
-    setEditDetail(e.target.value);
+  const handleContentChange = (e) => {
+    setEditContent(e.target.value);
+  };
+
+  const handleOneLineContentChange = (e) => {
+    setEditOneLineContent(e.target.value);
   };
 
   const handleImageChange = (e) => {
@@ -92,8 +98,12 @@ const Edit = () => {
       const updateData = {};
 
       // 수정된 경우에만 업데이트
-      if (editDetail !== undefined) {
-        updateData.postContent = editDetail;
+      if (editContent !== undefined) {
+        updateData.postContent = editContent;
+      }
+
+      if (editOneLineContent !== undefined) {
+        updateData.postOneLineContent = editOneLineContent;
       }
 
       if (editImage && editImage.length > 0) {
@@ -122,7 +132,12 @@ const Edit = () => {
       {post ? (
         <EditContainerInner>
           <h2>{post.placeName}</h2>
-          <StyledTextarea value={editDetail} onChange={handlePostChange} />
+          <StyledTextarea value={editContent} onChange={handleContentChange} />
+          <StyledInput
+            maxLength="10"
+            value={editOneLineContent}
+            onChange={handleOneLineContentChange}
+          />
           <ImageEditContainer>
             <FileInputBox type="file" onChange={handleImageChange} multiple />
             <PreviewImagesContainer>
@@ -159,6 +174,8 @@ const EditContainer = styled.div`
   text-align: center;
 `;
 const EditContainerInner = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 1280px;
   max-width: 1280px;
   margin: 0 auto;
@@ -166,6 +183,11 @@ const EditContainerInner = styled.div`
 const StyledTextarea = styled.textarea`
   width: 80%;
   height: 300px;
+`;
+const StyledInput = styled.input`
+  width: 300px;
+  height: 30px;
+  margin: 20px auto;
 `;
 const ImageEditContainer = styled.div`
   width: 50%;

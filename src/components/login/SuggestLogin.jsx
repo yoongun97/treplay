@@ -2,21 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
-const SuggestSignup = () => {
+const SuggestLogin = () => {
   return (
     <SuggestContainer>
       <SuggestInner>
         <h2>
-          <span>회원가입</span>을 통하여
+          <span>로그인</span>하시고
           <br />
           <span>최고의 또갈집</span>을 확인해보세요
         </h2>
         <ImageBox></ImageBox>
         <BubbleBox>
-          <span>회원가입 후 최고의 여행스팟을 공유해 주세요!</span>
+          <span>로그인 후 최고의 여행스팟을 공유해 주세요!</span>
         </BubbleBox>
-        <StyledButton to={"/signup"}>
-          <span>회원가입 하러가기</span>
+        <StyledButton to={"/login"}>
+          <span>로그인 하러가기</span>
           <img
             src={`${process.env.PUBLIC_URL}/icon/arrow_blue.svg`}
             alt="arrow_blue_icon"
@@ -27,7 +27,7 @@ const SuggestSignup = () => {
   );
 };
 
-export default SuggestSignup;
+export default SuggestLogin;
 
 const SuggestContainer = styled.div`
   display: flex;
