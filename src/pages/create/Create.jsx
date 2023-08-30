@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import SelectBox from "../../components/selectBox/SelectBox";
-import ImageUpload from "../../components/ImageUpload";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
-import PlaceSearch from "../../components/place/PlaceSearch";
+import React, { useState } from 'react';
+import SelectBox from '../../components/selectBox/SelectBox';
+import ImageUpload from '../../components/ImageUpload';
+import { useAtom } from 'jotai';
+import { postAtom } from '../../store/postAtom';
+import PlaceSearch from '../../components/place/PlaceSearch';
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <SelectBox />
       </div>
       {/* <PlaceAddress /> */}
@@ -31,7 +31,7 @@ function Create() {
           }}
         />
       </div>
-      <ImageUpload style={{ margin: "20px" }} />
+      <ImageUpload style={{ margin: '20px' }} />
     </>
   );
 }
