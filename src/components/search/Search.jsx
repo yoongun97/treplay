@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { styled } from "styled-components";
+import { Link } from "react-router-dom";
 
 const Search = ({ onSearch }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onSearch(search);
     }
   };
@@ -40,6 +40,7 @@ const SearchBox = styled(Link)`
   align-items: center;
   width: 580px;
   height: 60px;
+  margin-bottom: 60px;
   padding-left: 20px;
   border: 1px solid #0a58be;
   border-radius: 30px;

@@ -6,6 +6,7 @@ export const postAtom = atom({
   placeName: "",
   placeLocation: "",
   postContent: "",
+  postOneLineContent: "",
   date: null,
   author: null,
   uid: null,

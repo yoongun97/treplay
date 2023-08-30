@@ -81,7 +81,12 @@ const Preview = ({
             return (
               <PreviewListBox to={`/detail/${post.id}`} key={post.id}>
                 <ImageBox style={imageStyle}></ImageBox>
-                <h3>{post.placeName}</h3>
+                <h4>{post.placeName}</h4>
+                <h5>{post.placeLocation}</h5>
+                <p>
+                  <span># </span>
+                  {post.postOneLineContent}
+                </p>
                 {/* 추천/비추천 개수 보여줌 */}
                 <LikesContainer>
                   <LikesBox>
@@ -159,13 +164,35 @@ const PreviewListContainer = styled.div`
 const PreviewListBox = styled(Link)`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
+  width: 380px;
+  text-align: left;
 
-  & > h3 {
-    margin: 20px 0px 16px;
-    font-size: 18px;
+  & > h4 {
+    margin-top: 20px;
+    font-size: 20px;
     font-weight: 500;
+    color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > h5 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > p {
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #777;
   }
 `;
 

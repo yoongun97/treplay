@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import { styled } from 'styled-components';
-import Search from '../../components/search/Search';
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import { styled } from "styled-components";
+import Search from "../../components/search/Search";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -27,7 +27,7 @@ function CategoryPage() {
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) =>
       post.placeName
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(searchData.toLowerCase().replace(' ', ''))
     );
@@ -37,9 +37,9 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -74,15 +74,16 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(['posts', category, sortOption], fetchPosts);
+  } = useQuery(["posts", category], fetchPosts);
+
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    console.error("데이터를 가져올 수 없습니다", error);
+    return alert("데이터를 가져올 수 없습니다");
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
   const indexOfLastPost = currentPage * postsViewPage;
@@ -96,14 +97,24 @@ function CategoryPage() {
         <h3>우리 동네 베스트 추천 장소</h3>
         <Search onSearch={handleSearch} />
       </PhrasesContainer>
-
-      {!!user ? (
-        <WriteButtonContainer>
-          <Link to={`/create`}>글쓰기</Link>
-        </WriteButtonContainer>
-      ) : (
-        <></>
-      )}
+      <MiddleContainer>
+        {/* FilterContainer에 정렬기능 추가 */}
+        <FilterContainer>
+          <LatestFilterButton>최신순</LatestFilterButton>
+          <LikedFilterButton>인기순</LikedFilterButton>
+        </FilterContainer>
+        {!!user ? (
+          <WriteButton to={`/create`}>
+            <img
+              src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
+              alt="writing_icon"
+            ></img>
+            <span>글쓰기</span>
+          </WriteButton>
+        ) : (
+          <></>
+        )}
+      </MiddleContainer>
       {/* //수정 */}
       <PostsContainer>
         {(filteredPosts.length > 0 ? filteredPosts : currentPosts)
@@ -113,6 +124,11 @@ function CategoryPage() {
               <PostBox to={`/detail/${post.id}`}>
                 <ImageBox alt="PostImgs" src={post.postImgs} />
                 <h4>{post.placeName}</h4>
+                <h5>{post.placeLocation}</h5>
+                <p>
+                  <span># </span>
+                  {post.postOneLineContent}
+                </p>
                 <CategoryLikes id={post.id} />
               </PostBox>
             </div>
@@ -157,9 +173,37 @@ const PhrasesContainer = styled.div`
     color: #222;
   }
 `;
+const MiddleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
 
-const WriteButtonContainer = styled.div`
+const FilterContainer = styled.div`
+  display: flex;
+  gap: 12px;
+
+  & > div {
+    width: 105px;
+    height: 34px;
+    border-radius: 30px;
+    border: 1px solid #e5e5e5;
+  }
+`;
+
+const LatestFilterButton = styled.div``;
+const LikedFilterButton = styled.div``;
+const WriteButton = styled(Link)`
   align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #0a58be;
+  color: #fff;
   text-align: center;
   margin-bottom: 30px;
 `;
@@ -176,13 +220,33 @@ const PostBox = styled(Link)`
   flex-direction: column;
   align-items: flex-start;
   width: 380px;
-  height: 480px;
+  text-align: left;
 
   & > h4 {
-    margin: 20px 0 16px;
-    font-size: 16px;
+    margin-top: 20px;
+    font-size: 20px;
     font-weight: 500;
     color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > h5 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > p {
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #777;
   }
 `;
 
