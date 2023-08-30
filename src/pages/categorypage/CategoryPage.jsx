@@ -8,24 +8,31 @@ import CategoryLikes from "./CategoryLikes";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
 import { styled } from "styled-components";
+import Search from "../../components/search/Search";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
-  const [search, setSearch] = useState("");
-
+  const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 1; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
+  //또가요 , 북마크 , 최신순 정렬하기
+  const [sortOption, setSortOption] = useState('likes');
 
-  const handleSearchInputChange = (e) => {
-    setSearch(e.target.value);
+  const handleSortOption = (newSortOption) => {
+    setSortOption(newSortOption);
   };
 
-  const handleSearchInputKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setSearch(e.currentTarget.value);
-    }
+  const handleSearch = (searchData) => {
+    const searchResults = posts.filter((post) =>
+      post.placeName
+        .replace(" ", "")
+        .toLowerCase()
+        .includes(searchData.toLowerCase().replace(' ', ''))
+    );
+    setFilteredPosts(searchResults);
+    setCurrentPage(1); // 이곳에서 문제인가요? 검색 결과가 없을시 초기 화면으로 가는데 이걸 아래쪽에서 어떻게 하는지
   };
 
   const fetchPosts = async () => {
@@ -45,7 +52,22 @@ function CategoryPage() {
       });
     });
 
-    return postsData;
+    const sortedPosts = sortPosts(postsData);
+
+    return sortedPosts;
+  };
+
+  //또가요 , 북마크 , 최신순 정렬하기
+  const sortPosts = (posts) => {
+    if (sortOption === 'likes') {
+      return posts.sort((a, b) => b.likes - a.likes);
+    } else if (sortOption === 'saved') {
+      return posts.sort((a, b) => b.saved - a.saved);
+    } else if (sortOption === 'newDate') {
+      return posts.sort((a, b) => b.newDate - a.newDate);
+    }
+    console.log(posts);
+    return posts;
   };
 
   const {
@@ -53,6 +75,7 @@ function CategoryPage() {
     error,
     isLoading,
   } = useQuery(["posts", category], fetchPosts);
+
 
   if (error) {
     console.error("데이터를 가져올 수 없습니다", error);
@@ -66,7 +89,6 @@ function CategoryPage() {
   const indexOfLastPost = currentPage * postsViewPage;
   const indexOfFirstPost = indexOfLastPost - postsViewPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-  //또가요 안가요 보여주기
 
   console.log(user);
 
@@ -75,41 +97,52 @@ function CategoryPage() {
       <PhrasesContainer>
         <h2>{category}</h2>
         <h3>우리 동네 베스트 추천 장소</h3>
-        <SearchBox>
-          <input
-            placeholder="찾으시는 장소를 검색해주세요"
-            value={search}
-            onChange={handleSearchInputChange}
-            onKeyDown={handleSearchInputKeyDown}
-          />
-
-          <div>
-            <div></div>
-          </div>
-        </SearchBox>
+        <Search onSearch={handleSearch} />
       </PhrasesContainer>
-      {!!user ? (
-        <WriteButtonContainer>
-          <Link to={`/create`}>글쓰기</Link>
-        </WriteButtonContainer>
-      ) : (
-        <></>
-      )}
+      <MiddleContainer>
+        {/* FilterContainer에 정렬기능 추가 */}
+        <FilterContainer>
+          <LatestFilterButton>최신순</LatestFilterButton>
+          <LikedFilterButton>인기순</LikedFilterButton>
+        </FilterContainer>
+        {!!user ? (
+          <WriteButton to={`/create`}>
+            <img
+              src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
+              alt="writing_icon"
+            ></img>
+            <span>글쓰기</span>
+          </WriteButton>
+        ) : (
+          <></>
+        )}
+      </MiddleContainer>
+      {/* //수정 */}
       <PostsContainer>
-        {currentPosts.map((post) => (
-          //style 가로로 3개만 보여주기
-          <div>
-            <PostBox to={`/detail/${post.id}`}>
-              <ImageBox alt="PostImgs" src={post.postImgs} />
-              <h4>{post.placeName}</h4>
-              <CategoryLikes id={post.id} />
-            </PostBox>
-          </div>
-        ))}
+        {(filteredPosts.length > 0 ? filteredPosts : currentPosts)
+          .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
+          .map((post) => (
+            <div key={post.id}>
+              <PostBox to={`/detail/${post.id}`}>
+                <ImageBox alt="PostImgs" src={post.postImgs} />
+                <h4>{post.placeName}</h4>
+                <h5>{post.placeLocation}</h5>
+                <p>
+                  <span># </span>
+                  {post.postOneLineContent}
+                </p>
+                <CategoryLikes id={post.id} />
+              </PostBox>
+            </div>
+          ))}
+        {((filteredPosts.length === 0 && currentPosts.length === 0) ||
+          currentPosts.length === 0) && <div>결과가 없습니다.</div>}
       </PostsContainer>
       <PageNation
         postsViewPage={postsViewPage}
-        totalPosts={posts.length}
+        totalPosts={
+          filteredPosts.length > 0 ? filteredPosts.length : posts.length
+        }
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
       />
@@ -142,48 +175,39 @@ const PhrasesContainer = styled.div`
     color: #222;
   }
 `;
-
-const WriteButtonContainer = styled.div`
-  align-self: flex-end;
-  text-align: center;
-  margin-bottom: 30px;
-`;
-const SearchBox = styled(Link)`
+const MiddleContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 580px;
-  height: 60px;
-  padding-left: 20px;
-  border: 1px solid #0a58be;
-  border-radius: 30px;
-  margin-bottom: 60px;
+  width: 100%;
+`;
 
-  & > input {
-    outline: none;
-    border: none;
-    font-size: 16px;
-    font-weight: 400;
-    color: #222;
-    width: 480px;
-    height: 100%;
-    background: transparent;
-  }
+const FilterContainer = styled.div`
+  display: flex;
+  gap: 12px;
 
   & > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 24px;
-    background-color: #0a58be;
+    width: 105px;
+    height: 34px;
+    border-radius: 30px;
+    border: 1px solid #e5e5e5;
   }
-  & > div > div {
-    width: 24px;
-    height: 24px;
-    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
-  }
+`;
+
+const LatestFilterButton = styled.div``;
+const LikedFilterButton = styled.div``;
+const WriteButton = styled(Link)`
+  align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #0a58be;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
 `;
 
 const PostsContainer = styled.div`
@@ -198,13 +222,33 @@ const PostBox = styled(Link)`
   flex-direction: column;
   align-items: flex-start;
   width: 380px;
-  height: 480px;
+  text-align: left;
 
   & > h4 {
-    margin: 20px 0 16px;
-    font-size: 16px;
+    margin-top: 20px;
+    font-size: 20px;
     font-weight: 500;
     color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > h5 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > p {
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #777;
   }
 `;
 
