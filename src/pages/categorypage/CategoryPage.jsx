@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -89,6 +89,8 @@ function CategoryPage() {
   const indexOfLastPost = currentPage * postsViewPage;
   const indexOfFirstPost = indexOfLastPost - postsViewPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  console.log(user);
 
   return (
     <CategoryPageContainer>

@@ -8,6 +8,7 @@ export const MainContainer = styled.div`
   height: calc(100vh - 90px);
 `;
 export const LoginContainer = styled.div`
+  margin: 150px auto 130px;
   width: 500px;
   display: flex;
   flex-direction: column;
@@ -46,6 +47,29 @@ export const InfoInput = styled.input`
   border: none;
   outline: none;
   background-color: transparent;
+`;
+
+export const ErrorBox = styled.div`
+  width: 500px;
+  height: 40px;
+  margin-top: -14px;
+  margin-bottom: -4px;
+  display: flex;
+`;
+export const ErrorMark = styled.img`
+  width: 16px;
+  height: 16px;
+  margin: 12px 5px 12px 10px;
+`;
+
+export const ErrorMsg = styled.p`
+  width: 459px;
+  height: 22px;
+  color: #e02918;
+  font-size: 12px;
+  line-height: 22px;
+  margin-top: 9px;
+  margin-bottom: 9px;
 `;
 
 export const BtnBox = styled.div`
@@ -140,6 +164,7 @@ export const SnsContainer = styled.div`
 
 export const SnsBtn = styled.div`
   text-align: center;
+  cursor: pointer;
 `;
 
 export const SnsImg = styled.img`

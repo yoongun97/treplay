@@ -1,55 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as m from "./StyledModal";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
 
 function NicknameModal({
   nickname,
   setNickname,
   setIsModalOpen,
-  // 밖에서체크한함수,
+  isUsedNickname,
+  nicknameCheckHandler,
 }) {
   const [checkNickname, setCheckNickname] = useState(nickname);
-  const [isUsedNickname, setIsUsedNickname] = useState(false);
   const [showMsg, setShowMsg] = useState(true);
-
-  useEffect(() => {
-    nicknameCheckHandler();
-    setShowMsg(true); // Reset showMsg when the modal opens
-  }, []);
-
-  // const 하나더 = () => {
-  //   밖에서체크한함수
-  //   if (usedNickname.length > 0) {
-  //     setIsUsedNickname(true);
-  //   } else if (usedNickname.length === 0) {
-  //     setIsUsedNickname(false);
-  //   }
-  // }
-  const nicknameCheckHandler = async () => {
-    // e.preventDefault();
-    try {
-      const q = query(collection(db, "users"));
-      // 여기서 시간 걸림
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      const usedNickname = data.filter(
-        (item) => item.nickname === checkNickname
-      );
-
-      if (usedNickname.length > 0) {
-        setIsUsedNickname(true);
-      } else if (usedNickname.length === 0) {
-        setIsUsedNickname(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <m.CheckModal>
@@ -76,7 +36,8 @@ function NicknameModal({
         <m.ModalCheckBtn
           disabled={!checkNickname}
           onClick={async (e) => {
-            await nicknameCheckHandler(e);
+            e.preventDefault();
+            await nicknameCheckHandler(checkNickname);
             setShowMsg(true);
           }}
         >

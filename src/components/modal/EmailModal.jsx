@@ -1,48 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as m from "./StyledModal";
-import { fetchSignInMethodsForEmail } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
 
 function EmailModal({
   email,
   setEmail,
   setIsModalOpen,
-  // 밖에서체크한함수,
+  isUsedEmail,
+  emailCheckHandler,
 }) {
   const [checkEmail, setCheckEmail] = useState(email);
-  const [isUsedEmail, setIsUsedEmail] = useState("");
+  // 메시지 보여주는 여부
   const [showMsg, setShowMsg] = useState(true);
-
-  useEffect(() => {
-    emailCheckHandler();
-
-    setShowMsg(true); // Reset showMsg when the modal opens
-  }, []);
-
-  // const 하나더 = () => {
-  //   밖에서체크한함수
-  //   if (usedNickname.length > 0) {
-  //     setIsUsedNickname(true);
-  //   } else if (usedNickname.length === 0) {
-  //     setIsUsedNickname(false);
-  //   }
-  // }
-
-  const emailCheckHandler = async () => {
-    // 이미 존재하는 이메일 !== 에러가 난 것
-    try {
-      const usedEmail = await fetchSignInMethodsForEmail(auth, checkEmail);
-      console.log({ usedEmail });
-      if (usedEmail.length > 0) {
-        setIsUsedEmail("duplicate");
-      } else if (usedEmail.length === 0) {
-        setIsUsedEmail("notduplicate");
-      }
-    } catch (error) {
-      console.log(error);
-      setIsUsedEmail("error");
-    }
-  };
 
   return (
     <m.CheckModal>
@@ -57,7 +25,6 @@ function EmailModal({
         />
       </m.CloseBtn>
       <m.ModalTitle>중복 확인</m.ModalTitle>
-
       <m.ModalInputCheck>
         <m.ModalInput
           value={checkEmail}
@@ -70,7 +37,8 @@ function EmailModal({
         <m.ModalCheckBtn
           disabled={!checkEmail}
           onClick={async (e) => {
-            await emailCheckHandler(e);
+            e.preventDefault();
+            await emailCheckHandler(checkEmail);
             setShowMsg(true);
           }}
         >

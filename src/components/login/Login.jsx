@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as s from "./StyledLogin";
 import FacebookLogin from "./sns/FacebookLogin";
 import GoogleLogin from "./sns/GoogleLogin";
@@ -11,29 +11,45 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // error msg 선택
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // focus 줄 input 참조
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
   const navigate = useNavigate();
+  const location = useLocation(); // useLocation 훅을 사용하여 이전 페이지 정보 가져오기
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
       if (!email) {
-        alert("이메일을 입력해주세요.");
+        setErrorMsg("이메일을 입력해 주세요.");
+        emailInputRef.current.focus();
         return;
       }
       if (!password) {
-        alert("비밀번호를 입력해주세요.");
+        setErrorMsg("비밀번호를 입력해 주세요.");
+        passwordInputRef.current.focus();
         return;
       }
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
       alert("로그인에 성공하셨습니다.");
 
-      navigate("/");
+      // 이전 페이지로 이동
+      navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
     } catch (error) {
-      alert(getErrorMessage(error.code));
+      if (error.code === "auth/user-not-found") {
+        setErrorMsg("등록되지 않은 이메일입니다.");
+      } else if (error.code === "auth/invalid-email") {
+        setErrorMsg("잘못된 이메일 형식입니다.");
+      } else if (error.code === "auth/wrong-password") {
+        setErrorMsg("비밀번호가 일치하지 않습니다.");
+      } else {
+        alert(getErrorMessage(error.code));
+      }
+
       console.log(error.code);
     }
   };
@@ -58,68 +74,77 @@ function Login() {
   };
 
   return (
-    <s.MainContainer>
-      <s.LoginContainer>
-        <s.EmailLoginBox>
-          <s.LoginTitle>로그인</s.LoginTitle>
-          <s.InputForm>
-            <s.InputBox>
-              <s.InfoInput
-                type="email"
-                value={email}
-                placeholder="이메일을 입력해주세요"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                autoFocus
-                autoComplete="email"
+    <s.LoginContainer>
+      <s.EmailLoginBox>
+        <s.LoginTitle>로그인</s.LoginTitle>
+        <s.InputForm>
+          <s.InputBox>
+            <s.InfoInput
+              type="email"
+              value={email}
+              placeholder="이메일을 입력해주세요"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorMsg("");
+              }}
+              autoFocus
+              autoComplete="email"
+              ref={emailInputRef}
+            />
+          </s.InputBox>
+          <s.InputBox>
+            <s.InfoInput
+              type="password"
+              value={password}
+              placeholder="비밀번호를 입력해주세요"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorMsg("");
+              }}
+              autoComplete="password"
+              ref={passwordInputRef}
+            />
+          </s.InputBox>
+          {errorMsg && (
+            <s.ErrorBox>
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+                alt="경고이미지"
               />
-            </s.InputBox>
-            <s.InputBox>
-              <s.InfoInput
-                type="password"
-                value={password}
-                placeholder="비밀번호를 입력해주세요"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                autoComplete="password"
-              />
-            </s.InputBox>
-            <s.BtnBox>
-              <s.NaviBtn>아이디 찾기</s.NaviBtn>
-              <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
-              <s.NaviBtn
-                onClick={() => {
-                  navigate("/signup");
-                }}
-              >
-                회원가입
-              </s.NaviBtn>
-            </s.BtnBox>
-            <s.LoginBtn
-              type="submit"
-              onClick={(e) => {
-                loginHandler(e);
+              <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+            </s.ErrorBox>
+          )}
+          <s.BtnBox>
+            <s.NaviBtn>아이디 찾기</s.NaviBtn>
+            <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
+            <s.NaviBtn
+              onClick={() => {
+                navigate("/signup");
               }}
             >
-              로그인
-            </s.LoginBtn>
-          </s.InputForm>
-        </s.EmailLoginBox>
+              회원가입
+            </s.NaviBtn>
+          </s.BtnBox>
+          <s.LoginBtn
+            type="submit"
+            onClick={(e) => {
+              loginHandler(e);
+            }}
+          >
+            로그인
+          </s.LoginBtn>
+        </s.InputForm>
+      </s.EmailLoginBox>
 
-        <s.SnsLoginContainer>
-          <s.SnsLoginTitle>
-            <span>SNS 계정으로 로그인</span>
-          </s.SnsLoginTitle>
-          <s.SnsContainer>
-            <FacebookLogin />
-            <GoogleLogin />
-            <NaverLogin />
-          </s.SnsContainer>
-        </s.SnsLoginContainer>
-      </s.LoginContainer>
-    </s.MainContainer>
+      <s.SnsLoginContainer>
+        <s.SnsLoginTitle>SNS 계정으로 로그인</s.SnsLoginTitle>
+        <s.SnsContainer>
+          <FacebookLogin />
+          <GoogleLogin />
+          <NaverLogin />
+        </s.SnsContainer>
+      </s.SnsLoginContainer>
+    </s.LoginContainer>
   );
 }
 
