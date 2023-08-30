@@ -111,9 +111,6 @@ export const CheckBtn = styled.button`
       border: 1px solid #0a58be;
       color: #0a58be;
       cursor: pointer;
-      &:hover {
-        opacity: 0.6;
-      }
     `}
 `;
 
@@ -133,7 +130,7 @@ export const ErrorMark = styled.img`
 export const ErrorMsg = styled.p`
   width: 459px;
   height: 22px;
-  color: #e02918;
+  color: ${(props) => (props.error === "false" ? "#0a58be" : "#e02918")};
   font-size: 12px;
   line-height: 22px;
   margin-top: 11px;
@@ -197,16 +194,13 @@ export const AgreementContent = styled.p`
   height: 100%;
   width: 100%;
   font-size: 12px;
-  color: #d9d9d9;
+  color: #777777;
   overflow: auto;
   &::-webkit-scrollbar {
     width: 3px; /* 스크롤바의 너비 */
   }
   &::-webkit-scrollbar-thumb {
     background-color: #d9d9d9; /* 스크롤바의 색상 */
-  }
-  &: hover {
-    color: #777777;
   }
 `;
 

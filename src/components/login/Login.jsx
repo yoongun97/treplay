@@ -34,22 +34,18 @@ function Login() {
         passwordInputRef.current.focus();
         return;
       }
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
       alert("로그인에 성공하셨습니다.");
 
       // 이전 페이지로 이동
       navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
     } catch (error) {
-      if (
-        error.code === "auth/user-not-found" ||
-        error.code === "auth/invalid-email" ||
-        error.code === "auth/wrong-password"
-      ) {
-        setErrorMsg("아이디 또는 비밀번호를 확인해주세요");
+      if (error.code === "auth/user-not-found") {
+        setErrorMsg("등록되지 않은 이메일입니다.");
+      } else if (error.code === "auth/invalid-email") {
+        setErrorMsg("잘못된 이메일 형식입니다.");
+      } else if (error.code === "auth/wrong-password") {
+        setErrorMsg("비밀번호가 일치하지 않습니다.");
       } else {
         alert(getErrorMessage(error.code));
       }

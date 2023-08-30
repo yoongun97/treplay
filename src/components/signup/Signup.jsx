@@ -1,9 +1,13 @@
 import { useRef, useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+  updateProfile,
+} from "firebase/auth";
 import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import NicknameModal from "../modal/NicknameModal";
 import EmailModal from "../modal/EmailModal";
 
@@ -16,9 +20,6 @@ function Signup() {
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [checkNumber, setCheckNumber] = useState("");
-
-  // 중복확인 버튼 확인
-  const [toCheck, setToCheck] = useState("");
 
   // 모달 여닫기
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +44,24 @@ function Signup() {
   const checknumberInputRef = useRef();
   const checkboxInputRef = useRef();
 
+  // 이메일/닉네임 인지 확인
+  const [toCheck, setToCheck] = useState("");
+
+  // 중복확인 여부 확인
+  const [isUsedEmail, setIsUsedEmail] = useState("duplicate");
+  const [isUsedNickname, setIsUsedNickname] = useState(true);
+
+  // 약관동의 체크박스 handler
+  const checkboxHandler = (checkbox) => {
+    if (checkbox === 1) {
+      setIsChecked1(!isChecked1);
+    } else if (checkbox === 2) {
+      setIsChecked2(!isChecked2);
+    } else {
+      setIsChecked1(!isChecked1);
+      setIsChecked2(!isChecked2);
+    }
+  };
   const navigate = useNavigate();
 
   // 회원가입 함수
@@ -50,6 +69,7 @@ function Signup() {
     e.preventDefault();
     try {
       if (!email) {
+        setIsUsedEmail("duplicate");
         setErrorBox("email");
         setErrorMsg("이메일을 입력해 주세요.");
         emailInputRef.current.focus();
@@ -75,6 +95,7 @@ function Signup() {
       }
 
       if (!nickname) {
+        setIsUsedNickname(true);
         setErrorBox("nickname");
         setErrorMsg("닉네임을 입력해 주세요.");
         nicknameInputRef.current.focus();
@@ -149,12 +170,12 @@ function Signup() {
     switch (errorCode) {
       case "auth/invalid-email":
         return "잘못된 이메일 형식입니다.";
+      case "auth/email-already-in-use":
+        return "이미 사용 중인 이메일입니다.";
       case "auth/weak-password":
         return "비밀번호는 6글자 이상이어야 합니다.";
       case "auth/wrong-password":
         return "비밀번호가 일치하지 않습니다.";
-      case "auth/email-already-in-use":
-        return "이미 사용 중인 이메일입니다.";
       case "auth/network-request-failed":
         return "네트워크 연결에 실패 하였습니다.";
       case "auth/internal-error":
@@ -164,15 +185,55 @@ function Signup() {
     }
   };
 
-  // 약관동의 체크박스 handler
-  const checkboxHandler = (checkbox) => {
-    if (checkbox === 1) {
-      setIsChecked1(!isChecked1);
-    } else if (checkbox === 2) {
-      setIsChecked2(!isChecked2);
-    } else {
-      setIsChecked1(!isChecked1);
-      setIsChecked2(!isChecked2);
+  // 이메일 중복확인 함수
+  const emailCheckHandler = async (email) => {
+    try {
+      const usedEmail = await fetchSignInMethodsForEmail(auth, email);
+      console.log({ usedEmail });
+      if (usedEmail.length > 0) {
+        setIsUsedEmail("duplicate");
+        setToCheck("이메일");
+        setIsModalOpen(true);
+      } else if (usedEmail.length === 0) {
+        setIsUsedEmail("notduplicate");
+        setErrorBox("email");
+        setErrorMsg("사용 가능한 이메일입니다.");
+      }
+    } catch (error) {
+      console.log(error);
+      setIsUsedEmail("error");
+      setErrorBox("email");
+      setErrorMsg("유효하지 않은 이메일입니다.");
+    }
+  };
+
+  // 닉네임 중복확인 함수
+  const nicknameCheckHandler = async (nickname) => {
+    try {
+      const q = query(collection(db, "users"));
+      // 여기서 시간 걸림
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const usedNickname = data.filter((item) => item.nickname === nickname);
+
+      if (usedNickname.length > 0) {
+        setIsUsedNickname(true);
+        setToCheck("닉네임");
+        setIsModalOpen(true);
+      } else if (usedNickname.length === 0) {
+        setIsUsedNickname(false);
+        setErrorBox("nickname");
+        setErrorMsg("사용 가능한 닉네임입니다.");
+      }
+    } catch (error) {
+      console.log(error);
+      setIsUsedNickname(true);
+      setErrorBox("nickname");
+      setErrorMsg("유효하지 않은 닉네임입니다.");
     }
   };
 
@@ -212,21 +273,31 @@ function Signup() {
               disabled={!email}
               onClick={(e) => {
                 e.preventDefault();
-                setToCheck("이메일");
-                setIsModalOpen(true);
+                emailCheckHandler(email);
               }}
             >
               중복확인
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "email" && (
+        {!isModalOpen && errorBox === "email" && (
           <s.ErrorBox>
-            <s.ErrorMark
-              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
-              alt="경고이미지"
-            />
-            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+            {isUsedEmail === "notduplicate" ? (
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/992/992481.png"
+                alt="가능이미지"
+              />
+            ) : (
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+                alt="경고이미지"
+              />
+            )}
+            <s.ErrorMsg
+              error={isUsedEmail === "notduplicate" ? "false" : "true"}
+            >
+              {errorMsg}
+            </s.ErrorMsg>
           </s.ErrorBox>
         )}
         <s.InputBox>
@@ -309,7 +380,8 @@ function Signup() {
             <s.InfoInput
               type="text"
               value={nickname}
-              placeholder="닉네임을 입력해 주세요."
+              placeholder="닉네임을 입력해 주세요.(10자 이하)"
+              maxLength={10}
               onChange={(e) => {
                 setNickname(e.target.value);
                 setErrorBox("");
@@ -320,21 +392,30 @@ function Signup() {
               disabled={!nickname}
               onClick={(e) => {
                 e.preventDefault();
-                setToCheck("닉네임");
-                setIsModalOpen(true);
+                nicknameCheckHandler(nickname);
               }}
             >
               중복확인
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "nickname" && (
+        {!isModalOpen && errorBox === "nickname" && (
           <s.ErrorBox>
-            <s.ErrorMark
-              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
-              alt="경고이미지"
-            />
-            <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
+            {isUsedNickname === false ? (
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/992/992481.png"
+                alt="가능이미지"
+              />
+            ) : (
+              <s.ErrorMark
+                src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+                alt="경고이미지"
+              />
+            )}
+
+            <s.ErrorMsg error={isUsedNickname === false ? "false" : "true"}>
+              {errorMsg}
+            </s.ErrorMsg>
           </s.ErrorBox>
         )}
         <s.InputBox>
@@ -507,12 +588,16 @@ function Signup() {
             email={email}
             setEmail={setEmail}
             setIsModalOpen={setIsModalOpen}
+            isUsedEmail={isUsedEmail}
+            emailCheckHandler={emailCheckHandler}
           />
         ) : (
           <NicknameModal
             nickname={nickname}
             setNickname={setNickname}
             setIsModalOpen={setIsModalOpen}
+            isUsedNickname={isUsedNickname}
+            nicknameCheckHandler={nicknameCheckHandler}
           />
         ))}
     </s.SignupContainer>
