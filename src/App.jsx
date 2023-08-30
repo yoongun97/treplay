@@ -14,7 +14,6 @@ import { useAtom } from 'jotai';
 import { userAtom } from './store/userAtom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseConfig';
-import SuggestSignup from './components/signup/SuggestSignup';
 
 function App() {
   const [user, setUser] = useAtom(userAtom); // userAtom 사용
@@ -38,10 +37,7 @@ function App() {
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
-        <Route
-          path="/detail/:id"
-          element={user ? <DetailPage /> : <SuggestSignup />}
-        />
+        <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
