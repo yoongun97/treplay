@@ -17,7 +17,7 @@ function SavedList({ savedPosts, allLikedData }) {
           backgroundImage: `url(${imageUrl})`,
         };
         return (
-          <ListBox key={post.id}>
+          <ListBox key={post.id} to={`/detail/${post.id}`}>
             <ImageBox style={imageStyle}></ImageBox>
             <h4>{post.placeName}</h4>
             <h5> {post.author}</h5>
