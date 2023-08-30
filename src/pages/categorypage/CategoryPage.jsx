@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -38,6 +39,19 @@ import TopButton from '../../common/TopButton';
  *    - date 얘를 기준으로 정렬하는 코드를 짜면 됨
  *    - date sort 한 결과를 setFilteredData에 넣어준다.
  */
+=======
+import React, { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import { styled } from "styled-components";
+import Search from "../../components/search/Search";
+>>>>>>> 4d6af1da35e5e86d588b18abb6e557d21ea64481
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -183,6 +197,8 @@ function CategoryPage() {
     return '정보를 가져오고 있습니다.';
   }
   //페이지 네이션
+
+  console.log(user);
 
   return (
     <CategoryPageContainer>
