@@ -1,13 +1,11 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { useMutation } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { db } from "../../../firebaseConfig";
 import { styled } from "styled-components";
 
 function MyList({ myPosts, setMyPosts, allLikedData }) {
-  const navigate = useNavigate();
-
   // 게시물 삭제
   const deletePostHandler = (post) => {
     if (window.confirm("정말 삭제하시겠습니까?") === true) {
@@ -45,38 +43,38 @@ function MyList({ myPosts, setMyPosts, allLikedData }) {
           backgroundImage: `url(${imageUrl})`,
         };
         return (
-          <ListBox key={post.id} to={`/detail/${post.id}`}>
-            <ImageBox style={imageStyle}></ImageBox>
-            <h4>{post.placeName}</h4>
-            <h5> {post.author}</h5>
-            <p>
-              <span># </span>
-              {post.postOneLineContent}
-            </p>
-            <LikesContainer>
-              <LikesBox>
-                <img
-                  src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
-                  alt="likesIcon"
-                ></img>
-                <span>{likedCount.length}</span>
-              </LikesBox>
-              <DislikesBox>
-                <img
-                  src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
-                  alt="dislikesIcon"
-                ></img>
-                <span>{dislikedCount.length}</span>
-              </DislikesBox>
-            </LikesContainer>
-            <button
+          <ListBoxContainer>
+            <ListBox key={post.id} to={`/detail/${post.id}`}>
+              <ImageBox style={imageStyle}></ImageBox>
+              <h4>{post.placeName}</h4>
+              <h5> {post.author}</h5>
+              <p>
+                <span># </span>
+                {post.postOneLineContent}
+              </p>
+              <LikesContainer>
+                <LikesBox>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
+                    alt="likesIcon"
+                  ></img>
+                  <span>{likedCount.length}</span>
+                </LikesBox>
+                <DislikesBox>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
+                    alt="dislikesIcon"
+                  ></img>
+                  <span>{dislikedCount.length}</span>
+                </DislikesBox>
+              </LikesContainer>
+            </ListBox>
+            <DeleteButton
               onClick={() => {
                 deletePostHandler(post);
               }}
-            >
-              삭제
-            </button>
-          </ListBox>
+            ></DeleteButton>
+          </ListBoxContainer>
         );
       })}
     </ListContainer>
@@ -84,6 +82,10 @@ function MyList({ myPosts, setMyPosts, allLikedData }) {
 }
 
 export default MyList;
+
+const ListBoxContainer = styled.div`
+  position: relative;
+`;
 
 const ListContainer = styled.div`
   display: grid;
@@ -175,4 +177,18 @@ const LikesBox = styled.div`
 const DislikesBox = styled.div`
   padding-left: 10px;
   color: #fcd71e;
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25px;
+  height: 25px;
+  margin: 10px;
+  border: none;
+  outline: none;
+  background-color: none;
+  background: url(${process.env.PUBLIC_URL}/icon/delete_icon.svg) no-repeat
+    center / 100%;
 `;
