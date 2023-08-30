@@ -1,13 +1,22 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { db } from "../../../firebaseConfig";
+import { styled } from "styled-components";
 
 function MyList({ myPosts, setMyPosts, allLikedData }) {
   const navigate = useNavigate();
 
   // 게시물 삭제
+  const deletePostHandler = (post) => {
+    if (window.confirm("정말 삭제하시겠습니까?") === true) {
+      deleteMutation.mutate(post);
+      return alert("글이 삭제되었습니다!");
+    } else {
+      return;
+    }
+  };
   const deleteMutation = useMutation(
     async (post) => {
       const postRef = doc(db, "posts", post.id);
@@ -23,7 +32,7 @@ function MyList({ myPosts, setMyPosts, allLikedData }) {
   );
 
   return (
-    <div>
+    <ListContainer>
       {myPosts?.map((post) => {
         const likedCount = allLikedData?.filter(
           (data) => data.postId === post.id && data.state === "like"
@@ -31,38 +40,144 @@ function MyList({ myPosts, setMyPosts, allLikedData }) {
         const dislikedCount = allLikedData?.filter(
           (data) => data.postId === post.id && data.state === "dislike"
         );
-        const postImg = post.postImgs;
+        const imageUrl = post.postImgs[0];
+        const imageStyle = {
+          backgroundImage: `url(${imageUrl})`,
+        };
         return (
-          <div className="ListBox" key={post.id}>
-            <div
-              onClick={() => {
-                navigate(`/detail/${post.id}`);
-              }}
-            >
-              {postImg ? (
-                <img src={post.postImgs} alt="이미지" width="100px" />
-              ) : (
-                <img src="" alt="이미지 없음" width="100px"></img>
-              )}
-              <div className="ContentInfo">
-                <span>{post.placeName}</span>
-                <span> {post.author}</span>
-                <span> 또가요({likedCount.length})</span>
-                <span> 안가요({dislikedCount.length})</span>
-              </div>
-            </div>
+          <ListBox
+            key={post.id}
+            onClick={() => {
+              navigate(`/detail/${post.id}`);
+            }}
+          >
+            <ImageBox style={imageStyle}></ImageBox>
+            <h4>{post.placeName}</h4>
+            <h5> {post.author}</h5>
+            <p>
+              <span># </span>
+              {post.postOneLineContent}
+            </p>
+            <LikesContainer>
+              <LikesBox>
+                <img
+                  src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
+                  alt="likesIcon"
+                ></img>
+                <span>{likedCount.length}</span>
+              </LikesBox>
+              <DislikesBox>
+                <img
+                  src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
+                  alt="dislikesIcon"
+                ></img>
+                <span>{dislikedCount.length}</span>
+              </DislikesBox>
+            </LikesContainer>
             <button
               onClick={() => {
-                deleteMutation.mutate(post);
+                deletePostHandler(post);
               }}
             >
               삭제
             </button>
-          </div>
+          </ListBox>
         );
       })}
-    </div>
+    </ListContainer>
   );
 }
 
 export default MyList;
+
+const ListContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 70px;
+  row-gap: 80px;
+  width: 1280px;
+`;
+
+const ListBox = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 380px;
+  text-align: left;
+
+  & > h4 {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #222;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > h5 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > p {
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #777;
+  }
+`;
+
+const ImageBox = styled.div`
+  width: 380px;
+  height: 380px;
+  border-radius: 30px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
+
+const LikesContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0px 20px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  & > div {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  & > div > img {
+    margin-right: 12px;
+  }
+`;
+
+const LikesBox = styled.div`
+  position: relative;
+  padding-right: 10px;
+  color: #0a58be;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: auto;
+    bottom: auto;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background-color: #222;
+  }
+`;
+const DislikesBox = styled.div`
+  padding-left: 10px;
+  color: #fcd71e;
+`;

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Footer = () => {
+  const email = "sujeong.616.work@gmail.com";
   return (
     <FooterContainer>
       <FooterInner>
@@ -20,25 +21,25 @@ const Footer = () => {
             <span>•</span>
             <span>김수정</span>
             <span>Designer</span>
-            <Link to={"sujeong.616.work@gmail.com"}></Link>
+            <a href={`mailto:${email}`} target="blank"></a>
           </div>
           <div>
             <span>•</span>
             <span>조윤건</span>
             <span>Developer (Front-end)</span>
-            <Link to={"https://yoongeons.com"}></Link>
+            <a href={"https://yoongeons.com"} target="blank"></a>
           </div>
           <div>
             <span>•</span>
             <span>조유이</span>
             <span>Developer (Front-end)</span>
-            <Link to={"https://github.com/yui62yui"}></Link>
+            <a href={"https://github.com/yui62yui"} target="blank"></a>
           </div>
           <div>
             <span>•</span>
             <span>윤현희</span>
             <span>Developer (Front-end)</span>
-            <Link to={"https://github.com/hyunheeyun"}></Link>
+            <a href={"https://github.com/hyunheeyun"} target="blank"></a>
           </div>
         </FooterMain>
         <FooterBottom>
@@ -147,17 +148,19 @@ const FooterMain = styled.div`
   }
 
   & > div > a {
-    display: inline-block;
+    display: block;
     width: 24px;
     height: 24px;
-    margin-right: 8px;
+    margin-left: 4px;
     background: url(${process.env.PUBLIC_URL}/image/github_icon.png) no-repeat
       center / 100%;
   }
 
   & > div:first-of-type > a {
+    width: 21px;
+    height: 21px;
     background: url(${process.env.PUBLIC_URL}/image/design_icon.png) no-repeat
-      center / 100%;
+      center / cover;
   }
 `;
 const FooterBottom = styled.div`
