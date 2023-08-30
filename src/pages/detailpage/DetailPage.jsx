@@ -10,6 +10,7 @@ import Comments from "../../components/comments/Comments";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
 import ImageCarousel from "../../components/imageslide/ImageCarousel";
+import { styled } from "styled-components";
 
 function DetailPage() {
   const { id } = useParams();
@@ -59,79 +60,81 @@ function DetailPage() {
   }
 
   return (
-    <>
-      <div
-        style={{
-          maxWidth: "1200px",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          margin: "0 auto 0 auto",
-        }}
-      >
+    <DetailContainer>
+      <DetailContainerInner>
         <h2>{post?.placeName}</h2>
-        <button
-          style={{ margin: " 20px 5% 20px auto" }}
-          onClick={copyUrl}
-          value={post.id}
-        >
-          공유하기
-        </button>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            margin: "0 auto 0 auto",
-          }}
-        >
-          {user.uid === post?.uid ? (
-            <div style={{ display: "flex", marginLeft: "auto" }}>
-              <button
-                onClick={() => {
-                  navigate(`/edit/${id}`);
-                }}
-              >
-                수정
-              </button>
-              <button
-                onClick={() => {
-                  deleteMutation.mutate(post);
-                }}
-              >
-                삭제
-              </button>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+        <ButtonContainer>
+          <Bookmark />
+          <button onClick={copyUrl} value={post.id}>
+            <img
+              src={`${process.env.PUBLIC_URL}/icon/share_icon.svg`}
+              alt="bookmark_icon"
+            ></img>
+          </button>
+        </ButtonContainer>
+        {user.uid === post?.uid ? (
+          <EditButtonContainer>
+            <button
+              onClick={() => {
+                navigate(`/edit/${id}`);
+              }}
+            >
+              수정
+            </button>
+            <button
+              onClick={() => {
+                deleteMutation.mutate(post);
+              }}
+            >
+              삭제
+            </button>
+          </EditButtonContainer>
+        ) : (
+          <></>
+        )}
         <ImageCarousel postImgs={post?.postImgs} />
-
-        <div
-          style={{
-            maxWidth: "1200px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            margin: "30px auto 0 auto",
-          }}
-        >
+        <div>
           <p>{post?.postContent}</p>
           <p>{post?.postOneLineContent}</p>
           <PlaceMap postAddress={post?.placeLocation} />
         </div>
         <div>
-          <Bookmark />
           <Likes />
         </div>
         {/* 댓글창 */}
         <Comments id={id} />
-      </div>
-    </>
+      </DetailContainerInner>
+    </DetailContainer>
   );
 }
 
 export default DetailPage;
+
+const DetailContainer = styled.div``;
+
+const DetailContainerInner = styled.div`
+  width: 1280px;
+  margin: 0 auto;
+
+  & > h2 {
+    margin: 140px 0 60px;
+    color: #222;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  & > button {
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    border: none;
+  }
+`;
+
+const EditButtonContainer = styled.div``;

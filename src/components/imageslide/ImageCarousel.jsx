@@ -1,7 +1,32 @@
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { styled } from "styled-components";
+
+function SampleNextArrow(props) {
+  const { className, onClick } = props;
+  return (
+    <StyleNextButton className={className} onClick={onClick}>
+      <img
+        src={`${process.env.PUBLIC_URL}/icon/slider_right.svg`}
+        alt="slider_icon"
+      ></img>
+    </StyleNextButton>
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, onClick } = props;
+  return (
+    <StylePrevButton className={className} onClick={onClick}>
+      <img
+        src={`${process.env.PUBLIC_URL}/icon/slider_left.svg`}
+        alt="slider_icon"
+      ></img>
+    </StylePrevButton>
+  );
+}
 
 function ImageCarousel({ postImgs }) {
   const settings = {
@@ -10,22 +35,59 @@ function ImageCarousel({ postImgs }) {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
   return (
-    <div>
-      <Slider {...settings} style={{ width: '80%', marginLeft: '30px' }}>
+    <SliderContainer>
+      <Slider {...settings} style={{}}>
         {postImgs.map((img) => (
-          <div>
-            <img
-              src={img}
-              alt="디테일 이미지"
-              style={{ width: '100%', height: '400px' }}
-            />
-          </div>
+          <ImageBox>
+            <img src={img} alt="디테일 이미지" />
+          </ImageBox>
         ))}
       </Slider>
-    </div>
+    </SliderContainer>
   );
 }
 
 export default ImageCarousel;
+
+const StyleNextButton = styled.button`
+  width: 24px;
+  height: 24px;
+
+  &::before {
+    content: "";
+    background: url(${process.env.PUBLIC_URL}/icon/slider_left.svg) no-repeat
+      center / 100%;
+  }
+`;
+
+const StylePrevButton = styled.button`
+  width: 24px;
+  height: 24px;
+
+  &::before {
+    content: "";
+    background: url(${process.env.PUBLIC_URL}/icon/slider_right.svg) no-repeat
+      center / 100%;
+  }
+`;
+
+const SliderContainer = styled.div`
+  margin: 20px 0 40px;
+`;
+
+const ImageBox = styled.div`
+  justify-content: center;
+  align-items: center;
+  width: 1280px;
+  margin: 10px 0;
+
+  & > img {
+    width: auto;
+    height: 700px;
+    margin: 0 auto;
+  }
+`;

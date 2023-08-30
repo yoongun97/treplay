@@ -1,21 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import ImageUpload from "../../components/ImageUpload";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
 import PlaceSearch from "../../components/place/PlaceSearch";
+import { styled } from "styled-components";
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <SelectBoxContainer>
         <SelectBox />
-      </div>
+      </SelectBoxContainer>
       {/* <PlaceAddress /> */}
       <PlaceSearch />
-      <div>
+      <TextContainer>
         <textarea
           placeholder="내용을 작성하는 공간입니다."
           onChange={(e) => {
@@ -30,10 +31,13 @@ function Create() {
             setPost({ ...post, postOneLineContent: e.target.value });
           }}
         />
-      </div>
-      <ImageUpload style={{ margin: "20px" }} />
+      </TextContainer>
+      <ImageUpload />
     </>
   );
 }
 
 export default Create;
+
+const SelectBoxContainer = styled.div``;
+const TextContainer = styled.div``;
