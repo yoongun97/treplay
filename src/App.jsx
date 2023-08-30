@@ -16,6 +16,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
 
+
 function App() {
   const [user, setUser] = useAtom(userAtom); // userAtom 사용
 

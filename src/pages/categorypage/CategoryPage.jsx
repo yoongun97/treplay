@@ -14,20 +14,25 @@ function CategoryPage() {
   const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
-
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 5; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
+  //또가요 , 북마크 , 최신순 정렬하기
+  const [sortOption, setSortOption] = useState('likes');
 
-  const handleSearch = (searchQuery) => {
+  const handleSortOption = (newSortOption) => {
+    setSortOption(newSortOption);
+  };
+
+  const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) =>
       post.placeName
         .replace(" ", "")
         .toLowerCase()
-        .includes(searchQuery.toLowerCase().replace(" ", ""))
+        .includes(searchData.toLowerCase().replace(' ', ''))
     );
-    setCurrentPage(1);
     setFilteredPosts(searchResults);
+    setCurrentPage(1); // 이곳에서 문제인가요? 검색 결과가 없을시 초기 화면으로 가는데 이걸 아래쪽에서 어떻게 하는지
   };
 
   const fetchPosts = async () => {
@@ -47,7 +52,22 @@ function CategoryPage() {
       });
     });
 
-    return postsData;
+    const sortedPosts = sortPosts(postsData);
+
+    return sortedPosts;
+  };
+
+  //또가요 , 북마크 , 최신순 정렬하기
+  const sortPosts = (posts) => {
+    if (sortOption === 'likes') {
+      return posts.sort((a, b) => b.likes - a.likes);
+    } else if (sortOption === 'saved') {
+      return posts.sort((a, b) => b.saved - a.saved);
+    } else if (sortOption === 'newDate') {
+      return posts.sort((a, b) => b.newDate - a.newDate);
+    }
+    console.log(posts);
+    return posts;
   };
 
   const {
@@ -55,6 +75,7 @@ function CategoryPage() {
     error,
     isLoading,
   } = useQuery(["posts", category], fetchPosts);
+
 
   if (error) {
     console.error("데이터를 가져올 수 없습니다", error);
@@ -68,7 +89,6 @@ function CategoryPage() {
   const indexOfLastPost = currentPage * postsViewPage;
   const indexOfFirstPost = indexOfLastPost - postsViewPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-  //또가요 안가요 보여주기
 
   return (
     <CategoryPageContainer>
@@ -97,8 +117,9 @@ function CategoryPage() {
       </MiddleContainer>
       {/* //수정 */}
       <PostsContainer>
-        {(filteredPosts.length > 0 ? filteredPosts : currentPosts).map(
-          (post) => (
+        {(filteredPosts.length > 0 ? filteredPosts : currentPosts)
+          .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
+          .map((post) => (
             <div key={post.id}>
               <PostBox to={`/detail/${post.id}`}>
                 <ImageBox alt="PostImgs" src={post.postImgs} />
@@ -111,12 +132,12 @@ function CategoryPage() {
                 <CategoryLikes id={post.id} />
               </PostBox>
             </div>
-          )
-        )}
+          ))}
+        {((filteredPosts.length === 0 && currentPosts.length === 0) ||
+          currentPosts.length === 0) && <div>결과가 없습니다.</div>}
       </PostsContainer>
       <PageNation
         postsViewPage={postsViewPage}
-        // totalPosts={posts.length}
         totalPosts={
           filteredPosts.length > 0 ? filteredPosts.length : posts.length
         }
