@@ -62,6 +62,7 @@ function Signup() {
       setIsChecked2(!isChecked2);
     }
   };
+
   const navigate = useNavigate();
 
   // 회원가입 함수

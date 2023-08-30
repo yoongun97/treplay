@@ -14,9 +14,11 @@ import { useAtom } from "jotai";
 import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
+import SuggestLogin from "./components/login/SuggestLogin";
+import FindIDPW from "./components/findIDPW/FindIDPW";
 
 function App() {
-  const [, setUser] = useAtom(userAtom); // userAtom 사용
+  const [user, setUser] = useAtom(userAtom); // userAtom 사용
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
@@ -30,6 +32,8 @@ function App() {
     // setUser 함수가 업데이트될 때만 이펙트가 실행됨
   }, [setUser]);
 
+  console.log(auth.currentUser);
+
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -37,10 +41,14 @@ function App() {
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
-        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route
+          path="/detail/:id"
+          element={user ? <DetailPage /> : <SuggestLogin />}
+        />
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
+        <Route path="/idpw/inquiry" element={<FindIDPW />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
