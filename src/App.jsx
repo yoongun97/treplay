@@ -18,7 +18,7 @@ import SuggestLogin from "./components/login/SuggestLogin";
 import FindIDPW from "./components/findIDPW/FindIDPW";
 
 function App() {
-  const [user, setUser] = useAtom(userAtom); // userAtom 사용
+  const [, setUser] = useAtom(userAtom); // userAtom 사용
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
@@ -41,6 +41,7 @@ function App() {
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
+
         <Route
           path="/detail/:id"
           element={user ? <DetailPage /> : <SuggestLogin />}

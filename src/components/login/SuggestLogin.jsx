@@ -17,10 +17,7 @@ const SuggestLogin = () => {
         </BubbleBox>
         <StyledButton to={"/login"}>
           <span>로그인 하러가기</span>
-          <img
-            src={`${process.env.PUBLIC_URL}/icon/arrow_blue.svg`}
-            alt="arrow_blue_icon"
-          />
+          <span></span>
         </StyledButton>
       </SuggestInner>
     </SuggestContainer>
@@ -55,11 +52,12 @@ const SuggestInner = styled.div`
   }
 `;
 const ImageBox = styled.div`
-  width: 260px;
-  height: 260px;
+  width: 300px;
+  height: 300px;
   margin: 60px 0;
   border-radius: 50%;
-  background-color: #fff;
+  background: url(${process.env.PUBLIC_URL}/image/suggest_image.jpg) no-repeat
+    center / cover;
 `;
 const BubbleBox = styled.div`
   display: flex;
@@ -93,4 +91,20 @@ const StyledButton = styled(Link)`
   font-size: 18px;
   font-weight: 500;
   color: #0a58be;
+
+  &:hover {
+    background-color: #0a58be;
+    color: #fff;
+  }
+
+  & > span:last-child {
+    width: 23px;
+    height: 16px;
+    background: url(${process.env.PUBLIC_URL}/icon/arrow_blue.svg) no-repeat
+      center / 100%;
+    transition: 0.3s;
+  }
+  &:hover > span:last-child {
+    background-image: url(${process.env.PUBLIC_URL}/icon/arrow_white.svg);
+  }
 `;

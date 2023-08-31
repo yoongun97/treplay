@@ -9,25 +9,46 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
+
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [post] = useAtom(postAtom);
   const [user] = useAtom(userAtom);
   const date = new Date();
   const navigate = useNavigate();
+  //이미지 선택 이름,미리보기
+  const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
+  const [selectedFileNames, setSelectedFileNames] = useState([]);
 
   // 이미지 파일 선택
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles(files);
+
+    //이미지 선택 이름,미리보기
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setSelectedFilePreviews(previews);
+    setSelectedFileNames(files.map((file) => file.name));
+  };
+  //미리보기 이미지 삭제
+  const handleImageDeletePreview = (index) => {
+    setSelectedFilePreviews((prevPreviews) =>
+      prevPreviews.filter((_, i) => i !== index)
+    );
+    setSelectedFileNames((prevNames) =>
+      prevNames.filter((_, i) => i !== index)
+    );
+    setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
   // 선택한 이미지 파일 삭제
+
   const handleDelete = (fileName) => {
     const updatedFiles = selectedFiles.filter((file) => file.name !== fileName);
     setSelectedFiles(updatedFiles);
     document.getElementById("file-input").value = ""; // 파일 선택 초기화
   };
+
 
   // 이미지 파일 업로드 함수
   const handleUpload = async (e) => {
@@ -92,10 +113,21 @@ function ImageUpload() {
     <>
       <input id="file-input" type="file" onChange={handleFileSelect} multiple />
       <div>
-        {selectedFiles.map((file, index) => (
+        {/* {selectedFiles.map((file, index) => (
           <div key={index}>
             {file.name}{" "}
             <button onClick={() => handleDelete(file.name)}>x</button>
+          </div>
+        ))} */}
+        {/* edit페이지와 같은 로직 */}
+        {selectedFilePreviews.map((preview, index) => (
+          <div key={index}>
+            <img
+              src={preview}
+              alt={`미리보기${index + 1}`}
+              style={{ maxWidth: '100px' }}
+            />
+            <button onClick={() => handleImageDeletePreview(index)}>x</button>
           </div>
         ))}
       </div>
