@@ -69,7 +69,9 @@ const CategoryBox = styled(Link)`
   }
 
   & > span {
+    display: none;
     z-index: 10;
+    transition: 0.3s;
   }
 
   &::after {
@@ -77,18 +79,16 @@ const CategoryBox = styled(Link)`
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 60%;
-    background-color: rgba(0, 0, 0, 0.6);
-
+    border-radius: 50%;
     transition: 0.3s;
   }
 
   &:hover::after {
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
   &:hover > span {
-    display: none;
+    display: inline-block;
   }
   /* 추후 수정방향에 따라 변경필요 */
 `;

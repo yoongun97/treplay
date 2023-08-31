@@ -38,6 +38,7 @@ const MainContainer = styled.div`
   position: relative;
   width: 100%;
   height: calc(100vh - 90px);
+  min-height: 800px;
   background: url(${process.env.PUBLIC_URL}/image/mainBg.jpg) no-repeat top
     center / cover;
   z-index: 1;
@@ -135,23 +136,25 @@ const StyledButton = styled(Link)`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: transparent;
+
     transition: 0.3s;
   }
   &:hover {
     & > span {
-      color: transparent;
+      display: inline-block;
     }
 
     &::after {
-      background-color: transparent;
+      background-color: rgba(0, 0, 0, 0.6);
     }
   }
   & > span {
+    display: none;
     font-size: 32px;
     font-weight: 500;
     color: #fff;
     z-index: 30;
-    transition: 0.2s;
+    transition: 0.3s;
   }
 `;
