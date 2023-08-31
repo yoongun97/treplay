@@ -38,6 +38,7 @@ const MainContainer = styled.div`
   position: relative;
   width: 100%;
   height: calc(100vh - 90px);
+  min-height: 800px;
   background: url(${process.env.PUBLIC_URL}/image/mainBg.jpg) no-repeat top
     center / cover;
   z-index: 1;
