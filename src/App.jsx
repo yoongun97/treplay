@@ -18,7 +18,7 @@ import SuggestLogin from "./components/login/SuggestLogin";
 import FindIDPW from "./components/findIDPW/FindIDPW";
 
 function App() {
-  const [, setUser] = useAtom(userAtom); // userAtom 사용
+  const [user, setUser] = useAtom(userAtom); // userAtom 사용
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
