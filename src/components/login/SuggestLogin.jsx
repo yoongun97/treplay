@@ -33,7 +33,7 @@ const SuggestContainer = styled.div`
   width: 100%;
   height: calc(100vh - 90px);
   background: url(${process.env.PUBLIC_URL}/image/suggest_bg.png) no-repeat
-    center / 100%;
+    center / cover;
 `;
 const SuggestInner = styled.div`
   display: flex;

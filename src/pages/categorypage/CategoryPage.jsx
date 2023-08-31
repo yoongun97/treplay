@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -21,7 +20,7 @@ function CategoryPage() {
   // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 10; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
-  const [sortOption, setSortOption] = useState("likes");
+  const [sortOption, setSortOption] = useState("date");
 
   const handleSortOption = (newSortOption) => {
     setSortOption(newSortOption);
@@ -171,14 +170,41 @@ function CategoryPage() {
         <Search onSearch={handleSearch} />
       </PhrasesContainer>
       <MiddleContainer>
-        {/* FilterContainer에 정렬기능 추가 */}
         <FilterContainer>
-          <LatestFilterButton onClick={() => handleSortOption("date")}>
-            최신순
-          </LatestFilterButton>
-          <LikedFilterButton onClick={() => handleSortOption("likes")}>
-            인기순
-          </LikedFilterButton>
+          {sortOption === "date" ? (
+            <OnButton onClick={() => handleSortOption("date")}>
+              <img
+                src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
+                alt="latest_Filter_Icon"
+              ></img>
+              <span>최신순</span>
+            </OnButton>
+          ) : (
+            <OffButton onClick={() => handleSortOption("date")}>
+              <img
+                src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
+                alt="latest_Filter_Icon"
+              ></img>
+              <span>최신순</span>
+            </OffButton>
+          )}
+          {sortOption === "likes" ? (
+            <OnButton onClick={() => handleSortOption("likes")}>
+              <img
+                src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
+                alt="liked_Filter_Icon"
+              ></img>
+              <span>인기순</span>
+            </OnButton>
+          ) : (
+            <OffButton onClick={() => handleSortOption("likes")}>
+              <img
+                src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
+                alt="liked_Filter_Icon"
+              ></img>
+              <span>인기순</span>
+            </OffButton>
+          )}
         </FilterContainer>
         {!!user ? (
           <WriteButton to={`/create`}>
@@ -263,16 +289,28 @@ const FilterContainer = styled.div`
   display: flex;
   gap: 12px;
 
-  & > div {
+  & > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
     width: 105px;
     height: 34px;
     border-radius: 30px;
-    border: 1px solid #e5e5e5;
+    font-size: 16px;
+    font-weight: 400;
   }
 `;
-
-const LatestFilterButton = styled.button``;
-const LikedFilterButton = styled.button``;
+const OnButton = styled.button`
+  border: 1px solid #0a58be;
+  background-color: #0a58be;
+  color: #fff;
+`;
+const OffButton = styled.button`
+  border: 1px solid #e5e5e5;
+  background-color: #fff;
+  color: #bfbfbf;
+`;
 const WriteButton = styled(Link)`
   align-self: flex-end;
   display: flex;
