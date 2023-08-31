@@ -20,7 +20,7 @@ function CategoryPage() {
   // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 10; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
-  const [sortOption, setSortOption] = useState("");
+  const [sortOption, setSortOption] = useState("date");
 
   const handleSortOption = (newSortOption) => {
     setSortOption(newSortOption);
