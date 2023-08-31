@@ -47,18 +47,43 @@ export const ProfileImg = styled.img`
   border-radius: 50%;
   overflow: hidden;
 `;
-
-export const ProfileImgBtn = styled.div`
+export const FileButton = styled.div`
   position: absolute;
+  bottom: 14px;
+  right: -6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #f1f1f1;
-  margin: 90px 0 0 110px;
-  cursor: pointer;
+
+  & > label {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  & > label::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: 25%;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url(${process.env.PUBLIC_URL}/icon/camera_icon_black.svg)
+      no-repeat;
+  }
+
+  & > label > input {
+    display: none;
+    z-index: 20;
+  }
 `;
 
 export const ProfileEditImg = styled.img`
