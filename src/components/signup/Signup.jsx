@@ -4,12 +4,13 @@ import {
   fetchSignInMethodsForEmail,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db, storage } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import NicknameModal from "../modal/NicknameModal";
 import EmailModal from "../modal/EmailModal";
+import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 
 function Signup() {
   // input
@@ -20,6 +21,9 @@ function Signup() {
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [checkNumber, setCheckNumber] = useState("");
+
+  // 프로필 사진 업로드 및 변경 핸들러
+  const uploadPhotoHandler = (e) => {};
 
   // 모달 여닫기
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -247,12 +251,11 @@ function Signup() {
           src="https://images.unsplash.com/photo-1536164261511-3a17e671d380?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fCVFRCU5NCU4NCVFQiVBMSU5QyVFRCU5NSU4NHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
           alt="프로필 이미지"
         />
-        <s.ProfileImgBtn>
-          <s.ProfileEditImg
-            src="https://cdn-icons-png.flaticon.com/128/45/45010.png"
-            alt="이미지 수정"
-          />
-        </s.ProfileImgBtn>
+        <s.FileButton>
+          <label>
+            <input type="file" onChange={(e) => uploadPhotoHandler(e)}></input>
+          </label>
+        </s.FileButton>
       </s.ProfileImgBox>
 
       <form>
