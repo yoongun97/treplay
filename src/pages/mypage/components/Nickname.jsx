@@ -5,10 +5,12 @@ import { useState } from "react";
 import { updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebaseConfig";
+import { styled } from "styled-components";
 
 const Nickname = ({ ownData, allData, fetchData }) => {
   const [user] = useAtom(userAtom);
-  const [isEditorActived, setIsEditorActived] = useState(false); // 입력 받는 새로운 닉네임
+  const [isEditorActived, setIsEditorActived] = useState(false);
+  // 입력 받는 새로운 닉네임
   const [newNickname, setNewNickname] = useState(user?.displayName);
 
   // 닉네임 수정 버튼 클릭 핸들러
@@ -22,7 +24,10 @@ const Nickname = ({ ownData, allData, fetchData }) => {
       const usedNickname = allData.filter(
         (item) => item.nickname === newNickname
       );
-      if (!!newNickname === false) {
+      if (newNickname === user.displayName) {
+        setIsEditorActived(false);
+        return alert("변경사항 없이 저장합니다!");
+      } else if (!!newNickname === false) {
         return alert("닉네임을 입력해 주세요");
       } else if (usedNickname.length > 0) {
         return alert(
@@ -49,18 +54,21 @@ const Nickname = ({ ownData, allData, fetchData }) => {
   };
 
   return (
-    <div>
+    <>
       {/* SNS 이용자는 닉네임 못 바꾸게 함 */}
       {ownData === undefined ? (
-        <div>
-          <input type="text" value={user.displayName} disabled />
+        <NickNameContainer>
+          <NickNameContainerInner>
+            <DisabledInput type="text" value={user.displayName} disabled />
+          </NickNameContainerInner>
           <p>SNS 로그인 사용 시 닉네임을 수정할 수 없습니다.</p>
-        </div>
+        </NickNameContainer>
       ) : (
-        <div>
+        <NickNameContainerInner>
           {/* 닉네임 인풋 */}
           {isEditorActived ? (
-            <input
+            <AbledInput
+              maxLength={10}
               type="text"
               value={newNickname}
               onChange={(e) => {
@@ -68,30 +76,75 @@ const Nickname = ({ ownData, allData, fetchData }) => {
               }}
             />
           ) : (
-            <input type="text" value={user.displayName} disabled />
+            <DisabledInput type="text" value={user.displayName} disabled />
           )}
           {/* 닉네임 수정 버튼 */}
           {isEditorActived ? (
-            <button
+            <EditButton
               onClick={() => {
                 endEditNameHandler();
               }}
-            >
-              완료
-            </button>
+            ></EditButton>
           ) : (
-            <button
+            <EditButton
               onClick={() => {
                 startEditNameHandler();
               }}
-            >
-              수정
-            </button>
+            ></EditButton>
           )}
-        </div>
+        </NickNameContainerInner>
       )}
-    </div>
+    </>
   );
 };
 
 export default Nickname;
+const NickNameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > p {
+    margin-top: 16px;
+    color: #777;
+    font-size: 14px;
+    font-weight: 300;
+  }
+`;
+const NickNameContainerInner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 180px;
+  height: 40px;
+  border-radius: 60px;
+  border: 1px solid #0a58be;
+  background-color: #fff;
+  & > input {
+    width: 120px;
+    height: 22px;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+`;
+const AbledInput = styled.input`
+  color: #999;
+`;
+const DisabledInput = styled.input`
+  color: #0a58be;
+  text-align: center;
+`;
+
+const EditButton = styled.button`
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border: none;
+  background: url(${process.env.PUBLIC_URL}/icon/write_icon_blue.svg) no-repeat
+    center / 100%;
+`;

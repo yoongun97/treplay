@@ -90,11 +90,17 @@ const Preview = ({
                 {/* 추천/비추천 개수 보여줌 */}
                 <LikesContainer>
                   <LikesBox>
-                    <img src="icon/like_icon.svg" alt="likesIcon"></img>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
+                      alt="likesIcon"
+                    ></img>
                     <span>{likedCount.length}</span>
                   </LikesBox>
                   <DislikesBox>
-                    <img src="icon/dislike_icon.svg" alt="dislikesIcon"></img>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
+                      alt="dislikesIcon"
+                    ></img>
                     <span>{dislikedCount.length}</span>
                   </DislikesBox>
                 </LikesContainer>

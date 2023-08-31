@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
+import { styled } from "styled-components";
+import { Link } from "react-router-dom";
 
 // 지도의 크기와 초기 중심 좌표를 설정
 const containerStyle = {
@@ -60,6 +62,7 @@ function PlaceSearch() {
 
   // 결과를 선택하고 입력 필드에 표시
   const handleResultClick = (result) => {
+    console.log(result);
     setSelectedResult(result);
     setSearchInput(result.formatted_address);
     setPost({
@@ -78,8 +81,8 @@ function PlaceSearch() {
   };
 
   return isLoaded ? (
-    <div>
-      <div>
+    <>
+      <SearchBox>
         <input
           type="text"
           value={searchInput}
@@ -87,27 +90,27 @@ function PlaceSearch() {
           placeholder="Enter an address to search"
           onKeyDown={handleEnterKey}
         />
-        <button onClick={handleSearch}>검색</button>
-        <div>
-          <div>
-            {searchResults.map((result, index) => (
-              <div
-                key={index}
-                style={{ cursor: "pointer", marginBottom: "5px" }}
-                onClick={() => handleResultClick(result)}
-              >
-                {result.name} - {result.formatted_address}
-              </div>
-            ))}
+        <button onClick={handleSearch}>
+          <span></span>
+        </button>
+      </SearchBox>
+      <div>
+        {searchResults.map((result, index) => (
+          <div
+            key={index}
+            onClick={() => handleResultClick(result)}
+            style={{ cursor: "pointer", marginBottom: "5px" }}
+          >
+            {result.name} - {result.formatted_address}
           </div>
-          {selectedResult && (
-            <div>
-              <p>선택된 장소명: {selectedResult.name}</p>
-              <p>선택된 주소: {selectedResult.formatted_address}</p>
-            </div>
-          )}
-        </div>
+        ))}
       </div>
+      {selectedResult && (
+        <div>
+          <p>선택된 장소명: {selectedResult.name}</p>
+          <p>선택된 주소: {selectedResult.formatted_address}</p>
+        </div>
+      )}
       <div style={{ display: "none" }}>
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -117,10 +120,53 @@ function PlaceSearch() {
           onUnmount={onUnmount}
         />
       </div>
-    </div>
+    </>
   ) : (
     <div>Loading...</div>
   );
 }
 
 export default PlaceSearch;
+
+const SearchBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 580px;
+  height: 60px;
+  margin: 60px auto;
+  padding-left: 20px;
+  border: 1px solid #0a58be;
+  border-radius: 30px;
+
+  & > input {
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 400;
+    color: #222;
+    width: 480px;
+    height: 100%;
+    background: transparent;
+  }
+
+  & > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 24px;
+    background-color: #0a58be;
+  }
+  & > button > span {
+    width: 24px;
+    height: 24px;
+    background-image: url(${process.env.PUBLIC_URL}/icon/search_icon.svg);
+  }
+`;
+
+const ResultBox = styled.div`
+  display: block;
+`;

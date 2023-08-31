@@ -1,16 +1,14 @@
-
 import React from "react";
 import Slider from "react-slick";
 import "./slick.css";
 import { styled } from "styled-components";
-
 
 function SampleArrow(props) {
   const { className, style, onClick } = props;
   return (
     <div
       className={className}
-      style={{ ...style, display: 'none' }}
+      style={{ ...style, display: "none" }}
       onClick={onClick}
     />
   );
@@ -31,25 +29,33 @@ function MainCarousel() {
 
     appendDots: (dots) => <ul style={{ listStyle: "none" }}>{dots}</ul>,
     dotsClass: "dots_custom",
-
   };
   return (
     <div className="CarouselContainer">
       <StyledSlider
         {...settings}
         style={{
-          height: '700px',
-          width: '100%',
+          height: "700px",
+          width: "100%",
         }}
       >
         <ImageContainer>
-          <img src="image/mainBanner01.jpg" alt="MainCarousel1" />
+          <img
+            src={`${process.env.PUBLIC_URL}/image/mainBanner01.jpg`}
+            alt="MainCarousel1"
+          ></img>
         </ImageContainer>
         <ImageContainer>
-          <img src="image/mainBanner02.jpg" alt="MainCarousel2" />
+          <img
+            src={`${process.env.PUBLIC_URL}/image/mainBanner02.jpg`}
+            alt="MainCarousel2"
+          ></img>
         </ImageContainer>
         <ImageContainer>
-          <img src="image/mainBanner03.jpg" alt="MainCarousel3" />
+          <img
+            src={`${process.env.PUBLIC_URL}/image/mainBanner03.jpg`}
+            alt="MainCarousel3"
+          ></img>
         </ImageContainer>
       </StyledSlider>
     </div>

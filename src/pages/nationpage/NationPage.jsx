@@ -8,7 +8,6 @@ import MainCarousel from '../../components/imageslide/MainCarousel';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { useQuery } from 'react-query';
-import TopButton from '../../common/TopButton';
 
 function NationPage() {
   const [posts, setPosts] = useState([]);
@@ -60,7 +59,6 @@ function NationPage() {
       />
       <EventBanner />
       <BestPlace posts={posts} allLikedData={allLikedData} />
-      <TopButton />
     </div>
   );
 }

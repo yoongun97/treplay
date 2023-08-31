@@ -10,8 +10,7 @@ import * as s from './StyledSignup';
 import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 import NicknameModal from '../modal/NicknameModal';
 import EmailModal from '../modal/EmailModal';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-// import baseprofile from '../../../public/image/baseprofile.jpeg';
+import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 
 function Signup() {
   // 사진 넣기
@@ -68,6 +67,7 @@ function Signup() {
       setIsChecked2(!isChecked2);
     }
   };
+
   const navigate = useNavigate();
 
   // 회원가입 함수
@@ -492,6 +492,7 @@ function Signup() {
             <s.InfoInput
               type="number"
               value={checkNumber}
+              placeholder="인증번호를 입력해주세요."
               onChange={(e) => {
                 setCheckNumber(e.target.value);
                 setErrorBox('');
