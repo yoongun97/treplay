@@ -5,6 +5,7 @@ export const StBox = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 40px;
+  cursor: pointer;
 `;
 export const DropdownWrapper = styled.div`
   width: 220px;
