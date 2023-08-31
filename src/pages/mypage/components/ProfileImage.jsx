@@ -4,6 +4,7 @@ import { userAtom } from "../../../store/userAtom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, storage } from "../../../firebaseConfig";
 import { updateProfile } from "firebase/auth";
+import { styled } from "styled-components";
 
 const ProfileImage = ({ fetchData }) => {
   const [user] = useAtom(userAtom);
@@ -28,19 +29,78 @@ const ProfileImage = ({ fetchData }) => {
   };
 
   return (
-    <div>
+    <ProfileImageContainer>
       {user.photoURL ? (
-        <img src={user.photoURL} alt="프로필 이미지" width="100px" />
+        <img src={user.photoURL} alt="프로필 이미지" />
       ) : (
         <img src="" alt="프로필 이미지 미등록" />
       )}
-      <div>
-        <input type="file" onChange={(e) => uploadPhotoHandler(e)}></input>
-        <span>파일버튼</span>
-        {/* 추후 input display:none하고 span 태그로 버튼 모양 만들기 */}
-      </div>
-    </div>
+      <FileButton>
+        <label>
+          <input type="file" onChange={(e) => uploadPhotoHandler(e)}></input>
+        </label>
+      </FileButton>
+    </ProfileImageContainer>
   );
 };
 
 export default ProfileImage;
+
+const ProfileImageContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  margin: 60px auto 20px;
+  border-radius: 50%;
+  border: 3px solid #0a58be;
+  background-color: #fff;
+
+  & > img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+  }
+`;
+
+const FileButton = styled.div`
+  position: absolute;
+  bottom: 14px;
+  right: -6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+
+  & > label {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  & > label::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: 25%;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url(${process.env.PUBLIC_URL}/icon/camera_icon_black.svg)
+      no-repeat;
+  }
+
+  & > label > input {
+    display: none;
+    z-index: 20;
+  }
+`;

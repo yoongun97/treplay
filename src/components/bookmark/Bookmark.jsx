@@ -78,7 +78,17 @@ const Bookmark = () => {
         bookmarkHandler(e);
       }}
     >
-      {isSaved ? <span>북마크 취소</span> : <span>북마크 하기</span>}
+      {isSaved ? (
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/bookmark_icon_black.svg`}
+          alt="bookmark_icon"
+        ></img>
+      ) : (
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/bookmark_icon.svg`}
+          alt="bookmark_icon"
+        ></img>
+      )}
     </button>
   );
 };

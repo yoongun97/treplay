@@ -7,7 +7,7 @@ const EventBanner = () => {
 
   return (
     <EventBannerContainer>
-      <ImageBox>이미지</ImageBox>
+      <ImageBox></ImageBox>
       <EventBannerBoxContainer>
         <EventBannerBox>
           <h4>#먹방대전! 또갈 맛집 투표하기</h4>
@@ -47,10 +47,11 @@ const EventBannerContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 230px;
-  height: 200px;
+  width: 480px;
+  height: 261px;
   margin-right: 130px;
-  background-color: #fff;
+  background: url(${process.env.PUBLIC_URL}/image/banner_image_icon.png)
+    no-repeat center / 100%;
 `;
 
 const EventBannerBoxContainer = styled.div`
@@ -101,12 +102,13 @@ const LinkBox = styled(Link)`
   & > div {
     width: 24px;
     height: 24px;
-    background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_white.svg);
+    background: url(${process.env.PUBLIC_URL}/icon/right_arrow_white.svg)
+      no-repeat center / 100%;
     transition: 0.3s;
   }
 
   &:hover > div {
-    background-image: url(${process.env
-      .PUBLIC_URL}/icon/right_arrow_yellow.svg);
+    background: url(${process.env.PUBLIC_URL}/icon/right_arrow_yellow.svg)
+      no-repeat center / 100%;
   }
 `;
