@@ -53,6 +53,18 @@ function ImageCarousel({ postImgs }) {
 
 export default ImageCarousel;
 
+const SliderContainer = styled.div`
+  margin-bottom: 40px;
+
+  & > div {
+    position: relative;
+  }
+  & > div > ul {
+    position: absolute;
+    bottom: -10px;
+  }
+`;
+
 const StyleNextButton = styled.button`
   width: 24px;
   height: 24px;
@@ -62,7 +74,6 @@ const StyleNextButton = styled.button`
   }
   &::after {
     content: "";
-    position: absolute;
     background: url(${process.env.PUBLIC_URL}/icon/slider_left.svg) no-repeat
       center / 100%;
   }
@@ -82,24 +93,11 @@ const StylePrevButton = styled.button`
   }
 `;
 
-const SliderContainer = styled.div`
-  margin-bottom: 40px;
-
-  & > div {
-    position: relative;
-  }
-  & > div > ul {
-    position: absolute;
-    bottom: -10px;
-  }
-`;
-
 const ImageBox = styled.div`
   justify-content: center;
   align-items: center;
   width: 1280px;
-  margin: 10px 0;
-  padding: 10px;
+  margin: 20px 0;
   border-radius: 8px;
 
   & > img {
