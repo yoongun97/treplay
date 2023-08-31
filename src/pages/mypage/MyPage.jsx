@@ -1,7 +1,6 @@
 import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { userAtom } from "../../store/userAtom";
-import Unloggined from "../../common/Unloggined";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
@@ -9,6 +8,7 @@ import SavedList from "./components/SavedList";
 import MyList from "./components/MyList";
 import { useQuery } from "react-query";
 import ProfileImage from "./components/ProfileImage";
+import SuggestLogin from "../../components/login/SuggestLogin";
 import Nickname from "./components/Nickname";
 import { styled } from "styled-components";
 
@@ -142,7 +142,7 @@ function MyPage() {
         </MypageContainer>
       ) : (
         // 비회원일 경우에 Unloggined 컴포넌트 보여 주기
-        <Unloggined />
+        <SuggestLogin />
       )}
     </>
   );
