@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAtom } from "jotai";
+import { postAtom } from "../../store/postAtom";
 import {
   DropdownWrapper,
   DropdownHeader,
@@ -6,8 +8,6 @@ import {
   DropdownItem,
   StBox,
 } from "./StyledSelectBox";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
 
 function SelectBox() {
   const nations = ["미국", "일본", "한국"];
@@ -38,7 +38,10 @@ function SelectBox() {
           }}
         >
           <span>{selectedNation || "선택하세요"}</span>
-          <span>🔽</span>
+          <img
+            src={`${process.env.PUBLIC_URL}/icon/select_icon_down.svg`}
+            alt="select_icon"
+          ></img>
         </DropdownHeader>
         {isActive && (
           <DropdownList>
@@ -62,7 +65,10 @@ function SelectBox() {
           }}
         >
           <span>{selectedCategory || "선택하세요"}</span>
-          <span>🔽</span>
+          <img
+            src={`${process.env.PUBLIC_URL}/icon/select_icon_down.svg`}
+            alt="select_icon"
+          ></img>
         </DropdownHeader>
         {isActive1 && (
           <DropdownList>

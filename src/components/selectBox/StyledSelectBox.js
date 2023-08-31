@@ -2,35 +2,61 @@ import { styled } from "styled-components";
 
 export const StBox = styled.div`
   display: flex;
-  width: 500px;
-  height: 50px;
-  overflow: hidden;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
 `;
-
 export const DropdownWrapper = styled.div`
-  width: 200px;
-  height: 40px;
-  border: 1px solid #ccc;
+  width: 220px;
+  border: 1px solid #e5e5e5;
 `;
-
 export const DropdownHeader = styled.div`
-  padding: 10px;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 220px;
+  height: 46px;
+  padding: 6px 12px;
+  line-height: 46px;
+  color: #bfbfbf;
 `;
-
 export const DropdownList = styled.div`
-  border-top: 1px solid #ccc;
-  position: absolute;
-  width: 200px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
+  background-color: white;
 `;
 
 export const DropdownItem = styled.div`
-    padding:10pxcursor:pointer;
-    &:hover{
-        background-color: lightgray;
-    }
+  position: relative;
+  height: 34px;
+  padding: 0 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 34px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f2f8ff;
+  }
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #e5e5e5;
+  }
+  &:first-child::before {
+    content: "";
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #e5e5e5;
+  }
+
+  &:last-child::after {
+    display: none;
+  }
 `;
