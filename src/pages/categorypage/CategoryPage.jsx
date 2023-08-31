@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -155,6 +156,8 @@ function CategoryPage() {
     return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
+
+  console.log(user);
 
   console.log(user);
 

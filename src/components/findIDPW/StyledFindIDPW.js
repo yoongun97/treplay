@@ -102,7 +102,6 @@ export const FindBtn = styled.button`
   font-size: 18px;
   font-weight: 600;
 `;
-
 export const FindedTitle = styled.div`
   height: 22px;
   margin-bottom: 40px;

@@ -36,7 +36,6 @@ function Login() {
       }
       await signInWithEmailAndPassword(auth, email, password);
 
-
       // 이전 페이지로 이동
       navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
     } catch (error) {
@@ -129,7 +128,6 @@ function Login() {
             >
               비밀번호 찾기
             </s.NaviBtn>
-
             <s.NaviBtn
               onClick={() => {
                 navigate("/signup");
