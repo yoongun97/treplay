@@ -450,6 +450,7 @@ function Signup() {
             <s.InfoInput
               type="number"
               value={checkNumber}
+              placeholder="인증번호를 입력해주세요."
               onChange={(e) => {
                 setCheckNumber(e.target.value);
                 setErrorBox("");
