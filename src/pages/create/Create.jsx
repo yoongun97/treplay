@@ -11,6 +11,7 @@ function Create() {
 
   return (
     <>
+
       <SelectBoxContainer>
         <SelectBox />
       </SelectBoxContainer>
@@ -31,6 +32,7 @@ function Create() {
             setPost({ ...post, postOneLineContent: e.target.value });
           }}
         />
+
       </TextContainer>
       <ImageUpload />
     </>
