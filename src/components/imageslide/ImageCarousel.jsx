@@ -40,7 +40,7 @@ function ImageCarousel({ postImgs }) {
   };
   return (
     <SliderContainer>
-      <Slider {...settings} style={{}}>
+      <Slider {...settings}>
         {postImgs.map((img) => (
           <ImageBox>
             <img src={img} alt="디테일 이미지" />
@@ -58,7 +58,11 @@ const StyleNextButton = styled.button`
   height: 24px;
 
   &::before {
+    display: none;
+  }
+  &::after {
     content: "";
+    position: absolute;
     background: url(${process.env.PUBLIC_URL}/icon/slider_left.svg) no-repeat
       center / 100%;
   }
@@ -69,6 +73,9 @@ const StylePrevButton = styled.button`
   height: 24px;
 
   &::before {
+    display: none;
+  }
+  &::after {
     content: "";
     background: url(${process.env.PUBLIC_URL}/icon/slider_right.svg) no-repeat
       center / 100%;
@@ -76,7 +83,15 @@ const StylePrevButton = styled.button`
 `;
 
 const SliderContainer = styled.div`
-  margin: 20px 0 40px;
+  margin-bottom: 40px;
+
+  & > div {
+    position: relative;
+  }
+  & > div > ul {
+    position: absolute;
+    bottom: -10px;
+  }
 `;
 
 const ImageBox = styled.div`
@@ -84,10 +99,13 @@ const ImageBox = styled.div`
   align-items: center;
   width: 1280px;
   margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
 
   & > img {
     width: auto;
     height: 700px;
     margin: 0 auto;
+    border-radius: 8px;
   }
 `;
