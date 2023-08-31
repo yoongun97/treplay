@@ -1,47 +1,5 @@
-<<<<<<< HEAD
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  startAt,
-  endAt,
-} from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import { styled } from 'styled-components';
-import Search from '../../components/search/Search';
-import TopButton from '../../common/TopButton';
-
-//최신순 , 북마크 , 또가요 정렬
-//없는 결과시에도 1페이지가 뜨는 이유 == 43번줄 문제?
-//주소 결과도 찾아지게 - 해결 완료
-
-/**
- * 1. useQuery 로 데이터베이스에서 posts를 가져온다.
- * 2. 검색을 한 경우,
- */
-
-/**
- * 1. 인기순
- *    - 좋아요 데이터를 일단 가져와야 함 (조건은 현희님이 잘 판단하기)
- *    - 게시물의 id와 일치하는 좋아요 개수를 적용한다
- *    - 그 다음에 posts에 좋아요 개수 속성을 넣어준다.
- *    - 이걸 완료해야 인기순으로 정렬이 가능함
- *    - 정렬된 결과를 setFilteredData에 넣어준다.
- * 2. 최신순
- *    - date 얘를 기준으로 정렬하는 코드를 짜면 됨
- *    - date sort 한 결과를 setFilteredData에 넣어준다.
- */
-=======
-import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -51,7 +9,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
 import { styled } from "styled-components";
 import Search from "../../components/search/Search";
->>>>>>> 4d6af1da35e5e86d588b18abb6e557d21ea64481
+import TopButton from "../../common/TopButton";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -62,7 +20,7 @@ function CategoryPage() {
   // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 10; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
-  const [sortOption, setSortOption] = useState('likes');
+  const [sortOption, setSortOption] = useState("likes");
 
   const handleSortOption = (newSortOption) => {
     setSortOption(newSortOption);
@@ -70,15 +28,15 @@ function CategoryPage() {
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
-      const totalSearchData = searchData.toLowerCase().replace(' ', '');
+      const totalSearchData = searchData.toLowerCase().replace(" ", "");
 
       const placeNameMatch = post.placeName
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
       const placeLocationMatch = post.placeLocation
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
@@ -91,9 +49,9 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category)
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
@@ -119,7 +77,7 @@ function CategoryPage() {
       };
       //likes의 정보를 가져옴
       const likesSnapshot = await getDocs(
-        query(collection(db, 'likes'), where('postId', '==', post.id))
+        query(collection(db, "likes"), where("postId", "==", post.id))
       );
 
       post.likes = likesSnapshot.size;
@@ -132,11 +90,11 @@ function CategoryPage() {
   };
   //또가요 , 북마크 , 최신순 정렬하기
   const sortPosts = (posts) => {
-    if (sortOption === 'likes') {
+    if (sortOption === "likes") {
       return posts.sort((a, b) => b.likes - a.likes);
-    } else if (sortOption === 'saved') {
+    } else if (sortOption === "saved") {
       return posts.sort((a, b) => b.saved - a.saved);
-    } else if (sortOption === 'date') {
+    } else if (sortOption === "date") {
       return posts.sort((a, b) => b.date - a.date);
     }
 
@@ -147,7 +105,7 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(['posts', category], fetchPosts);
+  } = useQuery(["posts", category], fetchPosts);
   // undefined
   // 데이터를 가져오는게 완료돠면 posts에 데이터가 들어감
 
@@ -189,12 +147,12 @@ function CategoryPage() {
   }, [posts, sortOption, currentPage]);
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    console.error("데이터를 가져올 수 없습니다", error);
+    return alert("데이터를 가져올 수 없습니다");
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return "정보를 가져오고 있습니다.";
   }
   //페이지 네이션
 
@@ -212,10 +170,10 @@ function CategoryPage() {
       <MiddleContainer>
         {/* FilterContainer에 정렬기능 추가 */}
         <FilterContainer>
-          <LatestFilterButton onClick={() => handleSortOption('date')}>
+          <LatestFilterButton onClick={() => handleSortOption("date")}>
             최신순
           </LatestFilterButton>
-          <LikedFilterButton onClick={() => handleSortOption('likes')}>
+          <LikedFilterButton onClick={() => handleSortOption("likes")}>
             인기순
           </LikedFilterButton>
         </FilterContainer>
