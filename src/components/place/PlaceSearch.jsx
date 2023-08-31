@@ -60,6 +60,7 @@ function PlaceSearch() {
 
   // 결과를 선택하고 입력 필드에 표시
   const handleResultClick = (result) => {
+    console.log(result);
     setSelectedResult(result);
     setSearchInput(result.formatted_address);
     setPost({

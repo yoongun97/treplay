@@ -35,7 +35,7 @@ function Login() {
         return;
       }
       await signInWithEmailAndPassword(auth, email, password);
-      alert("로그인에 성공하셨습니다.");
+
 
       // 이전 페이지로 이동
       navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
@@ -115,8 +115,21 @@ function Login() {
             </s.ErrorBox>
           )}
           <s.BtnBox>
-            <s.NaviBtn>아이디 찾기</s.NaviBtn>
-            <s.NaviBtn>비밀번호 찾기</s.NaviBtn>
+            <s.NaviBtn
+              onClick={() => {
+                navigate("/idpw/inquiry");
+              }}
+            >
+              아이디 찾기
+            </s.NaviBtn>
+            <s.NaviBtn
+              onClick={() => {
+                navigate("/idpw/inquiry");
+              }}
+            >
+              비밀번호 찾기
+            </s.NaviBtn>
+
             <s.NaviBtn
               onClick={() => {
                 navigate("/signup");

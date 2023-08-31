@@ -200,6 +200,8 @@ function CategoryPage() {
 
   console.log(user);
 
+  console.log(user);
+
   return (
     <CategoryPageContainer>
       <PhrasesContainer>
