@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  startAt,
-  endAt,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import PageNation from '../../components/pageNation/PageNation';
 import CategoryLikes from './CategoryLikes';
@@ -39,19 +31,6 @@ import TopButton from '../../common/TopButton';
  *    - date 얘를 기준으로 정렬하는 코드를 짜면 됨
  *    - date sort 한 결과를 setFilteredData에 넣어준다.
  */
-=======
-import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import PageNation from "../../components/pageNation/PageNation";
-import CategoryLikes from "./CategoryLikes";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import { styled } from "styled-components";
-import Search from "../../components/search/Search";
->>>>>>> 4d6af1da35e5e86d588b18abb6e557d21ea64481
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -60,9 +39,9 @@ function CategoryPage() {
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
-  const postsViewPage = 10; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
-  const [sortOption, setSortOption] = useState('likes');
+  const [sortOption, setSortOption] = useState('date');
 
   const handleSortOption = (newSortOption) => {
     setSortOption(newSortOption);
@@ -86,7 +65,7 @@ function CategoryPage() {
     });
     console.log({ searchResults, searchData });
     setFilteredPosts(searchResults);
-    setCurrentPage(1); // 이곳에서 문제인가요? 검색 결과가 없을시 초기 화면으로 가는데 이걸 아래쪽에서 어떻게 하는지
+    setCurrentPage(1);
   };
 
   const fetchPosts = async () => {
@@ -133,13 +112,16 @@ function CategoryPage() {
   //또가요 , 북마크 , 최신순 정렬하기
   const sortPosts = (posts) => {
     if (sortOption === 'likes') {
-      return posts.sort((a, b) => b.likes - a.likes);
-    } else if (sortOption === 'saved') {
-      return posts.sort((a, b) => b.saved - a.saved);
+      // likes 내림차순 정렬, 같은 likes는 최신순으로 정렬
+      return posts.sort((a, b) => {
+        if (b.likes === a.likes) {
+          return b.date - a.date; // 최신순으로 정렬
+        }
+        return b.likes - a.likes;
+      });
     } else if (sortOption === 'date') {
       return posts.sort((a, b) => b.date - a.date);
     }
-
     return posts;
   };
 
@@ -151,15 +133,15 @@ function CategoryPage() {
   // undefined
   // 데이터를 가져오는게 완료돠면 posts에 데이터가 들어감
 
-  //새로운 훅을 만들어 likes를 가져오기
-  useEffect(() => {
-    const fetchPostsAndLikes = async () => {
-      const postsWithLikes = await fetchPosts();
-      setFilteredPosts(postsWithLikes);
-    };
+  // //새로운 훅을 만들어 likes를 가져오기
+  // useEffect(() => {
+  //   const fetchPostsAndLikes = async () => {
+  //     const postsWithLikes = await fetchPosts();
+  //     setFilteredPosts(postsWithLikes);
+  //   };
 
-    fetchPostsAndLikes();
-  }, [sortOption, currentPage]);
+  //   fetchPostsAndLikes();
+  // }, [sortOption, currentPage]);
 
   // 첫 데이터 세팅을 위해 useEffect 실행
   // useEffect(() => {
@@ -255,9 +237,7 @@ function CategoryPage() {
       <TopButton />
       <PageNation
         postsViewPage={postsViewPage}
-        totalPosts={
-          filteredPosts.length > 0 ? filteredPosts.length : posts.length
-        }
+        totalPosts={posts.length}
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
       />

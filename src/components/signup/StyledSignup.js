@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 export const Overlay = styled.div`
   ${({ isModalOpen }) =>
@@ -130,7 +130,7 @@ export const ErrorMark = styled.img`
 export const ErrorMsg = styled.p`
   width: 459px;
   height: 22px;
-  color: ${(props) => (props.error === "false" ? "#0a58be" : "#e02918")};
+  color: ${(props) => (props.error === 'false' ? '#0a58be' : '#e02918')};
   font-size: 12px;
   line-height: 22px;
   margin-top: 11px;
