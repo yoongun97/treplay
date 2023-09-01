@@ -1,12 +1,12 @@
-import React from "react";
-import * as s from "./StyledPageNation";
+import React from 'react';
+import * as s from './StyledPageNation';
 
 const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
-  const pageNumber = [];
   //총 페이지수 계산
-  for (let i = 1; i <= Math.ceil(totalPosts / postsViewPage); i++) {
-    pageNumber.push(i);
-  }
+  const pageNumber = Array.from(
+    { length: Math.ceil(totalPosts / postsViewPage) },
+    (_, index) => index + 1
+  );
   //이전 버튼
   const prevPage = () => {
     if (currentPage > 1) {
@@ -29,7 +29,7 @@ const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
             <s.PageNumberButton
               key={number}
               onClick={() => pagenate(number)}
-              className={currentPage === number ? "active" : ""}
+              className={currentPage === number ? 'active' : ''}
             >
               {number}
             </s.PageNumberButton>

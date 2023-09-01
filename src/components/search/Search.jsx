@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import * as s from "./StyledSearch";
+import React, { useState } from 'react';
+import * as s from './StyledSearch';
 
 const Search = ({ onSearch }) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       onSearch(search);
     }
   };
