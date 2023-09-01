@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 export const Overlay = styled.div`
   ${({ isModalOpen }) =>
@@ -29,16 +29,16 @@ export const SignupTitle = styled.h2`
 `;
 
 export const ProfileImgBox = styled.div`
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  margin: 60px auto 60px auto;
-  background-color: white;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 140px;
+  height: 140px;
+  margin: 60px auto;
+  border-radius: 50%;
   border: 3px solid #0a58be;
-  position: relative;
+  background-color: white;
 `;
 
 export const ProfileImg = styled.img`
@@ -47,18 +47,21 @@ export const ProfileImg = styled.img`
   border-radius: 50%;
   overflow: hidden;
 `;
-export const FileButton = styled.div`
+
+export const ProfileImgBtn = styled.div`
   position: absolute;
   bottom: 14px;
   right: -6px;
   display: flex;
   flex-direction: column;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
   background-color: #f1f1f1;
+  cursor: pointer;
 
   & > label {
     position: relative;
@@ -155,7 +158,7 @@ export const ErrorMark = styled.img`
 export const ErrorMsg = styled.p`
   width: 459px;
   height: 22px;
-  color: ${(props) => (props.error === 'false' ? '#0a58be' : '#e02918')};
+  color: ${(props) => (props.error === "false" ? "#0a58be" : "#e02918")};
   font-size: 12px;
   line-height: 22px;
   margin-top: 11px;
