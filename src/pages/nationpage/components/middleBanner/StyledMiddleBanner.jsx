@@ -1,43 +1,13 @@
-import React from "react";
 import { styled } from "styled-components";
 
-const MiddleBanner = () => {
-  return (
-    <MiddleBannerContainer>
-      <ImageBox />
-      <ImageBox />
-      <MiddleBannerPhrasesBox>
-        <h2>AD) 스파르타 코딩 클럽</h2>
-        <h3>노트북 하나로 세계 어디서든!</h3>
-        <div>
-          <span>
-            여행을 좋아하는 당신! <br />
-            노트북 하나만 있다면 세계 어디서든 자유롭게 <br />
-            코딩을 할 수 있다는 사실, 알고 계셨나요?
-            <br /> 두 손으로 코딩을, 두 발에게는 자유를!
-            <br />
-            여행하는 개발자... 낭만 있잖아?! 👩‍💻👨‍💻
-          </span>
-        </div>
-        <MoreInfoButton href="https://spartacodingclub.kr/" target="blank">
-          <span>더 알아보기</span>
-          <div></div>
-        </MoreInfoButton>
-      </MiddleBannerPhrasesBox>
-    </MiddleBannerContainer>
-  );
-};
-
-export default MiddleBanner;
-
-const MiddleBannerContainer = styled.div`
+export const MiddleBannerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 140px 0;
   background-color: #f2f8ff;
 `;
-const ImageBox = styled.div`
+export const ImageBox = styled.div`
   width: 400px;
   height: 400px;
   border-radius: 30px;
@@ -58,7 +28,7 @@ const ImageBox = styled.div`
   }
 `;
 
-const MiddleBannerPhrasesBox = styled.div`
+export const MiddleBannerPhrasesBox = styled.div`
   width: 330px;
   margin-left: 80px;
 
@@ -87,7 +57,7 @@ const MiddleBannerPhrasesBox = styled.div`
     }
   }
 `;
-const MoreInfoButton = styled.a`
+export const MoreInfoButton = styled.a`
   display: flex;
 
   justify-content: center;
