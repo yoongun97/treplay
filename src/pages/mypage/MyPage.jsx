@@ -1,7 +1,6 @@
 import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { userAtom } from "../../store/userAtom";
-import Unloggined from "../../common/Unloggined";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
@@ -9,8 +8,10 @@ import SavedList from "./components/SavedList";
 import MyList from "./components/MyList";
 import { useQuery } from "react-query";
 import ProfileImage from "./components/ProfileImage";
+import SuggestLogin from "../../components/login/SuggestLogin";
 import Nickname from "./components/Nickname";
 import { styled } from "styled-components";
+import PageNation from "../../components/pageNation/PageNation";
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -23,6 +24,10 @@ function MyPage() {
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [isMyListActived, setIsMyListActived] = useState(true);
+
+  // 페이지네이션 설정
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsViewPage = 6; // 한 페이지에 보여줄 게시물 수
 
   const fetchData = async () => {
     // 유저 데이터
@@ -70,26 +75,42 @@ function MyPage() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  //페이지 네이션
+  useEffect(() => {
+    if (!isMyListActived) {
+      setMyPosts(savedPosts);
+      fetchData();
+    } else {
+      setMyPosts(myPosts);
+      fetchData();
+    }
+  }, [isMyListActived]);
   // 버튼 클릭 시 리스트 전환 함수
   const activeSavedListHandler = () => {
     setIsMyListActived(false);
+    setCurrentPage(1);
   };
   const activeMyListHandler = () => {
     setIsMyListActived(true);
+    setCurrentPage(1);
   };
 
   // 리액트 쿼리로 로딩/에러 처리
 
-  const { isLoading, iserror, error } = useQuery("userData", fetchData);
+  const { isLoading, isError, error } = useQuery("userData", fetchData);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
   }
 
-  if (iserror) {
+  if (isError) {
     return alert(`에러 발생! Error Code: ${error.message}`);
   }
+
+  // 페이지 변경 이벤트 핸들러
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <>
@@ -127,22 +148,34 @@ function MyPage() {
               {/* 버튼 전환에 따른 리스트 변환 */}
               {isMyListActived === true ? (
                 <MyList
-                  myPosts={myPosts}
+                  myPosts={myPosts.slice(
+                    (currentPage - 1) * postsViewPage,
+                    currentPage * postsViewPage
+                  )}
                   setMyPosts={setMyPosts}
                   allLikedData={allLikedData}
                 />
               ) : (
                 <SavedList
-                  savedPosts={savedPosts}
+                  savedPosts={savedPosts.slice(
+                    (currentPage - 1) * postsViewPage,
+                    currentPage * postsViewPage
+                  )}
                   allLikedData={allLikedData}
                 />
               )}
             </ListContainerInner>
           </ListContainer>
+          <PageNation
+            postsViewPage={postsViewPage}
+            totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
+            currentPage={currentPage}
+            pagenate={handlePageChange}
+          />
         </MypageContainer>
       ) : (
         // 비회원일 경우에 Unloggined 컴포넌트 보여 주기
-        <Unloggined />
+        <SuggestLogin />
       )}
     </>
   );

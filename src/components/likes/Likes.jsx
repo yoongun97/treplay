@@ -104,10 +104,7 @@ export default function Likes() {
           disabled={likes}
         >
           <div>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
-              alt="likesIcon"
-            ></img>
+            <span></span>
             <span>또가요</span>
           </div>
           <p>{likesCount}명</p>
@@ -118,10 +115,7 @@ export default function Likes() {
           disabled={dislikes}
         >
           <div>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
-              alt="dislikesIcon"
-            ></img>
+            <span></span>
             <span>안가요</span>
           </div>
           <p>{dislikesCount}명</p>
@@ -132,3 +126,4 @@ export default function Likes() {
     </s.LikesContainer>
   );
 }
+

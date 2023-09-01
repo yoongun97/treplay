@@ -104,7 +104,6 @@ export const FindBtn = styled.button`
   font-size: 18px;
   font-weight: 600;
 `;
-
 export const FindedTitle = styled.div`
   height: 22px;
   margin-bottom: 40px;
@@ -147,6 +146,7 @@ export const FindedBtn = styled.button`
   color: white;
   font-size: 18px;
   font-weight: 600;
+
 `;
 
 export const ErrorBox = styled.div`
@@ -173,3 +173,4 @@ export const ErrorMsg = styled.p`
   margin-top: 11px;
   margin-bottom: 11px;
 `;
+

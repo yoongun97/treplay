@@ -4,14 +4,21 @@ import {
   fetchSignInMethodsForEmail,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db, storage } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import NicknameModal from "../modal/NicknameModal";
 import EmailModal from "../modal/EmailModal";
+import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 
 function Signup() {
+  // 사진 넣기
+  const [profileImage, setProfileImage] = useState(
+    `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
+  );
+  const [selectedImage, setSelectedImage] = useState(null);
+  const imageInputRef = useRef();
   // input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -137,9 +144,25 @@ function Signup() {
           email,
           password
         );
-        updateProfile(auth.currentUser, {
-          displayName: nickname,
-        });
+        //이미지 넣기
+        if (selectedImage) {
+          const storageRef = ref(
+            storage,
+            `profile_images/${userCredential.user.uid}`
+          );
+          const imageSnapshot = await uploadBytes(storageRef, selectedImage);
+          const imageUrl = await getDownloadURL(imageSnapshot.ref);
+
+          updateProfile(auth.currentUser, {
+            displayName: nickname,
+            photoURL: imageUrl, //이미지 url
+          });
+        } else {
+          updateProfile(auth.currentUser, {
+            displayName: nickname,
+          });
+        }
+
         const newUser = {
           uid: userCredential.user.uid,
           email,
@@ -244,19 +267,38 @@ function Signup() {
     }
   };
 
+  // 이미지 변경 처리 함수
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfileImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+
+      setSelectedImage(selectedImage); // 선택한 이미지 저장
+    }
+  };
+
   return (
     <s.SignupContainer isModalOpen={isModalOpen}>
       {isModalOpen && <s.Overlay isModalOpen={isModalOpen} />}
       <s.SignupTitle>회원가입</s.SignupTitle>
       <s.ProfileImgBox>
-        <s.ProfileImg
-          src="https://images.unsplash.com/photo-1536164261511-3a17e671d380?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fCVFRCU5NCU4NCVFQiVBMSU5QyVFRCU5NSU4NHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-          alt="프로필 이미지"
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          ref={imageInputRef}
+          onChange={handleImageChange}
         />
+        <s.ProfileImg src={profileImage} alt="프로필 이미지" />
         <s.ProfileImgBtn>
           <s.ProfileEditImg
             src="https://cdn-icons-png.flaticon.com/128/45/45010.png"
             alt="이미지 수정"
+            onClick={() => imageInputRef.current.click()}
           />
         </s.ProfileImgBtn>
       </s.ProfileImgBox>

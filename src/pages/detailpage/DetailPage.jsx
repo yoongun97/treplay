@@ -1,17 +1,17 @@
-import React from "react";
-import PlaceMap from "../../components/place/PlaceMap";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
-import Likes from "../../components/likes/Likes";
-import Bookmark from "../../components/bookmark/Bookmark";
-import Comments from "../../components/comments/Comments";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import ImageCarousel from "../../components/imageslide/ImageCarousel";
-import TopButton from "../../common/TopButton";
+import React, { useState } from 'react';
+import PlaceMap from '../../components/place/PlaceMap';
+import { deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import Likes from '../../components/likes/Likes';
+import Bookmark from '../../components/bookmark/Bookmark';
+import Comments from '../../components/comments/Comments';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import ImageCarousel from '../../components/imageslide/ImageCarousel';
 import * as s from "./StyledDetailPage";
+
 
 function DetailPage() {
   const { id } = useParams();
@@ -62,20 +62,29 @@ function DetailPage() {
 
   const date = post?.date.toDate();
   const dateOptions = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   };
 
   const timeOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   };
 
-  const postDate = date.toLocaleString("ja-KR", dateOptions);
-  const postTime = date.toLocaleString("en-KR", timeOptions);
+  const postDate = date.toLocaleString('ja-KR', dateOptions);
+  const postTime = date.toLocaleString('en-KR', timeOptions);
 
+  // 댓글 내용에 줄바꿈 처리를 추가
+  const lineChangeText = (text) => {
+    return text.split('\n').map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
   return (
     <s.DetailContainer>
       <s.DetailContainerInner>
@@ -120,18 +129,20 @@ function DetailPage() {
         </s.InfoContainer>
         <ImageCarousel postImgs={post?.postImgs} />
 
-        <s.ContentsContainer>
-          <p>{post?.postContent}</p>
+        <ContentsContainer>
+          {/* 줄 바꿈 함수 추가 */}
+          <p>{lineChangeText(post?.postContent)}</p>
+
           <p># {post?.postOneLineContent}</p>
         </s.ContentsContainer>
         <PlaceMap postAddress={post?.placeLocation} />
         <Likes />
         {/* 댓글창 */}
-        <Comments id={id} />
 
-        <TopButton />
-      </s.DetailContainerInner>
-    </s.DetailContainer>
+      </DetailContainerInner>
+      <Comments id={id} />
+    </DetailContainer>
+
   );
 }
 

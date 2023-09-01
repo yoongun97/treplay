@@ -127,7 +127,6 @@ function Login() {
             >
               비밀번호 찾기
             </s.NaviBtn>
-
             <s.NaviBtn
               onClick={() => {
                 navigate("/signup");

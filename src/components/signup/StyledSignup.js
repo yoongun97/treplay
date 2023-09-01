@@ -29,16 +29,16 @@ export const SignupTitle = styled.h2`
 `;
 
 export const ProfileImgBox = styled.div`
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  margin: 60px auto 60px auto;
-  background-color: white;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 140px;
+  height: 140px;
+  margin: 60px auto;
+  border-radius: 50%;
   border: 3px solid #0a58be;
-  position: relative;
+  background-color: white;
 `;
 
 export const ProfileImg = styled.img`
@@ -50,15 +50,43 @@ export const ProfileImg = styled.img`
 
 export const ProfileImgBtn = styled.div`
   position: absolute;
+  bottom: 14px;
+  right: -6px;
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #f1f1f1;
-  margin: 90px 0 0 110px;
   cursor: pointer;
+
+  & > label {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  & > label::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: 25%;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url(${process.env.PUBLIC_URL}/icon/camera_icon_black.svg)
+      no-repeat;
+  }
+
+  & > label > input {
+    display: none;
+    z-index: 20;
+  }
 `;
 
 export const ProfileEditImg = styled.img`
