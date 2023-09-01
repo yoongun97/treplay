@@ -14,11 +14,7 @@ export const BarContainer = styled.div`
   font-weight: 500;
   color: #fff;
 `;
-export const LikesBar = styled.div.attrs((props) => ({
-  // "likes"와 "dislikes" 속성을 필터링합니다.
-  likes: undefined,
-  dislikes: undefined,
-}))`
+export const LikesBar = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -29,12 +25,7 @@ export const LikesBar = styled.div.attrs((props) => ({
   padding: 0 20px;
   background-color: #0a58be;
 `;
-
-export const DislikesBar = styled.div.attrs((props) => ({
-  // "likes"와 "dislikes" 속성을 필터링합니다.
-  likes: undefined,
-  dislikes: undefined,
-}))`
+export const DislikesBar = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -46,6 +37,7 @@ export const DislikesBar = styled.div.attrs((props) => ({
   padding: 0 20px;
   background-color: #fcd71e;
 `;
+
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
