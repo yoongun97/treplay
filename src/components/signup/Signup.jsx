@@ -119,12 +119,12 @@ function Signup() {
         phonenumberInputRef.current.focus();
         return;
       }
-      if (!checkNumber) {
-        setErrorBox("checkNumber");
-        setErrorMsg("인증번호를 입력해주세요.");
-        checknumberInputRef.current.focus();
-        return;
-      }
+      // if (!checkNumber) {
+      //   setErrorBox("checkNumber");
+      //   setErrorMsg("인증번호를 입력해주세요.");
+      //   checknumberInputRef.current.focus();
+      //   return;
+      // }
       if (isChecked1 === false || isChecked2 === false) {
         setErrorBox("");
         alert("약관에 동의해 주세요.");
@@ -472,7 +472,7 @@ function Signup() {
               }}
               ref={phonenumberInputRef}
             />
-            <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn>
+            {/* <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn> */}
           </s.InputCheck>
         </s.InputBox>
         {errorBox === "phoneNumber" && (
@@ -484,7 +484,7 @@ function Signup() {
             <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
           </s.ErrorBox>
         )}
-        <s.InputBox>
+        {/* <s.InputBox>
           <s.InputTitle>인증번호 </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
@@ -499,7 +499,7 @@ function Signup() {
             />
             <s.CheckBtn onClick={() => {}}>확인</s.CheckBtn>
           </s.InputCheck>
-        </s.InputBox>
+        </s.InputBox> */}
         {errorBox === "checkNumber" && (
           <s.ErrorBox>
             <s.ErrorMark
