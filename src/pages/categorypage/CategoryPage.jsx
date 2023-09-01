@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import PageNation from "../../components/pageNation/PageNation";
-import CategoryLikes from "./CategoryLikes";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import { styled } from "styled-components";
-import Search from "../../components/search/Search";
-import TopButton from "../../common/TopButton";
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import { styled } from 'styled-components';
+import Search from '../../components/search/Search';
+import TopButton from '../../common/TopButton';
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -20,24 +20,33 @@ function CategoryPage() {
   // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
+  const [sortOption, setSortOption] = useState('date');
 
-  const [sortOption, setSortOption] = useState("date");
+  const queryClient = useQueryClient();
 
-  const handleSortOption = (newSortOption) => {
-    setSortOption(newSortOption);
+  const handleLikesSort = () => {
+    setSortOption('likes');
+
+    // 캐시를 무효화하여 새로운 데이터를 가져옵니다.
+    queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
+  };
+
+  const handleDateSort = () => {
+    setSortOption('date');
+    queryClient.invalidateQueries(['posts', category]);
   };
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
-      const totalSearchData = searchData.toLowerCase().replace(" ", "");
+      const totalSearchData = searchData.toLowerCase().replace(' ', '');
 
       const placeNameMatch = post.placeName
-        .replace(" ", "")
+        .replace(' ', '')
         .toLowerCase()
         .includes(totalSearchData);
 
       const placeLocationMatch = post.placeLocation
-        .replace(" ", "")
+        .replace(' ', '')
         .toLowerCase()
         .includes(totalSearchData);
 
@@ -50,57 +59,67 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, "posts"),
-      where("nation", "==", nation),
-      where("category", "==", category)
+      collection(db, 'posts'),
+      where('nation', '==', nation),
+      where('category', '==', category)
     );
 
     const querySnapshot = await getDocs(postsCollection);
 
-    // const postsData = [];
-    // querySnapshot.forEach((doc) => {
-    //   postsData.push({
-    //     ...doc.data(),
-    //     id: doc.id,
-    //   });
-    // });
+    // 비동기 작업을 병렬로 처리하기 위해 Promise.all 사용
+    const postsData = await Promise.all(
+      querySnapshot.docs.map(async (doc) => {
+        const post = {
+          ...doc.data(),
+          id: doc.id,
+        };
 
-    // const sortedPosts = sortPosts(postsData);
+        // likes의 정보 비동기로 가져오기
+        const likesQuerySnapshot = await getDocs(
+          query(collection(db, 'likes'), where('postId', '==', post.id))
+        );
 
-    // return sortedPosts;
+        post.likes = likesQuerySnapshot.size;
+        return post;
+      })
+    );
 
-    const postsData = [];
-    //for of로 바꾸어서 비동기 처리하기
-    for (const doc of querySnapshot.docs) {
-      const post = {
-        ...doc.data(),
-        id: doc.id,
-      };
-      //likes의 정보를 가져옴
-      const likesSnapshot = await getDocs(
-        query(collection(db, "likes"), where("postId", "==", post.id))
-      );
-
-      post.likes = likesSnapshot.size;
-      postsData.push(post);
-    }
-
-    const sortedPosts = sortPosts(postsData);
+    const sortedPosts = sortPosts(postsData, sortOption);
 
     return sortedPosts;
   };
+
+  //최신순,인기순 모든데이터를 가져와서 sort 리패치
+
   //또가요 , 북마크 , 최신순 정렬하기
-  const sortPosts = (posts) => {
-    if (sortOption === "likes") {
-      // likes 내림차순 정렬, 같은 likes는 최신순으로 정렬
-      return posts.sort((a, b) => {
-        if (b.likes === a.likes) {
-          return b.date - a.date; // 최신순으로 정렬
-        }
-        return b.likes - a.likes;
-      });
-    } else if (sortOption === "date") {
-      return posts.sort((a, b) => b.date - a.date);
+  const sortPostsByLikes = (posts) => {
+    // Likes 내림차순 정렬
+    return posts.sort((a, b) => {
+      if (b.likes === a.likes) {
+        // Likes가 같으면 게시물 작성 시간 비교
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      }
+      return b.likes - a.likes;
+    });
+  };
+
+  const sortPostsByDate = (posts) => {
+    // Date 객체로 변환 후 비교
+    return posts.sort((a, b) => {
+      const dateA = a.date.toDate();
+      const dateB = b.date.toDate();
+
+      // dateA와 dateB를 비교하여 최신 순으로 정렬
+      return dateB - dateA;
+    });
+  };
+
+  const sortPosts = (posts, sortOption) => {
+    if (sortOption === 'likes') {
+      console.log({ posts });
+      return sortPostsByLikes(posts);
+    } else if (sortOption === 'date') {
+      return sortPostsByDate(posts);
     }
     return posts;
   };
@@ -109,54 +128,25 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(["posts", category], fetchPosts);
-  // undefined
-  // 데이터를 가져오는게 완료돠면 posts에 데이터가 들어감
-
-  // //새로운 훅을 만들어 likes를 가져오기
-  // useEffect(() => {
-  //   const fetchPostsAndLikes = async () => {
-  //     const postsWithLikes = await fetchPosts();
-  //     setFilteredPosts(postsWithLikes);
-  //   };
-
-  //   fetchPostsAndLikes();
-  // }, [sortOption, currentPage]);
-
-  // 첫 데이터 세팅을 위해 useEffect 실행
-  // useEffect(() => {
-  //   const indexOfLastPost = currentPage * postsViewPage;
-  //   const indexOfFirstPost = indexOfLastPost - postsViewPage;
-  //   console.log({ indexOfFirstPost, indexOfLastPost });
-  //   // posts가 처음엔 useQuery로 가져오는데 시간이 걸리기 때문에 ? 옴셔널 체이닝 걸어줌
-  //   const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
-  //   console.log({ posts, currentPosts });
-  //   // 옵셔널 체이닝 걸어줄 때, currentPosts가 undefined이기 때문에 setFilteredPosts에 [] 빈 배열이 들어가도록 설정
-  //   // posts가 다 가져와지면 currentPosts가 다시 들어감
-  //   setFilteredPosts(currentPosts || []);
-  //   //추가 부분 sortPosts 함수 사용해서 currentPosts를 사용 후 filteredPosts로 정렬
-  //   const sortedPosts = sortPosts(currentPosts);
-  //   setFilteredPosts(sortedPosts);
-  // }, [posts, sortOption, currentPage]);
-  // useEffect(() => { 여기가 동작한다 => 화면에 보이는 filteredPosts를 수정한다. } , [이게 바뀌면 => sortOption이 바뀌면])
+  } = useQuery(['posts', category, currentPage, sortOption], fetchPosts);
 
   useEffect(() => {
     if (posts && posts.length > 0) {
       const indexOfLastPost = currentPage * postsViewPage;
       const indexOfFirstPost = indexOfLastPost - postsViewPage;
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-      const sortedPosts = sortPosts(currentPosts);
+      const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
     }
   }, [posts, sortOption, currentPage]);
 
   if (error) {
-    console.error("데이터를 가져올 수 없습니다", error);
-    return alert("데이터를 가져올 수 없습니다");
+    console.error('데이터를 가져올 수 없습니다', error);
+    return alert('데이터를 가져올 수 없습니다');
   }
 
   if (isLoading) {
-    return "정보를 가져오고 있습니다.";
+    return '정보를 가져오고 있습니다.';
   }
   //페이지 네이션
 
@@ -169,8 +159,8 @@ function CategoryPage() {
       </PhrasesContainer>
       <MiddleContainer>
         <FilterContainer>
-          {sortOption === "date" ? (
-            <OnButton onClick={() => handleSortOption("date")}>
+          {sortOption === 'date' ? (
+            <OnButton onClick={handleDateSort}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -178,7 +168,7 @@ function CategoryPage() {
               <span>최신순</span>
             </OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption("date")}>
+            <OffButton onClick={handleDateSort}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
@@ -186,8 +176,8 @@ function CategoryPage() {
               <span>최신순</span>
             </OffButton>
           )}
-          {sortOption === "likes" ? (
-            <OnButton onClick={() => handleSortOption("likes")}>
+          {sortOption === 'likes' ? (
+            <OnButton onClick={handleLikesSort}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -195,7 +185,7 @@ function CategoryPage() {
               <span>인기순</span>
             </OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption("likes")}>
+            <OffButton onClick={handleLikesSort}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
@@ -220,7 +210,7 @@ function CategoryPage() {
       <PostsContainer>
         {filteredPosts.length > 0 ? (
           filteredPosts
-            .slice(0, 10) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
+            .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
             .map((post) => (
               <div key={post.id}>
                 <PostBox to={`/detail/${post.id}`}>

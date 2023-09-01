@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const LikesContainer = styled.div`
   margin-bottom: 140px;
@@ -13,11 +13,7 @@ export const BarContainer = styled.div`
   font-weight: 500;
   color: #fff;
 `;
-export const LikesBar = styled.div.attrs((props) => ({
-  // "likes"와 "dislikes" 속성을 필터링합니다.
-  likes: undefined,
-  dislikes: undefined,
-}))`
+export const LikesBar = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -29,11 +25,7 @@ export const LikesBar = styled.div.attrs((props) => ({
   background-color: #0a58be;
 `;
 
-export const DislikesBar = styled.div.attrs((props) => ({
-  // "likes"와 "dislikes" 속성을 필터링합니다.
-  likes: undefined,
-  dislikes: undefined,
-}))`
+export const DislikesBar = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -83,12 +75,12 @@ export const ButtonContainer = styled.div`
   }
 `;
 export const LikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#0a58be" : "#0a58be")};
-  color: ${(props) => (props.disabled ? "#fff" : "#0a58be")};
-  background-color: ${(props) => (props.disabled ? "#0a58be" : "#fff")};
+  border: 1px solid ${(props) => (props.disabled ? '#0a58be' : '#0a58be')};
+  color: ${(props) => (props.disabled ? '#fff' : '#0a58be')};
+  background-color: ${(props) => (props.disabled ? '#0a58be' : '#fff')};
 
   & > p {
-    color: ${(props) => (props.disabled ? "#fff" : "#222")};
+    color: ${(props) => (props.disabled ? '#fff' : '#222')};
   }
 
   & > div > span:first-child {
@@ -99,12 +91,12 @@ export const LikesButton = styled.button`
   }
 `;
 export const DislikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#fcd71e" : "#fcd71e")};
-  color: ${(props) => (props.disabled ? "#fff" : "#fcd71e")};
-  background-color: ${(props) => (props.disabled ? "#fcd71e" : "#fff")};
+  border: 1px solid ${(props) => (props.disabled ? '#fcd71e' : '#fcd71e')};
+  color: ${(props) => (props.disabled ? '#fff' : '#fcd71e')};
+  background-color: ${(props) => (props.disabled ? '#fcd71e' : '#fff')};
 
   & > p {
-    color: ${(props) => (props.disabled ? "#fff" : "#222")};
+    color: ${(props) => (props.disabled ? '#fff' : '#222')};
   }
 
   & > div > span:first-child {

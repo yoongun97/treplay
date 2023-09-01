@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { styled } from "styled-components";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Search = ({ onSearch }) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       onSearch(search);
     }
   };
@@ -24,9 +24,7 @@ const Search = ({ onSearch }) => {
           onChange={handleSearchInputChange}
           onKeyDown={handleSearchInputKeyDown}
         />
-        <div>
-          <div></div>
-        </div>
+        <div></div>
       </SearchBox>
     </>
   );
