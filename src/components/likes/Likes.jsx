@@ -4,7 +4,9 @@ import { useParams } from "react-router";
 import { db } from "../../firebaseConfig";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
-import * as s from "./SytledLikes";
+import * as s from "./StyledLikes";
+import { StyleSheetManager } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 
 export default function Likes() {
   const { id } = useParams();
@@ -88,42 +90,43 @@ export default function Likes() {
   };
 
   return (
-    <s.LikesContainer>
-      <s.BarContainer>
-        <s.LikesBar likes={likesPercentage.toFixed(0)}>
-          <span>또가요 {likesPercentage.toFixed(1)}%</span>
-        </s.LikesBar>
-        <s.DislikesBar dislikes={dislikesPercentage.toFixed(0)}>
-          <span>안가요 {dislikesPercentage.toFixed(1)}%</span>
-        </s.DislikesBar>
-      </s.BarContainer>
-      <s.ButtonContainer>
-        {/* 또가요 버튼 */}
-        <s.LikesButton
-          onClick={(e) => likesButtonHandler(e, "like")}
-          disabled={likes}
-        >
-          <div>
-            <span></span>
-            <span>또가요</span>
-          </div>
-          <p>{likesCount}명</p>
-        </s.LikesButton>
-        {/* 안가요 버튼 */}
-        <s.DislikesButton
-          onClick={(e) => likesButtonHandler(e, "dislike")}
-          disabled={dislikes}
-        >
-          <div>
-            <span></span>
-            <span>안가요</span>
-          </div>
-          <p>{dislikesCount}명</p>
-        </s.DislikesButton>
+    <StyleSheetManager shouldForwardProp={(prop) => isPropValid(prop)}>
+      <s.LikesContainer>
+        <s.BarContainer>
+          <s.LikesBar likes={likesPercentage.toFixed(0)}>
+            <span>또가요 {likesPercentage.toFixed(1)}%</span>
+          </s.LikesBar>
+          <s.DislikesBar dislikes={dislikesPercentage.toFixed(0)}>
+            <span>안가요 {dislikesPercentage.toFixed(1)}%</span>
+          </s.DislikesBar>
+        </s.BarContainer>
+        <s.ButtonContainer>
+          {/* 또가요 버튼 */}
+          <s.LikesButton
+            onClick={(e) => likesButtonHandler(e, "like")}
+            disabled={likes}
+          >
+            <div>
+              <span></span>
+              <span>또가요</span>
+            </div>
+            <p>{likesCount}명</p>
+          </s.LikesButton>
+          {/* 안가요 버튼 */}
+          <s.DislikesButton
+            onClick={(e) => likesButtonHandler(e, "dislike")}
+            disabled={dislikes}
+          >
+            <div>
+              <span></span>
+              <span>안가요</span>
+            </div>
+            <p>{dislikesCount}명</p>
+          </s.DislikesButton>
 
-        {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
-      </s.ButtonContainer>
-    </s.LikesContainer>
+          {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
+        </s.ButtonContainer>
+      </s.LikesContainer>
+    </StyleSheetManager>
   );
 }
-

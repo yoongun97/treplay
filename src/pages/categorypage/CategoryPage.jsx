@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -7,9 +7,8 @@ import PageNation from "../../components/pageNation/PageNation";
 import CategoryLikes from "./CategoryLikes";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
-import { styled } from "styled-components";
 import Search from "../../components/search/Search";
-import TopButton from "../../common/TopButton";
+import * as s from "./StyledCategoryPage";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -161,70 +160,70 @@ function CategoryPage() {
   //페이지 네이션
 
   return (
-    <CategoryPageContainer>
-      <PhrasesContainer>
+    <s.CategoryPageContainer>
+      <s.PhrasesContainer>
         <h2>{category}</h2>
         <h3>우리 동네 베스트 추천 장소</h3>
         <Search onSearch={handleSearch} />
-      </PhrasesContainer>
-      <MiddleContainer>
-        <FilterContainer>
+      </s.PhrasesContainer>
+      <s.MiddleContainer>
+        <s.FilterContainer>
           {sortOption === "date" ? (
-            <OnButton onClick={() => handleSortOption("date")}>
+            <s.OnButton onClick={() => handleSortOption("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
               ></img>
               <span>최신순</span>
-            </OnButton>
+            </s.OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption("date")}>
+            <s.OffButton onClick={() => handleSortOption("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
               ></img>
               <span>최신순</span>
-            </OffButton>
+            </s.OffButton>
           )}
           {sortOption === "likes" ? (
-            <OnButton onClick={() => handleSortOption("likes")}>
+            <s.OnButton onClick={() => handleSortOption("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
               ></img>
               <span>인기순</span>
-            </OnButton>
+            </s.OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption("likes")}>
+            <s.OffButton onClick={() => handleSortOption("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
               ></img>
               <span>인기순</span>
-            </OffButton>
+            </s.OffButton>
           )}
-        </FilterContainer>
+        </s.FilterContainer>
         {!!user ? (
-          <WriteButton to={`/create`}>
+          <s.WriteButton to={`/create`}>
             <img
               src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
               alt="writing_icon"
             ></img>
             <span>글쓰기</span>
-          </WriteButton>
+          </s.WriteButton>
         ) : (
           <></>
         )}
-      </MiddleContainer>
+      </s.MiddleContainer>
       {/* //수정 */}
-      <PostsContainer>
+      <s.PostsContainer>
         {filteredPosts.length > 0 ? (
           filteredPosts
             .slice(0, 10) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
             .map((post) => (
               <div key={post.id}>
-                <PostBox to={`/detail/${post.id}`}>
-                  <ImageBox alt="PostImgs" src={post.postImgs} />
+                <s.PostBox to={`/detail/${post.id}`}>
+                  <s.ImageBox alt="PostImgs" src={post.postImgs} />
                   <h4>{post.placeName}</h4>
                   <h5>{post.placeLocation}</h5>
                   <p>
@@ -232,144 +231,21 @@ function CategoryPage() {
                     {post.postOneLineContent}
                   </p>
                   <CategoryLikes id={post.id} />
-                </PostBox>
+                </s.PostBox>
               </div>
             ))
         ) : (
           <div>결과가 없습니다.</div>
         )}
-      </PostsContainer>
-      <TopButton />
+      </s.PostsContainer>
       <PageNation
         postsViewPage={postsViewPage}
         totalPosts={posts.length}
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
       />
-    </CategoryPageContainer>
+    </s.CategoryPageContainer>
   );
 }
 
 export default CategoryPage;
-
-const CategoryPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 1280px;
-  margin: 180px auto 140px;
-  text-align: center;
-`;
-
-const PhrasesContainer = styled.div`
-  margin: 0 auto;
-
-  & > h2 {
-    font-size: 28px;
-    font-weight: 600;
-  }
-
-  & > h3 {
-    margin: 20px 0 60px;
-    font-size: 24px;
-    font-weight: 500;
-    color: #222;
-  }
-`;
-const MiddleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 30px;
-`;
-
-const FilterContainer = styled.div`
-  display: flex;
-  gap: 12px;
-
-  & > button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    width: 105px;
-    height: 34px;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 400;
-  }
-`;
-const OnButton = styled.button`
-  border: 1px solid #0a58be;
-  background-color: #0a58be;
-  color: #fff;
-`;
-const OffButton = styled.button`
-  border: 1px solid #e5e5e5;
-  background-color: #fff;
-  color: #bfbfbf;
-`;
-const WriteButton = styled(Link)`
-  align-self: flex-end;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  width: 100px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: #0a58be;
-  color: #fff;
-  text-align: center;
-`;
-
-const PostsContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 70px;
-  row-gap: 80px;
-  width: 1280px;
-`;
-const PostBox = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 380px;
-  text-align: left;
-
-  & > h4 {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 26px;
-    color: #222;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  & > h5 {
-    width: 100%;
-    padding: 5px 0;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 26px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  & > p {
-    padding-bottom: 8px;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 26px;
-    color: #777;
-  }
-`;
-
-const ImageBox = styled.img`
-  width: 380px;
-  height: 380px;
-  object-fit: cover;
-`;
