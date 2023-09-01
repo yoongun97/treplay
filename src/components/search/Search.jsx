@@ -15,6 +15,10 @@ const Search = ({ onSearch }) => {
     }
   };
 
+  const handleSearch = () => {
+    onSearch(search);
+  };
+
   return (
     <>
       <SearchBox>
@@ -25,7 +29,7 @@ const Search = ({ onSearch }) => {
           onKeyDown={handleSearchInputKeyDown}
         />
         <div>
-          <div></div>
+          <div onClick={handleSearch}></div>
         </div>
       </SearchBox>
     </>
