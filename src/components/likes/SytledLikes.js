@@ -5,10 +5,11 @@ export const LikesContainer = styled.div`
   text-align: center;
 `;
 export const BarContainer = styled.div`
-  width: 1280px;
+  width: 1080px;
   height: 40px;
   display: flex;
   align-items: center;
+  margin: 0 auto;
   font-size: 16px;
   font-weight: 500;
   color: #fff;

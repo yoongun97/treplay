@@ -178,6 +178,7 @@ const PreviewListBox = styled(Link)`
     margin-top: 20px;
     font-size: 20px;
     font-weight: 500;
+    line-height: 26px;
     color: #222;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -189,6 +190,7 @@ const PreviewListBox = styled(Link)`
     padding: 5px 0;
     font-size: 16px;
     font-weight: 400;
+    line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -196,8 +198,9 @@ const PreviewListBox = styled(Link)`
 
   & > p {
     padding-bottom: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 300;
+    line-height: 26px;
     color: #777;
   }
 `;
