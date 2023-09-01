@@ -15,10 +15,11 @@ import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
-import FindIDPW from "./components/findIDPW/FindIDPW";
+// import FindIDPW from "./components/findIDPW/FindIDPW";
+import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
 function App() {
-  const [, setUser] = useAtom(userAtom); // userAtom 사용
+  const [user, setUser] = useAtom(userAtom); // userAtom 사용
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
@@ -49,7 +50,7 @@ function App() {
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
-        <Route path="/idpw/inquiry" element={<FindIDPW />} />
+        <Route path="/idpw/inquiry" element={<DownFindIDPW />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>

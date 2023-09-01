@@ -28,8 +28,9 @@ export const IdBtn = styled.button`
   border: none;
   border-top-left-radius: 60px;
   border-bottom-left-radius: 60px;
-  color: ${(props) => (props.isID ? "#ffffff" : "#878d94")};
-  background-color: ${(props) => (props.isID ? "#0a58be" : "#e4e8e9")};
+  color: ${(props) => (props.isid === "true" ? "#ffffff" : "#878d94")};
+  background-color: ${(props) =>
+    props.isid === "true" ? "#0a58be" : "#e4e8e9"};
 `;
 
 export const PWBtn = styled.button`
@@ -38,8 +39,9 @@ export const PWBtn = styled.button`
   border: none;
   border-top-right-radius: 60px;
   border-bottom-right-radius: 60px;
-  color: ${(props) => (!props.isID ? "#ffffff" : "#878d94")};
-  background-color: ${(props) => (!props.isID ? "#0a58be" : "#e4e8e9")};
+  color: ${(props) => (props.isid === "false" ? "#ffffff" : "#878d94")};
+  background-color: ${(props) =>
+    props.isid === "false" ? "#0a58be" : "#e4e8e9"};
 `;
 
 export const InputBox = styled.div`
@@ -119,7 +121,7 @@ export const FindedMent = styled.span`
 
 export const FindedID = styled.p`
   width: 500px;
-  height: 100px;
+  /* height: 100px; */
   background-color: #f1f1f1;
   line-height: 100px;
   text-align: center;
@@ -142,4 +144,29 @@ export const FindedBtn = styled.button`
   color: white;
   font-size: 18px;
   font-weight: 600;
+`;
+
+export const ErrorBox = styled.div`
+  width: 500px;
+  height: 44px;
+  /* margin-top: -59px;
+  margin-bottom: 49px; */
+  margin-top: -22px;
+  margin-bottom: 26px;
+  display: flex;
+`;
+export const ErrorMark = styled.img`
+  width: 16px;
+  height: 16px;
+  margin: 14px 5px 14px 10px;
+`;
+
+export const ErrorMsg = styled.p`
+  width: 459px;
+  height: 22px;
+  color: #e02918;
+  font-size: 12px;
+  line-height: 22px;
+  margin-top: 11px;
+  margin-bottom: 11px;
 `;
