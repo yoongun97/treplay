@@ -79,8 +79,10 @@ function MyPage() {
   useEffect(() => {
     if (!isMyListActived) {
       setMyPosts(savedPosts);
+      fetchData();
     } else {
       setMyPosts(myPosts);
+      fetchData();
     }
   }, [isMyListActived]);
   // 버튼 클릭 시 리스트 전환 함수
