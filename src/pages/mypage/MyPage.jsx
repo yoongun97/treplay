@@ -1,17 +1,17 @@
-import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-import { userAtom } from '../../store/userAtom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import { useParams } from 'react-router-dom';
-import SavedList from './components/SavedList';
-import MyList from './components/MyList';
-import { useQuery } from 'react-query';
-import ProfileImage from './components/ProfileImage';
-import SuggestLogin from '../../components/login/SuggestLogin';
-import Nickname from './components/Nickname';
-import { styled } from 'styled-components';
-import PageNation from '../../components/pageNation/PageNation';
+import { useAtom } from "jotai";
+import React, { useEffect, useState } from "react";
+import { userAtom } from "../../store/userAtom";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { useParams } from "react-router-dom";
+import SavedList from "./components/SavedList";
+import MyList from "./components/MyList";
+import { useQuery } from "react-query";
+import ProfileImage from "./components/ProfileImage";
+import SuggestLogin from "../../components/login/SuggestLogin";
+import Nickname from "./components/Nickname";
+import { styled } from "styled-components";
+import PageNation from "../../components/pageNation/PageNation";
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -27,11 +27,11 @@ function MyPage() {
 
   // 페이지네이션 설정
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 1; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 6; // 한 페이지에 보여줄 게시물 수
 
   const fetchData = async () => {
     // 유저 데이터
-    const userQ = query(collection(db, 'users'));
+    const userQ = query(collection(db, "users"));
     const querySnapshot = await getDocs(userQ);
     const data = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -41,7 +41,7 @@ function MyPage() {
     setOwnData(data.find((item) => item.uid === userUid));
 
     // 또가요 데이터
-    const likedQ = query(collection(db, 'likes'));
+    const likedQ = query(collection(db, "likes"));
     const likedQuerySnapshot = await getDocs(likedQ);
     const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
 
@@ -49,12 +49,12 @@ function MyPage() {
     setAllLikedData(likedData);
 
     // 내 저장 데이터
-    const savedQ = query(collection(db, 'saved'), where('uid', '==', userUid));
+    const savedQ = query(collection(db, "saved"), where("uid", "==", userUid));
     const savedQuerySnapshot = await getDocs(savedQ);
     const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
 
     // 모든 글 데이터
-    const postsQ = query(collection(db, 'posts'));
+    const postsQ = query(collection(db, "posts"));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -79,8 +79,10 @@ function MyPage() {
   useEffect(() => {
     if (!isMyListActived) {
       setMyPosts(savedPosts);
+      fetchData();
     } else {
       setMyPosts(myPosts);
+      fetchData();
     }
   }, [isMyListActived]);
   // 버튼 클릭 시 리스트 전환 함수
@@ -95,7 +97,7 @@ function MyPage() {
 
   // 리액트 쿼리로 로딩/에러 처리
 
-  const { isLoading, isError, error } = useQuery('userData', fetchData);
+  const { isLoading, isError, error } = useQuery("userData", fetchData);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
@@ -164,17 +166,17 @@ function MyPage() {
               )}
             </ListContainerInner>
           </ListContainer>
+          <PageNation
+            postsViewPage={postsViewPage}
+            totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
+            currentPage={currentPage}
+            pagenate={handlePageChange}
+          />
         </MypageContainer>
       ) : (
         // 비회원일 경우에 Unloggined 컴포넌트 보여 주기
         <SuggestLogin />
       )}
-      <PageNation
-        postsViewPage={postsViewPage}
-        totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
-        currentPage={currentPage}
-        pagenate={handlePageChange}
-      />
     </>
   );
 }
@@ -215,8 +217,8 @@ const ChangeButton = styled.div`
   margin: 140px 0 60px;
 
   /* selected가 현재 선택한 카테고리를 뜻함. 이게 true이면 파랗게 만듦 */
-  background-color: ${(props) => (props.selected ? '#0A58BE' : '#e4e8e9')};
-  color: ${(props) => (props.selected ? '#fff' : '#878d94')};
+  background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
+  color: ${(props) => (props.selected ? "#fff" : "#878d94")};
   font-size: 24px;
   font-weight: 400;
   line-height: 54px;
@@ -238,7 +240,7 @@ const ChangeButton = styled.div`
 
   /* 현재 선택된 버튼은 hover 되지 않도록 함 */
   &:hover {
-    background-color: ${(props) => (props.selected ? '#0A58BE' : '#d5dadc')};
+    background-color: ${(props) => (props.selected ? "#0A58BE" : "#d5dadc")};
   }
 `;
 const ListContainerInner = styled.div``;

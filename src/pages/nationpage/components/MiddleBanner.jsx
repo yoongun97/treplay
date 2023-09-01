@@ -1,6 +1,5 @@
 import React from "react";
 import { styled } from "styled-components";
-import MoreInfoButton from "./MoreInfoButton";
 
 const MiddleBanner = () => {
   return (
@@ -8,20 +7,22 @@ const MiddleBanner = () => {
       <ImageBox />
       <ImageBox />
       <MiddleBannerPhrasesBox>
-        <h2>모여봐요 또갈집</h2>
-        <h3>또 다른 프로필을 구경해 보세요</h3>
+        <h2>AD) 스파르타 코딩 클럽</h2>
+        <h3>노트북 하나로 세계 어디서든!</h3>
         <div>
           <span>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime
-            numquam ducimus, possimus porro saepe vel assumenda! Eveniet maiores
-            sed animi aperiam, nulla deserunt voluptatem quod, saepe sunt soluta
-            possimus esse? Lorem ipsum dolor sit amet consectetur, adipisicing
-            elit. Maxime numquam ducimus, possimus porro saepe vel assumenda!
-            Eveniet maiores sed animi aperiam, nulla deserunt voluptatem quod,
-            saepe sunt soluta possimus esse?
+            여행을 좋아하는 당신! <br />
+            노트북 하나만 있다면 세계 어디서든 자유롭게 <br />
+            코딩을 할 수 있다는 사실, 알고 계셨나요?
+            <br /> 두 손으로 코딩을, 두 발에게는 자유를!
+            <br />
+            여행하는 개발자... 낭만 있잖아?! 👩‍💻👨‍💻
           </span>
         </div>
-        <MoreInfoButton to={"/"}></MoreInfoButton>
+        <MoreInfoButton href="https://spartacodingclub.kr/" target="blank">
+          <span>더 알아보기</span>
+          <div></div>
+        </MoreInfoButton>
       </MiddleBannerPhrasesBox>
     </MiddleBannerContainer>
   );
@@ -41,17 +42,19 @@ const ImageBox = styled.div`
   height: 400px;
   border-radius: 30px;
   background-color: #999;
-  background-position: center;
-  background-size: cover;
 
   &:first-child {
-    background-image: url("https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1160&q=80");
+    background-image: url("https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80");
     margin-right: 20px;
+    background-size: 250%;
+    background-position: center -180px;
   }
 
   &:nth-child(2) {
-    background-image: url("https://images.unsplash.com/photo-1564053489865-3f7ddbf8551b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1144&q=80");
+    background-image: url("https://images.unsplash.com/photo-1522199710521-72d69614c702?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80");
     margin-right: 20px;
+    background-size: cover;
+    background-position: -70px;
   }
 `;
 
@@ -82,5 +85,37 @@ const MiddleBannerPhrasesBox = styled.div`
       -webkit-box-orient: vertical;
       word-break: keep-all;
     }
+  }
+`;
+const MoreInfoButton = styled.a`
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: 180px;
+  height: 52px;
+  border-radius: 60px;
+  border: 1px solid #0a58be;
+  background-color: #fff;
+  color: #0a58be;
+  font-size: 18px;
+  font-weight: 400;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #0a58be;
+    color: #fff;
+  }
+
+  & > div {
+    width: 24px;
+    height: 24px;
+    background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_blue.svg);
+    transition: 0.3s;
+  }
+
+  &:hover > div {
+    background-image: url(${process.env.PUBLIC_URL}/icon/right_arrow_white.svg);
   }
 `;

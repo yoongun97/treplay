@@ -33,7 +33,10 @@ const ProfileImage = ({ fetchData }) => {
       {user.photoURL ? (
         <img src={user.photoURL} alt="프로필 이미지" />
       ) : (
-        <img src="" alt="프로필 이미지 미등록" />
+        <img
+          src={`${process.env.PUBLIC_URL}/image/baseprofile.jpeg`}
+          alt="프로필 이미지 미등록"
+        />
       )}
       <FileButton>
         <label>
@@ -63,6 +66,7 @@ const ProfileImageContainer = styled.div`
     width: 120px;
     height: 120px;
     border-radius: 50%;
+    object-fit: cover;
   }
 `;
 
