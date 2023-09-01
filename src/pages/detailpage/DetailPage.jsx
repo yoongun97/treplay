@@ -10,7 +10,6 @@ import Comments from '../../components/comments/Comments';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../store/userAtom';
 import ImageCarousel from '../../components/imageslide/ImageCarousel';
-import TopButton from '../../common/TopButton';
 import { styled } from 'styled-components';
 
 function DetailPage() {
@@ -76,6 +75,15 @@ function DetailPage() {
   const postDate = date.toLocaleString('ja-KR', dateOptions);
   const postTime = date.toLocaleString('en-KR', timeOptions);
 
+  // 댓글 내용에 줄바꿈 처리를 추가
+  const lineChangeText = (text) => {
+    return text.split('\n').map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
   return (
     <DetailContainer>
       <DetailContainerInner>
@@ -120,7 +128,8 @@ function DetailPage() {
         </InfoContainer>
         <ImageCarousel postImgs={post?.postImgs} />
         <ContentsContainer>
-          <p>{post?.postContent}</p>
+          {/* 줄 바꿈 함수 추가 */}
+          <p>{lineChangeText(post?.postContent)}</p>
           <p># {post?.postOneLineContent}</p>
         </ContentsContainer>
         <PlaceMap postAddress={post?.placeLocation} />
