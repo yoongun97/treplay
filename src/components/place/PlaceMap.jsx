@@ -6,22 +6,28 @@ function PlaceMap({ postAddress }) {
   const [address, setAddress] = useState(""); // 주소 상태 추가
 
   useEffect(() => {
-    // Google Maps API 스크립트를 동적으로 로드
-    const script = document.createElement("script");
-    //스크립트 엘리먼트를 생성하고, API 키 및 필요한 라이브러리 정보를 포함한 URL을 설정
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    // 스크립트를 비동기적으로 로드하도록 설정
-    script.onload = initMap;
-    //스크립트 로드가 완료되면 initMap 함수를 호출
-    document.head.appendChild(script);
-    //스크립트 엘리먼트를 <head> 요소에 추가
+    // 이미 스크립트가 로드되어 있는지 확인
+    if (!window.google) {
+      // Google Maps API 스크립트를 동적으로 로드
+      const script = document.createElement("script");
+      //스크립트 엘리먼트를 생성하고, API 키 및 필요한 라이브러리 정보를 포함한 URL을 설정
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      // 스크립트를 비동기적으로 로드하도록 설정
+      script.onload = initMap;
+      //스크립트 로드가 완료되면 initMap 함수를 호출
+      document.head.appendChild(script);
+      //스크립트 엘리먼트를 <head> 요소에 추가
 
-    // 컴포넌트가 언마운트될 때 스크립트 제거
-    return () => {
-      document.head.removeChild(script);
-    };
+      // 컴포넌트가 언마운트될 때 스크립트 제거
+      return () => {
+        document.head.removeChild(script);
+      };
+    } else {
+      // 이미 로드된 경우에는 initMap 함수 호출
+      initMap();
+    }
   }, [postAddress]);
 
   // 주소 복사

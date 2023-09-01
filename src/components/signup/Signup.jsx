@@ -115,6 +115,12 @@ function Signup() {
         phonenumberInputRef.current.focus();
         return;
       }
+      if (phoneNumber.length < 10) {
+        setErrorBox("phoneNumber");
+        setErrorMsg("전화번호는 10자 이상이어야 합니다.");
+        phonenumberInputRef.current.focus();
+        return;
+      }
       if (isNaN(phoneNumber) === true) {
         setErrorBox("phoneNumber");
         setErrorMsg("번호는 '-'를 제외한 숫자만 입력해 주세요.");
@@ -168,7 +174,7 @@ function Signup() {
         const collectionRef = collection(db, "users");
         await addDoc(collectionRef, newUser);
         alert("회원가입에 성공하셨습니다.");
-        navigate("/");
+        navigate(-1);
       }
     } catch (error) {
       if (
@@ -304,7 +310,7 @@ function Signup() {
             <s.InfoInput
               type="email"
               value={email}
-              placeholder="이메일주소"
+              placeholder="실제 사용중인 이메일을 입력해주세요."
               onChange={(e) => {
                 setEmail(e.target.value);
                 setErrorBox("");

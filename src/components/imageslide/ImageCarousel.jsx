@@ -41,8 +41,8 @@ function ImageCarousel({ postImgs }) {
   return (
     <SliderContainer>
       <Slider {...settings}>
-        {postImgs.map((img) => (
-          <ImageBox>
+        {postImgs.map((img, index) => (
+          <ImageBox key={index}>
             <img src={img} alt="디테일 이미지" />
           </ImageBox>
         ))}
