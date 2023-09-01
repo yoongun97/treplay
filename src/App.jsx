@@ -15,7 +15,9 @@ import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
-import FindIDPW from "./components/findIDPW/FindIDPW";
+// import FindIDPW from "./components/findIDPW/FindIDPW";
+import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
+
 
 function App() {
   const [user, setUser] = useAtom(userAtom); // userAtom 사용
@@ -32,8 +34,6 @@ function App() {
     // setUser 함수가 업데이트될 때만 이펙트가 실행됨
   }, [setUser]);
 
-  console.log(auth.currentUser);
-
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -49,7 +49,7 @@ function App() {
         <Route path="/create" element={<Create />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
-        <Route path="/idpw/inquiry" element={<FindIDPW />} />
+        <Route path="/idpw/inquiry" element={<DownFindIDPW />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>

@@ -12,6 +12,7 @@ import {
   where,
   updateDoc,
 } from 'firebase/firestore';
+import { styled } from 'styled-components';
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
@@ -21,8 +22,8 @@ function Comments({ id }) {
   const [, setComments] = useState([]);
   const currentUser = auth.currentUser;
 
-  const [editingCommentId, setEditingCommentId] = useState(null); // 이 부분을 추가해주세요
-  const [editedComment, setEditedComment] = useState(''); // 이 부분을 추가해주세요
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedComment, setEditedComment] = useState('');
 
   const {
     data: post,
@@ -66,6 +67,16 @@ function Comments({ id }) {
   //댓글 등록
   const commentChange = (e) => setComment(e.target.value);
 
+  // 댓글 내용에 줄바꿈 처리를 추가
+  const lineChangeText = (text) => {
+    return text.split('\n').map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
   const commentSubmit = async (e) => {
     e.preventDefault();
     if (comment === '') {
@@ -78,6 +89,7 @@ function Comments({ id }) {
         postId: id,
         userId: currentUser.uid,
         author: currentUser.displayName,
+        photoURL: currentUser.photoURL,
       };
       const docRef = await addDoc(collection(db, 'comments'), newComment);
       setComments([...post.comments, { id: docRef.id, ...newComment }]);
@@ -100,24 +112,20 @@ function Comments({ id }) {
   };
 
   const startEditComment = (commentId, commentText) => {
-    // 이 부분을 추가해주세요
     setEditingCommentId(commentId);
     setEditedComment(commentText);
   };
 
   const cancelEditComment = () => {
-    // 이 부분을 추가해주세요
     setEditingCommentId(null);
     setEditedComment('');
   };
 
   const updateEditedComment = (e) => {
-    // 이 부분을 추가해주세요
     setEditedComment(e.target.value);
   };
 
   const saveEditedComment = async (commentId) => {
-    // 이 부분을 추가해주세요
     if (editedComment === '') {
       return;
     }
@@ -136,10 +144,9 @@ function Comments({ id }) {
   };
 
   return (
-    <span
-      style={{ width: '800px', height: '300px', border: '1px solid black' }}
-    >
-      <form onSubmit={commentSubmit}>
+    <Container>
+      <h4>댓글 작성</h4>
+      <CommentInputForm onSubmit={commentSubmit}>
         <textarea
           type="text"
           placeholder="댓글을 입력해주세요"
@@ -147,28 +154,32 @@ function Comments({ id }) {
           onChange={commentChange}
         />
         <input type="submit" value="등록" />
-      </form>
-      <div>
+      </CommentInputForm>
+      <CommentsContainer>
         {post.comments?.map((comment) => (
-          <div key={comment.id}>
-            <div>
-              {editingCommentId === comment.id ? (
-                <>
-                  <textarea
-                    value={editedComment}
-                    onChange={updateEditedComment}
-                  />
+          <CommentBox key={comment.id}>
+            {editingCommentId === comment.id ? (
+              <>
+                <EditTextArea
+                  value={editedComment}
+                  onChange={updateEditedComment}
+                />
+                <FinishEditButtonContainer>
                   <button onClick={() => saveEditedComment(comment.id)}>
                     저장
                   </button>
                   <button onClick={cancelEditComment}>취소</button>
-                </>
-              ) : (
-                <>
-                  {comment.author}
-                  <div>{comment.comment}</div>
+                </FinishEditButtonContainer>
+              </>
+            ) : (
+              <>
+                <img src={comment.photoURL}></img>
+                <TextContainer>
+                  <p>{comment.author}</p>
+                  {/* 줄 바꿈 함수 추가 */}
+                  <div>{lineChangeText(comment.comment)}</div>
                   {currentUser && comment.userId === currentUser.uid && (
-                    <>
+                    <StartEditButtonContainer>
                       <button
                         onClick={() =>
                           startEditComment(comment.id, comment.comment)
@@ -179,16 +190,148 @@ function Comments({ id }) {
                       <button onClick={() => handleDeleteComment(comment.id)}>
                         삭제
                       </button>
-                    </>
+                    </StartEditButtonContainer>
                   )}
-                </>
-              )}
-            </div>
-          </div>
+                </TextContainer>
+              </>
+            )}
+          </CommentBox>
         ))}
-      </div>
-    </span>
+      </CommentsContainer>
+    </Container>
   );
 }
 
 export default Comments;
+const Container = styled.div`
+  width: 100%;
+  padding: 140px 320px;
+  background-color: #f2f8ff;
+
+  & > h4 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+`;
+const CommentInputForm = styled.form`
+  width: 100%;
+  height: 160px;
+  position: relative;
+
+  & > textarea {
+    width: 100%;
+    height: 160px;
+    padding: 16px;
+    border: 1px solid #e5e5e5;
+    overflow: auto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #222;
+  }
+
+  & > input {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 80px;
+    height: 40px;
+    border: none;
+    background-color: #0a58be;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    cursor: pointer;
+  }
+`;
+const CommentsContainer = styled.div`
+  width: 100%;
+  background-color: #f2f8ff;
+
+  & > div:nth-child(2n) {
+    background-color: #fff;
+  }
+`;
+const CommentBox = styled.div`
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 30px 16px;
+  color: #222;
+  & > img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+`;
+const TextContainer = styled.div`
+  & > p:first-of-type {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  & > p:last-of-type {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+`;
+const EditTextArea = styled.textarea`
+  width: calc(100% - 135px);
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+  overflow: auto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #222;
+`;
+const StartEditButtonContainer = styled.div`
+  position: absolute;
+  top: 30px;
+  right: 16px;
+  & > button {
+    width: 56px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  & > button:first-child {
+    margin-right: 10px;
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    color: #bfbfbf;
+  }
+  & > button:last-child {
+    border: 1px solid #222;
+    background-color: #222;
+    color: #fff;
+  }
+`;
+const FinishEditButtonContainer = styled.div`
+  position: absolute;
+  top: 30px;
+  right: 16px;
+  & > button {
+    width: 56px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  & > button:first-child {
+    margin-right: 10px;
+    border: 1px solid #222;
+    background-color: #222;
+    color: #fff;
+  }
+  & > button:last-child {
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    color: #bfbfbf;
+  }
+`;

@@ -93,7 +93,7 @@ const HomeLink = styled(Link)`
 
 const CategoryContainer = styled.div`
   flex-grow: 1;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   text-align: right;
 
@@ -110,7 +110,7 @@ const LoginContainer = styled.div`
   display: flex;
   align-items: center;
   margin-left: 100px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   color: #bfbfbf;
 

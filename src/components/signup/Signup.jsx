@@ -13,6 +13,12 @@ import EmailModal from "../modal/EmailModal";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 
 function Signup() {
+  // 사진 넣기
+  const [profileImage, setProfileImage] = useState(
+    `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
+  );
+  const [selectedImage, setSelectedImage] = useState(null);
+  const imageInputRef = useRef();
   // input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,9 +27,6 @@ function Signup() {
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [checkNumber, setCheckNumber] = useState("");
-
-  // 프로필 사진 업로드 및 변경 핸들러
-  const uploadPhotoHandler = (e) => {};
 
   // 모달 여닫기
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,18 +115,24 @@ function Signup() {
         phonenumberInputRef.current.focus();
         return;
       }
+      if (phoneNumber.length < 10) {
+        setErrorBox("phoneNumber");
+        setErrorMsg("전화번호는 10자 이상이어야 합니다.");
+        phonenumberInputRef.current.focus();
+        return;
+      }
       if (isNaN(phoneNumber) === true) {
         setErrorBox("phoneNumber");
         setErrorMsg("번호는 '-'를 제외한 숫자만 입력해 주세요.");
         phonenumberInputRef.current.focus();
         return;
       }
-      if (!checkNumber) {
-        setErrorBox("checkNumber");
-        setErrorMsg("인증번호를 입력해주세요.");
-        checknumberInputRef.current.focus();
-        return;
-      }
+      // if (!checkNumber) {
+      //   setErrorBox("checkNumber");
+      //   setErrorMsg("인증번호를 입력해주세요.");
+      //   checknumberInputRef.current.focus();
+      //   return;
+      // }
       if (isChecked1 === false || isChecked2 === false) {
         setErrorBox("");
         alert("약관에 동의해 주세요.");
@@ -135,9 +144,25 @@ function Signup() {
           email,
           password
         );
-        updateProfile(auth.currentUser, {
-          displayName: nickname,
-        });
+        //이미지 넣기
+        if (selectedImage) {
+          const storageRef = ref(
+            storage,
+            `profile_images/${userCredential.user.uid}`
+          );
+          const imageSnapshot = await uploadBytes(storageRef, selectedImage);
+          const imageUrl = await getDownloadURL(imageSnapshot.ref);
+
+          updateProfile(auth.currentUser, {
+            displayName: nickname,
+            photoURL: imageUrl, //이미지 url
+          });
+        } else {
+          updateProfile(auth.currentUser, {
+            displayName: nickname,
+          });
+        }
+
         const newUser = {
           uid: userCredential.user.uid,
           email,
@@ -149,7 +174,7 @@ function Signup() {
         const collectionRef = collection(db, "users");
         await addDoc(collectionRef, newUser);
         alert("회원가입에 성공하셨습니다.");
-        navigate("/");
+        navigate(-1);
       }
     } catch (error) {
       if (
@@ -242,20 +267,40 @@ function Signup() {
     }
   };
 
+  // 이미지 변경 처리 함수
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfileImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
+
+      setSelectedImage(selectedImage); // 선택한 이미지 저장
+    }
+  };
+
   return (
     <s.SignupContainer isModalOpen={isModalOpen}>
       {isModalOpen && <s.Overlay isModalOpen={isModalOpen} />}
       <s.SignupTitle>회원가입</s.SignupTitle>
       <s.ProfileImgBox>
-        <s.ProfileImg
-          src="https://images.unsplash.com/photo-1536164261511-3a17e671d380?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fCVFRCU5NCU4NCVFQiVBMSU5QyVFRCU5NSU4NHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-          alt="프로필 이미지"
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          ref={imageInputRef}
+          onChange={handleImageChange}
         />
-        <s.FileButton>
-          <label>
-            <input type="file" onChange={(e) => uploadPhotoHandler(e)}></input>
-          </label>
-        </s.FileButton>
+        <s.ProfileImg src={profileImage} alt="프로필 이미지" />
+        <s.ProfileImgBtn>
+          <s.ProfileEditImg
+            src="https://cdn-icons-png.flaticon.com/128/45/45010.png"
+            alt="이미지 수정"
+            onClick={() => imageInputRef.current.click()}
+          />
+        </s.ProfileImgBtn>
       </s.ProfileImgBox>
 
       <form>
@@ -265,7 +310,7 @@ function Signup() {
             <s.InfoInput
               type="email"
               value={email}
-              placeholder="이메일주소"
+              placeholder="실제 사용중인 이메일을 입력해주세요."
               onChange={(e) => {
                 setEmail(e.target.value);
                 setErrorBox("");
@@ -435,7 +480,7 @@ function Signup() {
               }}
               ref={phonenumberInputRef}
             />
-            <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn>
+            {/* <s.CheckBtn onClick={() => {}}>본인인증</s.CheckBtn> */}
           </s.InputCheck>
         </s.InputBox>
         {errorBox === "phoneNumber" && (
@@ -447,7 +492,7 @@ function Signup() {
             <s.ErrorMsg>{errorMsg}</s.ErrorMsg>
           </s.ErrorBox>
         )}
-        <s.InputBox>
+        {/* <s.InputBox>
           <s.InputTitle>인증번호 </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
@@ -462,7 +507,7 @@ function Signup() {
             />
             <s.CheckBtn onClick={() => {}}>확인</s.CheckBtn>
           </s.InputCheck>
-        </s.InputBox>
+        </s.InputBox> */}
         {errorBox === "checkNumber" && (
           <s.ErrorBox>
             <s.ErrorMark

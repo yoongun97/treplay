@@ -66,7 +66,7 @@ const MainInner = styled.div`
 
   & > h2 {
     color: white;
-    font-size: 60px;
+    font-size: 52px;
     font-weight: 600;
   }
 `;
@@ -75,7 +75,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 160px;
+  margin-top: 140px;
 `;
 
 const PrevButton = styled.div`

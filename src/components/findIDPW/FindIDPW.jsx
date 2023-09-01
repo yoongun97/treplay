@@ -14,6 +14,7 @@ function FindIDPW() {
           isID={isFindID}
           onClick={() => {
             setIsFindID(true);
+            setIsChecked(false);
           }}
         >
           아이디찾기
@@ -22,6 +23,7 @@ function FindIDPW() {
           isID={isFindID}
           onClick={() => {
             setIsFindID(false);
+            setIsChecked(false);
           }}
         >
           비밀번호 찾기
@@ -84,7 +86,35 @@ function FindIDPW() {
           <s.FindedID>Treplay99</s.FindedID>
         </>
       ) : (
-        <></>
+        <>
+          <s.InputBox>
+            <s.InputTitle>새 비밀번호</s.InputTitle>
+            <s.InputCheck>
+              <s.InfoInput
+                style={{ width: "95%" }}
+                type="password"
+                placeholder="6자리 이상 입력해주세요."
+              />
+            </s.InputCheck>
+          </s.InputBox>
+          <s.InputBox style={{ marginTop: "14px", marginBottom: "60px" }}>
+            <s.InputTitle>새 비밀번호 확인</s.InputTitle>
+            <s.InputCheck>
+              <s.InfoInput
+                style={{ width: "95%" }}
+                type="password"
+                placeholder="비밀번호를 위와 동일하게 입력해주세요."
+              />
+            </s.InputCheck>
+          </s.InputBox>
+          <s.ErrorBox>
+            <s.ErrorMark
+              src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
+              alt="경고이미지"
+            />
+            <s.ErrorMsg>비밀번호가 일치 하지 않습니다.</s.ErrorMsg>
+          </s.ErrorBox>
+        </>
       )}
       {!isChecked ? (
         isFindID ? (
@@ -119,7 +149,19 @@ function FindIDPW() {
           </s.FindedBtn>
         </s.FindedBtnBox>
       ) : (
-        <s.FindBtn>비밀번호 찾기</s.FindBtn>
+        <s.FindedBtnBox>
+          <s.FindedBtn
+            style={{
+              backgroundColor: " white",
+              color: "#0a58be",
+              border: "1px solid #0a58be",
+              marginRight: "20px",
+            }}
+          >
+            취소
+          </s.FindedBtn>
+          <s.FindedBtn>변경</s.FindedBtn>
+        </s.FindedBtnBox>
       )}
     </s.FindContainer>
   );

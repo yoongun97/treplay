@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as s from "./StyledLogin";
 import FacebookLogin from "./sns/FacebookLogin";
 import GoogleLogin from "./sns/GoogleLogin";
@@ -19,7 +19,6 @@ function Login() {
   const passwordInputRef = useRef();
 
   const navigate = useNavigate();
-  const location = useLocation(); // useLocation 훅을 사용하여 이전 페이지 정보 가져오기
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -37,7 +36,7 @@ function Login() {
       await signInWithEmailAndPassword(auth, email, password);
 
       // 이전 페이지로 이동
-      navigate(location.state?.from || "/"); // 이전 페이지 정보를 이용하여 이동
+      navigate(-1);
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         setErrorMsg("등록되지 않은 이메일입니다.");

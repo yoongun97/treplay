@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { db } from "../../firebaseConfig";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
-import { styled } from "styled-components";
+import * as s from "./SytledLikes";
 
 export default function Likes() {
   const { id } = useParams();
@@ -88,124 +88,42 @@ export default function Likes() {
   };
 
   return (
-    <LikesContainer>
-      <BarContainer>
-        <LikesBar likes={likesPercentage.toFixed(0)}>
+    <s.LikesContainer>
+      <s.BarContainer>
+        <s.LikesBar likes={likesPercentage.toFixed(0)}>
           <span>또가요 {likesPercentage.toFixed(1)}%</span>
-        </LikesBar>
-        <DislikesBar dislikes={dislikesPercentage.toFixed(0)}>
+        </s.LikesBar>
+        <s.DislikesBar dislikes={dislikesPercentage.toFixed(0)}>
           <span>안가요 {dislikesPercentage.toFixed(1)}%</span>
-        </DislikesBar>
-      </BarContainer>
-      <ButtonContainer>
+        </s.DislikesBar>
+      </s.BarContainer>
+      <s.ButtonContainer>
         {/* 또가요 버튼 */}
-        <LikesButton
+        <s.LikesButton
           onClick={(e) => likesButtonHandler(e, "like")}
           disabled={likes}
         >
           <div>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/like_icon.svg`}
-              alt="likesIcon"
-            ></img>
+            <span></span>
             <span>또가요</span>
           </div>
           <p>{likesCount}명</p>
-        </LikesButton>
+        </s.LikesButton>
         {/* 안가요 버튼 */}
-        <DislikesButton
+        <s.DislikesButton
           onClick={(e) => likesButtonHandler(e, "dislike")}
           disabled={dislikes}
         >
           <div>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/dislike_icon.svg`}
-              alt="dislikesIcon"
-            ></img>
+            <span></span>
             <span>안가요</span>
           </div>
           <p>{dislikesCount}명</p>
-        </DislikesButton>
+        </s.DislikesButton>
 
         {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
-      </ButtonContainer>
-    </LikesContainer>
+      </s.ButtonContainer>
+    </s.LikesContainer>
   );
 }
 
-const LikesContainer = styled.div`
-  margin-bottom: 140px;
-  text-align: center;
-`;
-const BarContainer = styled.div`
-  width: 1280px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  font-weight: 500;
-  color: #fff;
-`;
-const LikesBar = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-grow: 1;
-  width: ${(props) => props.likes}%;
-  min-width: 90px;
-  height: 40px;
-  padding: 0 20px;
-  background-color: #0a58be;
-`;
-const DislikesBar = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-grow: 1;
-  flex-shrink: 0;
-  width: ${(props) => props.dislikes}%;
-  min-width: 90px;
-  height: 40px;
-  padding: 0 20px;
-  background-color: #fcd71e;
-`;
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
-
-  & > button {
-    width: 240px;
-    height: 80px;
-    border-radius: 60px;
-    outline: none;
-    font-size: 18px;
-    font-weight: 500;
-  }
-
-  & > button > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  & p {
-    font-size: 14px;
-    font-weight: 400;
-    color: #222;
-  }
-`;
-const LikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#e5e5e5" : "#0a58be")};
-  color: #0a58be;
-  background-color: ${(props) => (props.disabled ? "#e5e5e5" : "#fff")};
-`;
-const DislikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#e5e5e5" : "#fcd71e")};
-  color: #fcd71e;
-  background-color: ${(props) => (props.disabled ? "#e5e5e5" : "#fff")};
-`;
