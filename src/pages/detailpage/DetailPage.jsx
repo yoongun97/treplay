@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import PlaceMap from '../../components/place/PlaceMap';
-import { deleteDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
-import Likes from '../../components/likes/Likes';
-import Bookmark from '../../components/bookmark/Bookmark';
-import Comments from '../../components/comments/Comments';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import ImageCarousel from '../../components/imageslide/ImageCarousel';
+import React, { useState } from "react";
+import PlaceMap from "../../components/place/PlaceMap";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
+import Likes from "../../components/likes/Likes";
+import Bookmark from "../../components/bookmark/Bookmark";
+import Comments from "../../components/comments/Comments";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import ImageCarousel from "../../components/imageslide/ImageCarousel";
 import * as s from "./StyledDetailPage";
-
 
 function DetailPage() {
   const { id } = useParams();
@@ -47,9 +46,14 @@ function DetailPage() {
 
   // 게시물 삭제
   const deleteMutation = useMutation(async (post) => {
-    const postRef = doc(db, "posts", post.id);
-    await deleteDoc(postRef);
-    navigate(-1);
+    if (window.confirm("정말 삭제하시겠습니까?") === true) {
+      const postRef = doc(db, "posts", post.id);
+      await deleteDoc(postRef);
+      navigate(-1);
+      return alert("글이 삭제되었습니다!");
+    } else {
+      return;
+    }
   });
 
   if (isLoading) {
@@ -62,23 +66,23 @@ function DetailPage() {
 
   const date = post?.date.toDate();
   const dateOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   };
 
   const timeOptions = {
-    hour: '2-digit',
-    minute: '2-digit',
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: false,
   };
 
-  const postDate = date.toLocaleString('ja-KR', dateOptions);
-  const postTime = date.toLocaleString('en-KR', timeOptions);
+  const postDate = date.toLocaleString("ja-KR", dateOptions);
+  const postTime = date.toLocaleString("en-KR", timeOptions);
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
-    return text.split('\n').map((line, index) => (
+    return text.split("\n").map((line, index) => (
       <span key={index}>
         {line}
         <br />
@@ -129,7 +133,7 @@ function DetailPage() {
         </s.InfoContainer>
         <ImageCarousel postImgs={post?.postImgs} />
 
-        <ContentsContainer>
+        <s.ContentsContainer>
           {/* 줄 바꿈 함수 추가 */}
           <p>{lineChangeText(post?.postContent)}</p>
 
@@ -138,11 +142,9 @@ function DetailPage() {
         <PlaceMap postAddress={post?.placeLocation} />
         <Likes />
         {/* 댓글창 */}
-
-      </DetailContainerInner>
+      </s.DetailContainerInner>
       <Comments id={id} />
-    </DetailContainer>
-
+    </s.DetailContainer>
   );
 }
 

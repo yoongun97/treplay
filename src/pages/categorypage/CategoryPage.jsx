@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import { styled } from 'styled-components';
-import Search from '../../components/search/Search';
-import TopButton from '../../common/TopButton';
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import { styled } from "styled-components";
+import Search from "../../components/search/Search";
+import TopButton from "../../common/TopButton";
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -21,7 +21,7 @@ function CategoryPage() {
   const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
 
-  const [sortOption, setSortOption] = useState('date');
+  const [sortOption, setSortOption] = useState("date");
 
   const handleSortOption = (newSortOption) => {
     setSortOption(newSortOption);
@@ -91,8 +91,7 @@ function CategoryPage() {
   };
   //또가요 , 북마크 , 최신순 정렬하기
   const sortPosts = (posts) => {
-
-    if (sortOption === 'likes') {
+    if (sortOption === "likes") {
       // likes 내림차순 정렬, 같은 likes는 최신순으로 정렬
       return posts.sort((a, b) => {
         if (b.likes === a.likes) {
@@ -100,7 +99,7 @@ function CategoryPage() {
         }
         return b.likes - a.likes;
       });
-    } else if (sortOption === 'date') {
+    } else if (sortOption === "date") {
       return posts.sort((a, b) => b.date - a.date);
     }
     return posts;
@@ -170,9 +169,8 @@ function CategoryPage() {
       </PhrasesContainer>
       <MiddleContainer>
         <FilterContainer>
-
-          {sortOption === 'date' ? (
-            <OnButton onClick={() => handleSortOption('date')}>
+          {sortOption === "date" ? (
+            <OnButton onClick={() => handleSortOption("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -180,7 +178,7 @@ function CategoryPage() {
               <span>최신순</span>
             </OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption('date')}>
+            <OffButton onClick={() => handleSortOption("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
@@ -188,8 +186,8 @@ function CategoryPage() {
               <span>최신순</span>
             </OffButton>
           )}
-          {sortOption === 'likes' ? (
-            <OnButton onClick={() => handleSortOption('likes')}>
+          {sortOption === "likes" ? (
+            <OnButton onClick={() => handleSortOption("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -197,7 +195,7 @@ function CategoryPage() {
               <span>인기순</span>
             </OnButton>
           ) : (
-            <OffButton onClick={() => handleSortOption('likes')}>
+            <OffButton onClick={() => handleSortOption("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
@@ -279,8 +277,10 @@ const PhrasesContainer = styled.div`
 `;
 const MiddleContainer = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 30px;
 `;
 
 const FilterContainer = styled.div`
@@ -321,7 +321,6 @@ const WriteButton = styled(Link)`
   background-color: #0a58be;
   color: #fff;
   text-align: center;
-  margin-bottom: 30px;
 `;
 
 const PostsContainer = styled.div`

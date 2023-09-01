@@ -72,16 +72,45 @@ export const ButtonContainer = styled.div`
   & p {
     font-size: 14px;
     font-weight: 400;
-    color: #222;
+  }
+
+  & > button > div > span:first-child {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
   }
 `;
 export const LikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#e5e5e5" : "#0a58be")};
-  color: #0a58be;
-  background-color: ${(props) => (props.disabled ? "#e5e5e5" : "#fff")};
+  border: 1px solid ${(props) => (props.disabled ? "#0a58be" : "#0a58be")};
+  color: ${(props) => (props.disabled ? "#fff" : "#0a58be")};
+  background-color: ${(props) => (props.disabled ? "#0a58be" : "#fff")};
+
+  & > p {
+    color: ${(props) => (props.disabled ? "#fff" : "#222")};
+  }
+
+  & > div > span:first-child {
+    background-image: ${(props) =>
+      props.disabled
+        ? `url(${process.env.PUBLIC_URL}/icon/like_icon_white.svg)`
+        : `url(${process.env.PUBLIC_URL}/icon/like_icon.svg)`};
+  }
 `;
 export const DislikesButton = styled.button`
-  border: 1px solid ${(props) => (props.disabled ? "#e5e5e5" : "#fcd71e")};
-  color: #fcd71e;
-  background-color: ${(props) => (props.disabled ? "#e5e5e5" : "#fff")};
+  border: 1px solid ${(props) => (props.disabled ? "#fcd71e" : "#fcd71e")};
+  color: ${(props) => (props.disabled ? "#fff" : "#fcd71e")};
+  background-color: ${(props) => (props.disabled ? "#fcd71e" : "#fff")};
+
+  & > p {
+    color: ${(props) => (props.disabled ? "#fff" : "#222")};
+  }
+
+  & > div > span:first-child {
+    background-image: ${(props) =>
+      props.disabled
+        ? `url(${process.env.PUBLIC_URL}/icon/dislike_icon_white.svg)`
+        : `url(${process.env.PUBLIC_URL}/icon/dislike_icon.svg)`};
+  }
 `;

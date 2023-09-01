@@ -27,7 +27,7 @@ function MyPage() {
 
   // 페이지네이션 설정
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 6; // 한 페이지에 보여줄 게시물 수
+  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
 
   const fetchData = async () => {
     // 유저 데이터
