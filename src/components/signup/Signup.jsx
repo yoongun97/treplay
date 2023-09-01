@@ -14,7 +14,9 @@ import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 
 function Signup() {
   // 사진 넣기
-  const [profileImage, setProfileImage] = useState("/image/baseprofile.jpeg");
+  const [profileImage, setProfileImage] = useState(
+    `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
+  );
   const [selectedImage, setSelectedImage] = useState(null);
   const imageInputRef = useRef();
   // input
