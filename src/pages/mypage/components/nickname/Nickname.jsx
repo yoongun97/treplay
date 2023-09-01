@@ -1,11 +1,11 @@
 import React from "react";
-import { userAtom } from "../../../store/userAtom";
+import { userAtom } from "../../../../store/userAtom";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../../firebaseConfig";
-import { styled } from "styled-components";
+import { auth, db } from "../../../../firebaseConfig";
+import * as s from "./StyledNickname";
 
 const Nickname = ({ ownData, allData, fetchData }) => {
   const [user] = useAtom(userAtom);
@@ -57,17 +57,17 @@ const Nickname = ({ ownData, allData, fetchData }) => {
     <>
       {/* SNS 이용자는 닉네임 못 바꾸게 함 */}
       {ownData === undefined ? (
-        <NickNameContainer>
-          <NickNameContainerInner>
-            <DisabledInput type="text" value={user.displayName} disabled />
-          </NickNameContainerInner>
+        <s.NickNameContainer>
+          <s.NickNameContainerInner>
+            <s.DisabledInput type="text" value={user.displayName} disabled />
+          </s.NickNameContainerInner>
           <p>SNS 로그인 사용 시 닉네임을 수정할 수 없습니다.</p>
-        </NickNameContainer>
+        </s.NickNameContainer>
       ) : (
-        <NickNameContainerInner>
+        <s.NickNameContainerInner>
           {/* 닉네임 인풋 */}
           {isEditorActived ? (
-            <AbledInput
+            <s.AbledInput
               maxLength={10}
               type="text"
               value={newNickname}
@@ -76,75 +76,26 @@ const Nickname = ({ ownData, allData, fetchData }) => {
               }}
             />
           ) : (
-            <DisabledInput type="text" value={user.displayName} disabled />
+            <s.DisabledInput type="text" value={user.displayName} disabled />
           )}
           {/* 닉네임 수정 버튼 */}
           {isEditorActived ? (
-            <EditButton
+            <s.EditButton
               onClick={() => {
                 endEditNameHandler();
               }}
-            ></EditButton>
+            ></s.EditButton>
           ) : (
-            <EditButton
+            <s.EditButton
               onClick={() => {
                 startEditNameHandler();
               }}
-            ></EditButton>
+            ></s.EditButton>
           )}
-        </NickNameContainerInner>
+        </s.NickNameContainerInner>
       )}
     </>
   );
 };
 
 export default Nickname;
-const NickNameContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  & > p {
-    margin-top: 16px;
-    color: #777;
-    font-size: 14px;
-    font-weight: 300;
-  }
-`;
-const NickNameContainerInner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 180px;
-  height: 40px;
-  border-radius: 60px;
-  border: 1px solid #0a58be;
-  background-color: #fff;
-  & > input {
-    width: 120px;
-    height: 22px;
-    border: none;
-    outline: none;
-    background-color: #fff;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
-  }
-`;
-const AbledInput = styled.input`
-  color: #999;
-`;
-const DisabledInput = styled.input`
-  color: #0a58be;
-  text-align: center;
-`;
-
-const EditButton = styled.button`
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  border: none;
-  background: url(${process.env.PUBLIC_URL}/icon/write_icon_blue.svg) no-repeat
-    center / 100%;
-`;

@@ -1,41 +1,4 @@
-import styled from "styled-components";
-
-export const EditContainer = styled.div`
-  width: 100%;
-  text-align: center;
-`;
-export const EditContainerInner = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 1000px;
-  max-width: 1000px;
-  margin: 0 auto;
-
-  & > h2 {
-    margin-top: 40px;
-  }
-`;
-export const StyledTextarea = styled.textarea`
-  width: 100%;
-  height: 300px;
-  margin-top: 40px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 20px;
-  border: 1px solid #e5e5e5;
-  outline: 1px solid #999;
-`;
-export const StyledInput = styled.input`
-  width: 100%;
-  height: 60px;
-  margin: 20px auto;
-  padding: 20px 16px;
-  font-size: 16px;
-  font-weight: 300;
-  border: 1px solid #e5e5e5;
-  outline: 1px solid #999;
-`;
+import { styled } from "styled-components";
 export const FileContainer = styled.div`
   margin: 80px 0 40px;
   display: flex;
@@ -126,5 +89,6 @@ export const SubmitButton = styled.div`
   font-size: 18px;
   font-weight: 500;
   line-height: 60px;
+  text-align: center;
   cursor: pointer;
 `;
