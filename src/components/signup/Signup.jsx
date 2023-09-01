@@ -151,7 +151,7 @@ function Signup() {
         const collectionRef = collection(db, "users");
         await addDoc(collectionRef, newUser);
         alert("회원가입에 성공하셨습니다.");
-        navigate("/");
+        navigate(-1);
       }
     } catch (error) {
       if (

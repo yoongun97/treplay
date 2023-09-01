@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import PlaceMap from '../../components/place/PlaceMap';
-import { deleteDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
-import Likes from '../../components/likes/Likes';
-import Bookmark from '../../components/bookmark/Bookmark';
-import Comments from '../../components/comments/Comments';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import ImageCarousel from '../../components/imageslide/ImageCarousel';
-import TopButton from '../../common/TopButton';
+import React, { useState } from "react";
+import PlaceMap from "../../components/place/PlaceMap";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
+import Likes from "../../components/likes/Likes";
+import Bookmark from "../../components/bookmark/Bookmark";
+import Comments from "../../components/comments/Comments";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import ImageCarousel from "../../components/imageslide/ImageCarousel";
+import TopButton from "../../common/TopButton";
 import { styled } from "styled-components";
 
 function DetailPage() {
@@ -23,14 +23,14 @@ function DetailPage() {
     isLoading,
     isError,
     error,
-  } = useQuery('post', async () => {
-    const postRef = doc(db, 'posts', id);
+  } = useQuery("post", async () => {
+    const postRef = doc(db, "posts", id);
     const docSnapshot = await getDoc(postRef);
 
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() };
     } else {
-      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
+      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
 
@@ -38,18 +38,18 @@ function DetailPage() {
   const copyUrl = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert('링크가 복사되었습니다.');
+      alert("링크가 복사되었습니다.");
     } catch (error) {
-      console.error('링크 복사 중 오류 발생:', error);
-      alert('링크 복사 중 오류가 발생했습니다.');
+      console.error("링크 복사 중 오류 발생:", error);
+      alert("링크 복사 중 오류가 발생했습니다.");
     }
   };
 
   // 게시물 삭제
   const deleteMutation = useMutation(async (post) => {
-    const postRef = doc(db, 'posts', post.id);
+    const postRef = doc(db, "posts", post.id);
     await deleteDoc(postRef);
-    navigate(`/${post?.nation}/${post?.category}`);
+    navigate(-1);
   });
 
   if (isLoading) {
