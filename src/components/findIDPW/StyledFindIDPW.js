@@ -119,15 +119,18 @@ export const FindedMent = styled.span`
   font-size: 16px;
 `;
 
-export const FindedID = styled.p`
+export const FindedIDs = styled.p`
   width: 500px;
-  /* height: 100px; */
+  height: 100px;
   background-color: #f1f1f1;
   line-height: 100px;
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 60px;
 `;
+
+export const FindedID = styled.p``;
 
 export const FindedBtnBox = styled.div`
   width: 500px;

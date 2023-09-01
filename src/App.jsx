@@ -33,8 +33,6 @@ function App() {
     // setUser 함수가 업데이트될 때만 이펙트가 실행됨
   }, [setUser]);
 
-  console.log(auth.currentUser);
-
   return (
     <Routes>
       <Route element={<Layout />}>

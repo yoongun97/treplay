@@ -156,10 +156,6 @@ function CategoryPage() {
   }
   //페이지 네이션
 
-  console.log(user);
-
-  console.log(user);
-
   return (
     <CategoryPageContainer>
       <PhrasesContainer>

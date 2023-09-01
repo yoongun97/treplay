@@ -270,7 +270,7 @@ function DownFindIDPW() {
               <s.FindedName>{name}</s.FindedName>
               <s.FindedMent>님의 정보와 일치하는 아이디입니다.</s.FindedMent>
             </s.FindedTitle>
-            <s.FindedID>
+            <s.FindedIDs>
               {userData.map((user) => {
                 return (
                   <>
@@ -279,7 +279,7 @@ function DownFindIDPW() {
                   </>
                 );
               })}
-            </s.FindedID>
+            </s.FindedIDs>
             <s.FindedBtnBox>
               <s.FindedBtn
                 onClick={() => {
@@ -358,15 +358,9 @@ function DownFindIDPW() {
         <>
           <s.FindedTitle>
             <s.FindedName>{name}</s.FindedName>
-            <s.FindedMent>님의 메일주소</s.FindedMent>
+            <s.FindedMent>님의 메일주소로 메일이 발송되었습니다</s.FindedMent>
           </s.FindedTitle>
-          <s.FindedID
-            style={{ fontSize: "20px", fontWeight: "600", color: "#0a58be" }}
-          >
-            {email}
-          </s.FindedID>
-          <s.FindedMent>로 메일이 발송되었습니다.</s.FindedMent>
-          <s.FindedID />
+          <s.FindedID>{email}</s.FindedID>
           <s.FindBtn
             onClick={() => {
               navigate("/login");
