@@ -18,7 +18,6 @@ import SuggestLogin from "./components/login/SuggestLogin";
 // import FindIDPW from "./components/findIDPW/FindIDPW";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
-
 function App() {
   const [user, setUser] = useAtom(userAtom); // userAtom 사용
 
@@ -36,12 +35,11 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/" element={<MainPage />} />
       <Route element={<Layout />}>
-        <Route path="/" element={<MainPage />} />
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
-
         <Route
           path="/detail/:id"
           element={user ? <DetailPage /> : <SuggestLogin />}
