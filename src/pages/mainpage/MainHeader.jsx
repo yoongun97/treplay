@@ -1,12 +1,11 @@
 import { useAtom } from "jotai";
 import React from "react";
-import { userAtom } from "../store/userAtom";
-import { Link, useParams } from "react-router-dom";
+import { userAtom } from "../../store/userAtom";
+import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { styled } from "styled-components";
 
-const Header = () => {
-  const { nation } = useParams();
+const MainHeader = () => {
   const [user] = useAtom(userAtom);
   const auth = getAuth();
 
@@ -23,35 +22,7 @@ const Header = () => {
   return (
     // params에 국가가 있으면 관광명소/맛집/숙박 보이게 함...
     <HeaderContainer>
-      {!!nation ? (
-        !!user ? (
-          <>
-            <HomeLink to={"/"}></HomeLink>
-            <CategoryContainer>
-              <Link to={`/${nation}/관광명소`}>관광명소</Link>
-              <Link to={`/${nation}/맛집`}>맛집</Link>
-              <Link to={`/${nation}/숙박`}>숙박</Link>
-            </CategoryContainer>
-            <LoginContainer>
-              <Link to={`/mypage/${user.uid}`}>내프로필</Link>
-              <span onClick={logoutHandler}>로그아웃</span>
-            </LoginContainer>
-          </>
-        ) : (
-          <>
-            <HomeLink to={"/"}></HomeLink>
-            <CategoryContainer>
-              <Link to={`/${nation}/관광명소`}>관광명소</Link>
-              <Link to={`/${nation}/맛집`}>맛집</Link>
-              <Link to={`/${nation}/숙박`}>숙박</Link>
-            </CategoryContainer>
-            <LoginContainer>
-              <Link to={`/login`}>로그인</Link>
-              <Link to={"/signup"}>회원가입</Link>
-            </LoginContainer>
-          </>
-        )
-      ) : !!user ? (
+      {!!user ? (
         <>
           <HomeLink to={"/"}></HomeLink>
           <LoginContainer>
@@ -72,7 +43,7 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default MainHeader;
 
 const HeaderContainer = styled.div`
   position: relative;
@@ -82,38 +53,15 @@ const HeaderContainer = styled.div`
   width: 100%;
   height: 90px;
   padding: 0px 320px;
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #e5e5e5;
-  }
+  z-index: 100;
 `;
 
 const HomeLink = styled(Link)`
   display: block;
   width: 142px;
   height: 46px;
-  background: url(${process.env.PUBLIC_URL}/image/logo.png) no-repeat center /
-    contain;
-`;
-
-const CategoryContainer = styled.div`
-  flex-grow: 1;
-  font-size: 18px;
-  font-weight: 400;
-  text-align: right;
-
-  & > a {
-    margin-right: 50px;
-  }
-
-  & > a:last-child {
-    margin-right: 0;
-  }
+  background: url(${process.env.PUBLIC_URL}/image/logo_white.png) no-repeat
+    center / contain;
 `;
 
 const LoginContainer = styled.div`
@@ -122,10 +70,10 @@ const LoginContainer = styled.div`
   margin-left: 100px;
   font-size: 14px;
   font-weight: 300;
-  color: #bfbfbf;
+  color: #fff;
 
   & > a {
-    color: #bfbfbf;
+    color: #fff;
   }
 
   & > a:first-child {
@@ -140,7 +88,7 @@ const LoginContainer = styled.div`
     top: 50%;
     width: 1px;
     height: 12px;
-    background-color: #bfbfbf;
+    background-color: #fff;
     transform: translateY(-50%);
   }
   & > a:last-child,

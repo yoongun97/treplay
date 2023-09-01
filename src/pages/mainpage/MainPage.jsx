@@ -1,31 +1,37 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import { styled } from "styled-components";
+import Footer from "../../common/Footer";
+import MainHeader from "./MainHeader";
 
 function MainPage() {
   return (
-    <MainContainer>
-      <MainInner>
-        <h2>어떤 여행지를 가고 싶으신가요?</h2>
-        <ButtonContainer>
-          <PrevButton />
-          <NationContainer>
-            <NationInner>
-              <StyledButton to={"/한국"}>
-                <span>한국</span>
-              </StyledButton>
-              <StyledButton to={"/일본"}>
-                <span>일본</span>
-              </StyledButton>
-              <StyledButton to={"/미국"}>
-                <span>미국</span>
-              </StyledButton>
-            </NationInner>
-          </NationContainer>
-          <NextButton />
-        </ButtonContainer>
-      </MainInner>
-    </MainContainer>
+    <>
+      <MainContainer>
+        <MainHeader />
+        <MainInner>
+          <h2>어떤 여행지를 가고 싶으신가요?</h2>
+          <ButtonContainer>
+            <PrevButton />
+            <NationContainer>
+              <NationInner>
+                <StyledButton to={"/한국"}>
+                  <span>한국</span>
+                </StyledButton>
+                <StyledButton to={"/일본"}>
+                  <span>일본</span>
+                </StyledButton>
+                <StyledButton to={"/미국"}>
+                  <span>미국</span>
+                </StyledButton>
+              </NationInner>
+            </NationContainer>
+            <NextButton />
+          </ButtonContainer>
+        </MainInner>
+      </MainContainer>
+      <Footer />
+    </>
   );
 }
 
@@ -33,11 +39,12 @@ export default MainPage;
 
 const MainContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   width: 100%;
-  height: calc(100vh - 90px);
+  height: 100vh;
   min-height: 800px;
   background: url(${process.env.PUBLIC_URL}/image/mainBg.jpg) no-repeat top
     center / cover;
