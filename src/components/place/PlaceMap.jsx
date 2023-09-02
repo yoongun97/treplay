@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as s from "./StyledPlaceMap";
 
-function PlaceMap({ postAddress }) {
+function PlaceMap({ postAddress, postPlace }) {
   const mapElement = useRef(null);
   const [address, setAddress] = useState(""); // 주소 상태 추가
+  const [placeName, setPlaceName] = useState("");
 
   useEffect(() => {
     // 이미 스크립트가 로드되어 있는지 확인
@@ -59,6 +60,7 @@ function PlaceMap({ postAddress }) {
           map,
         });
         console.log(marker);
+
         // 변환된 주소를 setAddress를 통해 상태에 업데이트
         setAddress(results[0].formatted_address);
       } else {
@@ -71,7 +73,10 @@ function PlaceMap({ postAddress }) {
     <s.MapContainer>
       <s.MapBox ref={mapElement} />
       <s.AddressBox>
-        <p>{address}</p>
+        <div>
+          <s.PlaceName>{postPlace}</s.PlaceName>
+          <p>{address}</p>
+        </div>
         <button style={{ marginLeft: "auto" }} onClick={copyAddress}>
           주소복사
         </button>

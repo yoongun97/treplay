@@ -14,9 +14,9 @@ function DownFindIDPW() {
   const [isChecked, setIsChecked] = useState(false);
 
   // input 값
-  const [name, setName] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [email, setEmail] = useState();
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   // focus 줄 input 참조
   const nameInputRef = useRef();
@@ -104,6 +104,20 @@ function DownFindIDPW() {
       console.log(error.code);
       alert(error.code);
     }
+  };
+
+  const TimeStampToDate = (time) => {
+    // Firebase timestamp를 JavaScript Date 객체로 변환합니다.
+    const date = time.toDate();
+
+    // 원하는 형식으로 날짜를 문자열로 표시합니다.
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1을 해주고 두 자리로 만듭니다.
+    const day = String(date.getDate()).padStart(2, "0"); // 날짜를 두 자리로 만듭니다.
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
   };
 
   return (
@@ -273,10 +287,12 @@ function DownFindIDPW() {
             <s.FindedIDs>
               {userData.map((user) => {
                 return (
-                  <>
-                    {user.email}
-                    <br />
-                  </>
+                  <s.FindedIdBox>
+                    <s.FindedID>{user.email}</s.FindedID>
+                    <s.FindedDate>
+                      가입일 : {TimeStampToDate(user.createdAt)}
+                    </s.FindedDate>
+                  </s.FindedIdBox>
                 );
               })}
             </s.FindedIDs>
@@ -360,11 +376,19 @@ function DownFindIDPW() {
             <s.FindedName>{name}</s.FindedName>
             <s.FindedMent>님의 메일주소로 메일이 발송되었습니다</s.FindedMent>
           </s.FindedTitle>
-          <s.FindedID>{email}</s.FindedID>
+          <s.FindedIDs>
+            <s.FindedIdBox>
+              <s.FindedID>{email}</s.FindedID>
+              <s.FindedDate>
+                가입일 : {TimeStampToDate(userData.createdAt)}
+              </s.FindedDate>
+            </s.FindedIdBox>
+          </s.FindedIDs>
           <s.FindBtn
             onClick={() => {
               navigate("/login");
             }}
+            style={{ marginTop: "0" }}
           >
             확인
           </s.FindBtn>

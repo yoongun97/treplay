@@ -20,7 +20,7 @@ export const AddressBox = styled.div`
   border: 1px solid #e5e5e5;
   background-color: #fff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   word-break: keep-all;
 
@@ -36,4 +36,11 @@ export const AddressBox = styled.div`
     font-size: 14px;
     font-weight: 300;
   }
+`;
+
+export const PlaceName = styled.div`
+  height: 26px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 3px;
 `;
