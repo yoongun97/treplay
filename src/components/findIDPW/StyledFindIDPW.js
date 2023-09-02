@@ -129,10 +129,23 @@ export const FindedIDs = styled.p`
 `;
 
 export const FindedIdBox = styled.div`
-  width: 210px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 10px 0 10px;
+  &:nth-child(2) {
+    position: relative;
+  }
+  &:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 2px;
+    height: 12px;
+    background-color: #222;
+    transform: translateY(-50%);
+  }
 `;
 
 export const FindedID = styled.p`
@@ -145,6 +158,7 @@ export const FindedID = styled.p`
 export const FindedDate = styled.p`
   margin-bottom: auto;
   font-size: 14px;
+  font-weight: 500;
 `;
 
 export const FindedBtnBox = styled.div`
