@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Category from "./components/Category";
-import MiddleBanner from "./components/MiddleBanner";
-import Preview from "./components/Preview";
-import EventBanner from "./components/EventBanner";
-import BestPlace from "./components/BestPlace";
+import Category from "./components/category/Category";
+import MiddleBanner from "./components/middleBanner/MiddleBanner";
+import Preview from "./components/preview/Preview";
+import EventBanner from "./components/eventBanner/EventBanner";
+import BestPlace from "./components/bestPlace/BestPlace";
 import MainCarousel from "../../components/imageslide/MainCarousel";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebaseConfig";

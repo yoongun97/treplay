@@ -8,7 +8,7 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import { styled } from "styled-components";
+import * as s from "./StyledEdit";
 
 const Edit = () => {
   const { id } = useParams();
@@ -128,185 +128,63 @@ const Edit = () => {
     }
   };
   return (
-    <EditContainer>
+    <s.EditContainer>
       {post ? (
-        <EditContainerInner>
+        <s.EditContainerInner>
           <h2>{post.placeName}</h2>
-          <StyledTextarea value={editContent} onChange={handleContentChange} />
-          <StyledInput
+          <s.StyledTextarea
+            value={editContent}
+            onChange={handleContentChange}
+          />
+          <s.StyledInput
             maxLength="10"
             value={editOneLineContent}
             onChange={handleOneLineContentChange}
           />
-          <FileContainer>
-            <TextContainer>
+          <s.FileContainer>
+            <s.TextContainer>
               <h4>첨부파일</h4>
               <p>
                 .jpg .png .jpeg 형식의 00mb 미만의 파일만 등록이 가능합니다.
               </p>
-            </TextContainer>
-            <StyledLabel>
+            </s.TextContainer>
+            <s.StyledLabel>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/camera_icon_white.svg`}
                 alt="File_icon"
               />
               <span>파일첨부</span>
-              <FileInputBox type="file" onChange={handleImageChange} multiple />
-            </StyledLabel>
-          </FileContainer>
-          <PreviewImagesContainer>
+              <s.FileInputBox
+                type="file"
+                onChange={handleImageChange}
+                multiple
+              />
+            </s.StyledLabel>
+          </s.FileContainer>
+          <s.PreviewImagesContainer>
             {post.postImgs.map((imageUrl) => (
-              <ImageBox key={imageUrl}>
+              <s.ImageBox key={imageUrl}>
                 <img src={imageUrl} alt="디테일 이미지" />
                 <button onClick={() => handleImageDelete(imageUrl)}>x</button>
-              </ImageBox>
+              </s.ImageBox>
             ))}
             {selectedFilePreviews.map((preview, index) => (
-              <ImageBox key={index}>
+              <s.ImageBox key={index}>
                 <img src={preview} alt={`미리보기 이미지 ${index + 1}`} />
                 {/* <p>{selectedFileNames[index]}</p> */}
                 <button onClick={() => handleImageDeletePreview(index)}>
                   x
                 </button>
-              </ImageBox>
+              </s.ImageBox>
             ))}
-          </PreviewImagesContainer>
-          <SubmitButton onClick={handlePostSave}>저장</SubmitButton>
-        </EditContainerInner>
+          </s.PreviewImagesContainer>
+          <s.SubmitButton onClick={handlePostSave}>저장</s.SubmitButton>
+        </s.EditContainerInner>
       ) : (
         <div>데이터 가져오는 중...</div>
       )}
-    </EditContainer>
+    </s.EditContainer>
   );
 };
 
 export default Edit;
-
-const EditContainer = styled.div`
-  width: 100%;
-  text-align: center;
-`;
-const EditContainerInner = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 1000px;
-  max-width: 1000px;
-  margin: 0 auto;
-
-  & > h2 {
-    margin-top: 40px;
-  }
-`;
-const StyledTextarea = styled.textarea`
-  width: 100%;
-  height: 300px;
-  margin-top: 40px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 20px;
-  border: 1px solid #e5e5e5;
-  outline: 1px solid #999;
-`;
-const StyledInput = styled.input`
-  width: 100%;
-  height: 60px;
-  margin: 20px auto;
-  padding: 20px 16px;
-  font-size: 16px;
-  font-weight: 300;
-  border: 1px solid #e5e5e5;
-  outline: 1px solid #999;
-`;
-const FileContainer = styled.div`
-  margin: 80px 0 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-`;
-
-const TextContainer = styled.div`
-  text-align: left;
-  & > h4 {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-
-  & > p {
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 20px;
-    color: #bfbfbf;
-  }
-`;
-const StyledLabel = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 120px;
-  height: 46px;
-  border-radius: 8px;
-  background-color: #0a58be;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 300;
-  cursor: pointer;
-  & > span:first-child {
-    width: 20px;
-    height: 20px;
-  }
-  & > input {
-    display: none;
-  }
-`;
-const FileInputBox = styled.input`
-  margin: 20px auto;
-`;
-
-const PreviewImagesContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 120px);
-  gap: 12px;
-`;
-const ImageBox = styled.div`
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  background-color: #cdcdcd;
-
-  & > img {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-  & > button {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 18px;
-    height: 18px;
-    margin: 10px;
-    border: none;
-    outline: none;
-    background-color: none;
-    background: url(${process.env.PUBLIC_URL}/icon/delete_icon.svg) no-repeat
-      center / 100%;
-  }
-`;
-const SubmitButton = styled.div`
-  width: 500px;
-  height: 60px;
-  margin: 140px auto;
-  border-radius: 60px;
-  background-color: #0a58be;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 60px;
-  cursor: pointer;
-`;

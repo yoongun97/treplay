@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { styled } from "styled-components";
+import * as s from "./StyledPlaceMap";
 
-function PlaceMap({ postAddress }) {
+function PlaceMap({ postAddress, postPlace }) {
   const mapElement = useRef(null);
   const [address, setAddress] = useState(""); // 주소 상태 추가
+  const [placeName, setPlaceName] = useState("");
 
   useEffect(() => {
     // 이미 스크립트가 로드되어 있는지 확인
@@ -59,6 +60,7 @@ function PlaceMap({ postAddress }) {
           map,
         });
         console.log(marker);
+
         // 변환된 주소를 setAddress를 통해 상태에 업데이트
         setAddress(results[0].formatted_address);
       } else {
@@ -68,54 +70,19 @@ function PlaceMap({ postAddress }) {
   };
 
   return (
-    <MapContainer>
-      <MapBox ref={mapElement} />
-      <AddressBox>
-        <p>{address}</p>
+    <s.MapContainer>
+      <s.MapBox ref={mapElement} />
+      <s.AddressBox>
+        <div>
+          <s.PlaceName>{postPlace}</s.PlaceName>
+          <p>{address}</p>
+        </div>
         <button style={{ marginLeft: "auto" }} onClick={copyAddress}>
           주소복사
         </button>
-      </AddressBox>
-    </MapContainer>
+      </s.AddressBox>
+    </s.MapContainer>
   );
 }
 
 export default PlaceMap;
-const MapContainer = styled.div`
-  position: relative;
-  margin: 80px 0 60px;
-`;
-const MapBox = styled.div`
-  width: 100%;
-  height: 460px;
-`;
-const AddressBox = styled.div`
-  position: absolute;
-  top: -40px;
-  transform: translateX(50%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 640px;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #e5e5e5;
-  background-color: #fff;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
-  font-size: 16px;
-  font-weight: 400;
-  word-break: keep-all;
-
-  & > button {
-    flex-shrink: 0;
-    margin-left: 20px;
-    width: 100px;
-    height: 32px;
-    border-radius: 30px;
-    border: none;
-    background-color: #0a58be;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 300;
-  }
-`;

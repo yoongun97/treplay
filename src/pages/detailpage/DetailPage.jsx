@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PlaceMap from "../../components/place/PlaceMap";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -139,7 +139,10 @@ function DetailPage() {
 
           <p># {post?.postOneLineContent}</p>
         </s.ContentsContainer>
-        <PlaceMap postAddress={post?.placeLocation} />
+        <PlaceMap
+          postAddress={post?.placeLocation}
+          postPlace={post?.placeName}
+        />
         <Likes />
         {/* 댓글창 */}
       </s.DetailContainerInner>

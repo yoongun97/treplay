@@ -1,12 +1,12 @@
-import React from "react";
-import { styled } from "styled-components";
+import React from 'react';
+import * as s from './StyledPageNation';
 
 const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
-  const pageNumber = [];
   //총 페이지수 계산
-  for (let i = 1; i <= Math.ceil(totalPosts / postsViewPage); i++) {
-    pageNumber.push(i);
-  }
+  const pageNumber = Array.from(
+    { length: Math.ceil(totalPosts / postsViewPage) },
+    (_, index) => index + 1
+  );
   //이전 버튼
   const prevPage = () => {
     if (currentPage > 1) {
@@ -21,69 +21,24 @@ const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
   };
 
   return (
-    <Container>
-      <PrevButton onClick={prevPage}></PrevButton>
+    <s.Container>
+      <s.PrevButton onClick={prevPage}></s.PrevButton>
       {pageNumber.length > 0 ? (
-        <PageNumberContianer>
+        <s.PageNumberContianer>
           {pageNumber.map((number) => (
-            <PageNumberButton
+            <s.PageNumberButton
               key={number}
               onClick={() => pagenate(number)}
-              className={currentPage === number ? "active" : ""}
+              className={currentPage === number ? 'active' : ''}
             >
               {number}
-            </PageNumberButton>
+            </s.PageNumberButton>
           ))}
-        </PageNumberContianer>
+        </s.PageNumberContianer>
       ) : null}
-      <NextButton onClick={nextPage}></NextButton>
-    </Container>
+      <s.NextButton onClick={nextPage}></s.NextButton>
+    </s.Container>
   );
 };
 
 export default PageNation;
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 80px;
-`;
-
-const PrevButton = styled.div`
-  width: 24px;
-  height: 24px;
-  margin-right: 16px;
-  background: url(${process.env.PUBLIC_URL}/icon/left_arrow_gray.svg) no-repeat
-    center / 100%;
-  cursor: pointer;
-`;
-const NextButton = styled.div`
-  width: 24px;
-  height: 24px;
-  margin-left: 16px;
-  background: url(${process.env.PUBLIC_URL}/icon/right_arrow_gray.svg) no-repeat
-    center / 100%;
-  cursor: pointer;
-`;
-
-const PageNumberContianer = styled.div`
-  display: flex;
-  gap: 6px;
-`;
-
-const PageNumberButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 22px;
-  height: 22px;
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
-
-  &.active {
-    border-radius: 50%;
-    color: #fff;
-    background-color: #0a58be;
-  }
-`;
