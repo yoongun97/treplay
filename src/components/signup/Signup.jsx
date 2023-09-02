@@ -7,7 +7,7 @@ import {
 import { auth, db, storage } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledSignup";
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import NicknameModal from "../modal/NicknameModal";
 import EmailModal from "../modal/EmailModal";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
@@ -48,7 +48,7 @@ function Signup() {
   const confirmpwInputRef = useRef();
   const nicknameInputRef = useRef();
   const phonenumberInputRef = useRef();
-  const checknumberInputRef = useRef();
+  // const checknumberInputRef = useRef();
   const checkboxInputRef = useRef();
 
   // 이메일/닉네임 인지 확인
@@ -70,11 +70,25 @@ function Signup() {
     }
   };
 
+  // 가입된 userData
+  const [userData, setUserData] = useState([]);
+
   const navigate = useNavigate();
 
   // 회원가입 함수
   const signupHandler = async (e) => {
     e.preventDefault();
+
+    const q = query(
+      collection(db, "users"),
+      where("name", "==", name),
+      where("phoneNumber", "==", phoneNumber)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const userData = querySnapshot.docs.map((doc) => doc.data());
+    setUserData(userData); // userData 상태 업데이트
+
     try {
       if (!email) {
         setIsUsedEmail("duplicate");
@@ -133,6 +147,12 @@ function Signup() {
       //   checknumberInputRef.current.focus();
       //   return;
       // }
+      console.log(userData);
+
+      if (userData.length > 1) {
+        alert("이미 생성된 계정이 있습니다.");
+        return;
+      }
       if (isChecked1 === false || isChecked2 === false) {
         setErrorBox("");
         alert("약관에 동의해 주세요.");

@@ -273,10 +273,10 @@ function DownFindIDPW() {
             <s.FindedIDs>
               {userData.map((user) => {
                 return (
-                  <>
-                    {user.email}
-                    <br />
-                  </>
+                  <s.FindedIdBox>
+                    <s.FindedID>{user.email}</s.FindedID>
+                    <s.FindedDate>날짜</s.FindedDate>
+                  </s.FindedIdBox>
                 );
               })}
             </s.FindedIDs>
@@ -360,11 +360,17 @@ function DownFindIDPW() {
             <s.FindedName>{name}</s.FindedName>
             <s.FindedMent>님의 메일주소로 메일이 발송되었습니다</s.FindedMent>
           </s.FindedTitle>
-          <s.FindedID>{email}</s.FindedID>
+          <s.FindedIDs>
+            <s.FindedIdBox>
+              <s.FindedID>{email}</s.FindedID>
+              <s.FindedDate>날짜</s.FindedDate>
+            </s.FindedIdBox>
+          </s.FindedIDs>
           <s.FindBtn
             onClick={() => {
               navigate("/login");
             }}
+            style={{ marginTop: "0" }}
           >
             확인
           </s.FindBtn>

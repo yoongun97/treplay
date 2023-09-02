@@ -115,21 +115,36 @@ export const FindedName = styled.span`
 `;
 
 export const FindedMent = styled.span`
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
 `;
 
 export const FindedIDs = styled.p`
   width: 500px;
   height: 100px;
   background-color: #f1f1f1;
-  line-height: 100px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
   margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
 `;
 
-export const FindedID = styled.p``;
+export const FindedIdBox = styled.div`
+  width: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const FindedID = styled.p`
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin: auto 12px 12px 12px;
+`;
+
+export const FindedDate = styled.p`
+  margin-bottom: auto;
+`;
 
 export const FindedBtnBox = styled.div`
   width: 500px;
@@ -146,7 +161,6 @@ export const FindedBtn = styled.button`
   color: white;
   font-size: 18px;
   font-weight: 600;
-
 `;
 
 export const ErrorBox = styled.div`
@@ -173,4 +187,3 @@ export const ErrorMsg = styled.p`
   margin-top: 11px;
   margin-bottom: 11px;
 `;
-
