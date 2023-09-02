@@ -144,6 +144,7 @@ export const FindedID = styled.p`
 
 export const FindedDate = styled.p`
   margin-bottom: auto;
+  font-size: 14px;
 `;
 
 export const FindedBtnBox = styled.div`
