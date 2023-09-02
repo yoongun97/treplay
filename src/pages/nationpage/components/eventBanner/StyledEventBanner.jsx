@@ -1,44 +1,7 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
-const EventBanner = () => {
-  const { nation } = useParams();
-
-  return (
-    <EventBannerContainer>
-      <ImageBox></ImageBox>
-      <EventBannerBoxContainer>
-        <EventBannerBox>
-          <h4>#먹방대전! 또갈 맛집 투표하기</h4>
-          <p>
-            {nation}에서 기억에 남는 맛집이 있나요? <br /> 최고의 맛집에
-            또가요를 남겨 주세요
-          </p>
-          <LinkBox to={`/${nation}/맛집`}>
-            <span>보러가기</span>
-            <div></div>
-          </LinkBox>
-        </EventBannerBox>
-        <EventBannerBox>
-          <h4>#나만의 또갈집 자랑하기</h4>
-          <p>
-            {nation}이라면 역시 이곳! <br /> 나의 원픽 추천 장소를 자랑해
-            주세요!
-          </p>
-          <LinkBox to={`/create`}>
-            <span>자랑하기</span>
-            <div></div>
-          </LinkBox>
-        </EventBannerBox>
-      </EventBannerBoxContainer>
-    </EventBannerContainer>
-  );
-};
-
-export default EventBanner;
-
-const EventBannerContainer = styled.div`
+export const EventBannerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,7 +9,7 @@ const EventBannerContainer = styled.div`
   background-color: #4b6be6;
 `;
 
-const ImageBox = styled.div`
+export const ImageBox = styled.div`
   width: 480px;
   height: 261px;
   margin-right: 130px;
@@ -54,12 +17,12 @@ const ImageBox = styled.div`
     no-repeat center / 100%;
 `;
 
-const EventBannerBoxContainer = styled.div`
+export const EventBannerBoxContainer = styled.div`
   display: flex;
   gap: 140px;
 `;
 
-const EventBannerBox = styled.div`
+export const EventBannerBox = styled.div`
   height: 165px;
   display: flex;
   flex-direction: column;
@@ -78,7 +41,7 @@ const EventBannerBox = styled.div`
   }
 `;
 
-const LinkBox = styled(Link)`
+export const LinkBox = styled(Link)`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

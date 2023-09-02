@@ -75,12 +75,22 @@ const Header = () => {
 export default Header;
 
 const HeaderContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 90px;
   padding: 0px 320px;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e5e5e5;
+  }
 `;
 
 const HomeLink = styled(Link)`

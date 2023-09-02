@@ -1,17 +1,17 @@
-import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
-import { userAtom } from "../../store/userAtom";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useParams } from "react-router-dom";
-import SavedList from "./components/SavedList";
-import MyList from "./components/MyList";
-import { useQuery } from "react-query";
-import ProfileImage from "./components/ProfileImage";
-import SuggestLogin from "../../components/login/SuggestLogin";
-import Nickname from "./components/Nickname";
-import { styled } from "styled-components";
-import PageNation from "../../components/pageNation/PageNation";
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
+import { userAtom } from '../../store/userAtom';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useParams } from 'react-router-dom';
+import SavedList from './components/savedList/SavedList';
+import { useQuery } from 'react-query';
+import ProfileImage from './components/profileImage/ProfileImage';
+import SuggestLogin from '../../components/login/SuggestLogin';
+import Nickname from './components/nickname/Nickname';
+import PageNation from '../../components/pageNation/PageNation';
+import MyList from './components/myList/MyList';
+import * as s from './StyledMyPage';
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -31,7 +31,7 @@ function MyPage() {
 
   const fetchData = async () => {
     // 유저 데이터
-    const userQ = query(collection(db, "users"));
+    const userQ = query(collection(db, 'users'));
     const querySnapshot = await getDocs(userQ);
     const data = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -41,7 +41,7 @@ function MyPage() {
     setOwnData(data.find((item) => item.uid === userUid));
 
     // 또가요 데이터
-    const likedQ = query(collection(db, "likes"));
+    const likedQ = query(collection(db, 'likes'));
     const likedQuerySnapshot = await getDocs(likedQ);
     const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
 
@@ -49,12 +49,12 @@ function MyPage() {
     setAllLikedData(likedData);
 
     // 내 저장 데이터
-    const savedQ = query(collection(db, "saved"), where("uid", "==", userUid));
+    const savedQ = query(collection(db, 'saved'), where('uid', '==', userUid));
     const savedQuerySnapshot = await getDocs(savedQ);
     const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
 
     // 모든 글 데이터
-    const postsQ = query(collection(db, "posts"));
+    const postsQ = query(collection(db, 'posts'));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -97,7 +97,7 @@ function MyPage() {
 
   // 리액트 쿼리로 로딩/에러 처리
 
-  const { isLoading, isError, error } = useQuery("userData", fetchData);
+  const { isLoading, isError, error } = useQuery('userData', fetchData);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
@@ -115,8 +115,8 @@ function MyPage() {
   return (
     <>
       {user ? (
-        <MypageContainer>
-          <UserInfoInner>
+        <s.MypageContainer>
+          <s.UserInfoInner>
             <h3>마이페이지</h3>
             <div>
               {/* 프로필 이미지/닉네임 컴포넌트 분리 */}
@@ -127,24 +127,24 @@ function MyPage() {
                 fetchData={fetchData}
               />
             </div>
-          </UserInfoInner>
-          <ListContainer>
-            <ChangeButtonContainer>
+          </s.UserInfoInner>
+          <s.ListContainer>
+            <s.ChangeButtonContainer>
               {/* 내가 쓴 글/ 저장한 글 전환 버튼 */}
-              <ChangeButton
+              <s.ChangeButton
                 onClick={activeMyListHandler}
                 selected={isMyListActived}
               >
                 <span>내가 쓴 글</span>
-              </ChangeButton>
-              <ChangeButton
+              </s.ChangeButton>
+              <s.ChangeButton
                 onClick={activeSavedListHandler}
                 selected={!isMyListActived}
               >
                 <span>저장한 글</span>
-              </ChangeButton>
-            </ChangeButtonContainer>
-            <ListContainerInner>
+              </s.ChangeButton>
+            </s.ChangeButtonContainer>
+            <s.ListContainerInner>
               {/* 버튼 전환에 따른 리스트 변환 */}
               {isMyListActived === true ? (
                 <MyList
@@ -164,83 +164,27 @@ function MyPage() {
                   allLikedData={allLikedData}
                 />
               )}
-            </ListContainerInner>
-          </ListContainer>
+            </s.ListContainerInner>
+          </s.ListContainer>
           <PageNation
             postsViewPage={postsViewPage}
             totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
             currentPage={currentPage}
             pagenate={handlePageChange}
           />
-        </MypageContainer>
+        </s.MypageContainer>
       ) : (
         // 비회원일 경우에 Unloggined 컴포넌트 보여 주기
         <SuggestLogin />
       )}
+      <PageNation
+        postsViewPage={postsViewPage}
+        totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
+        currentPage={currentPage}
+        pagenate={handlePageChange}
+      />
     </>
   );
 }
 
 export default MyPage;
-const MypageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 140px;
-`;
-const UserInfoInner = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 140px 0 140px;
-  background-color: #f2f8ff;
-  & > h3 {
-    text-align: center;
-    font-size: 32px;
-    font-weight: 500;
-  }
-`;
-const ListContainer = styled.div`
-  width: 1280px;
-`;
-
-const ChangeButtonContainer = styled.div`
-  display: flex;
-`;
-
-const ChangeButton = styled.div`
-  width: 150px;
-  height: 54px;
-  margin: 140px 0 60px;
-
-  /* selected가 현재 선택한 카테고리를 뜻함. 이게 true이면 파랗게 만듦 */
-  background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
-  color: ${(props) => (props.selected ? "#fff" : "#878d94")};
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 54px;
-  text-align: center;
-  transition: 0.3s;
-  cursor: pointer;
-
-  &:first-child {
-    border-top-left-radius: 60px;
-    border-bottom-left-radius: 60px;
-    border-right: 1px solid #d7d7d7;
-  }
-
-  &:last-child {
-    border-top-right-radius: 60px;
-    border-bottom-right-radius: 60px;
-    border-left: 1px solid #d7d7d7;
-  }
-
-  /* 현재 선택된 버튼은 hover 되지 않도록 함 */
-  &:hover {
-    background-color: ${(props) => (props.selected ? "#0A58BE" : "#d5dadc")};
-  }
-`;
-const ListContainerInner = styled.div``;

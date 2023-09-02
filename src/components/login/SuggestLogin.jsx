@@ -32,6 +32,7 @@ const SuggestContainer = styled.div`
   align-items: center;
   width: 100%;
   height: calc(100vh - 90px);
+  min-height: 800px;
   background: url(${process.env.PUBLIC_URL}/image/suggest_bg.png) no-repeat
     center / cover;
 `;
