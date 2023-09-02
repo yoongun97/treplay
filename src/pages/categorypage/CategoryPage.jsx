@@ -220,7 +220,7 @@ function CategoryPage() {
       <PostsContainer>
         {filteredPosts.length > 0 ? (
           filteredPosts
-            .slice(0, 10) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
+            .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
             .map((post) => (
               <div key={post.id}>
                 <PostBox to={`/detail/${post.id}`}>

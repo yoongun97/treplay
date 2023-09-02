@@ -1,8 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { styled } from "styled-components";
+import "./slick.css";
 
 function SampleNextArrow(props) {
   const { className, onClick } = props;
@@ -33,10 +32,11 @@ function ImageCarousel({ postImgs }) {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    appendDots: (dots) => <ul style={{ listStyle: "none" }}>{dots}</ul>,
+    dotsClass: "dots_custom",
   };
   return (
     <SliderContainer>
