@@ -65,16 +65,19 @@ function MainCarousel() {
 export default MainCarousel;
 
 const StyledSlider = styled(Slider)`
+  position: relative;
   display: flex;
   justify-content: center;
   & > div {
     width: 100%;
-    height: 100%;
+    height: 700px;
   }
 
   & > ul {
     position: absolute;
-    bottom: 24px;
+    bottom: -24px;
+    left: 0;
+    right: 0;
   }
 `;
 
