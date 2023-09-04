@@ -14,10 +14,13 @@
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+<img  src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=html5&logoColor=black">
+<img  src="https://img.shields.io/badge/GoogleMap-4285F4?style=for-the-badge&logo=html5&logoColor=white">
 
 ### Development
 
-<img  src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img  src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img  src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/StyledComponents-DB7093?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white"> <img src="https://img.shields.io/badge/ReactQuery-FF4154?style=for-the-badge&logo=react&logoColor=white">
+
 
 ---
 
@@ -113,20 +116,22 @@
 
 기능 | URL | Method | request | response
 -----|------|------|-------|------
-로그인 |/api/login | POST | {<br> email: string,  <br> password: string,  <br>  } | { <br> uid, <br> email,  <br> }
-회원가입 |/api/signup | POST | {<br> id: string,  <br> email: string,  <br> password: string,  <br> } | -
-마이페이지(작성  목록) | /api/mypage/:uid | GET | {<br> uid:string <br> },| posts: { <br> postId, <br> postTitle, <br> postContent, <br>}
-마이페이지(추천 목록) | /api/mypage/:uid | GET | likes :{ <br> userId: string, <br> state:string, <br> postId:string, <br> } <br> posts: { <br> postId <br> } <br> | posts: { <br> postId, <br> postTitle, <br> postContent, <br> } 
-리스트 조회 | /api/posts | GET | posts: { <br>selectedUpperOption <br> } | posts: {<br>postTitle,<br>postImg,<br>author<br>}
-카테고라이징 | /api/items, <br> /api/tips | GET |posts:{<br>selectedLowerOption<br>} | posts: {<br>postTitle,<br>postImg,<br>author<br>}
-포스트 조회 | /api/detail/:postId | GET | posts: {<br>postId:string,<br>} | posts: <br>postTitle,<br>postImg,<br>postContent<br>}
-포스트 추가 | /api/posts | POST |posts:{<br>postTitle:string,<br>postImg:string,<br>postContent: string,<br>author:user.email,<br>uid:user.id,<br>selectedUpperOption: string,<br>selectedLowerOption:string,<br>id:string<br>}|-
-포스트 삭제 | /api/posts/:postId | DELETE | posts:{<br>postId:string, <br>uid:string<br>} | -
-포스트 수정 | /api/posts/:postId | PATCH |posts:{<br>postTitle:string,<br>postImg:string,<br>postContent: string,<br>uid:user.id,<br>selectedUpperOption: string,<br>selectedLowerOption:string,<br>id:string<br>} | posts: { <br> postTitle,<br>postImg<br>postContent<br>selectedUpperOption,<br>selectedLowerOption<br>
-추천 조회 | /api/likes | GET | likes: {<br>postId:string,<br>uid:string,<br>state:string<br>} | likes:{<br>uid<br>}
-추천 추가 | /api/likes | POST | likes: {<br>postId:string,<br>uid:string,<br>state:string<br>} | -
-추천 삭제 | /api/likes | DELETE | likes: {<br>postId:string,<br>uid:string,<br>state:string<br>} | -
-댓글 추가 | /api/comments | POST |  { <br> author:user.email,<br>uid:user.id<br>id:string,<br>postId,<br>content:string,<br>} | comments: {<br>author,<br>content,<br>}
-댓글 삭제 | /api/comments | DELETE| comments:{<br>uid:user.id<br>id,<br>} | -
-
+회원가입 |/api/signup | POST | {<br> id: string,  <br> email: string,  <br> password: string,  <br> nickname: string, <br> name: string, <br> phoneNumber: string, <br> } | -
+로그인 |/api/login | POST | {<br> email: string,  <br> password: string,  <br>  } | { <br> uid, <br> nickname,  <br> }
+마이페이지(프로필) | /api/mypage/:uid | GET | {<br> uid:string <br> },| users: { <br> nickname, <br> profileImg, <br>}
+마이페이지(프로필 수정) | /api/mypage/:uid/edit | PATCH | {<br> uid:string <br> }, <br> { <br> nickname:string, <br> profileImg <br> }| users: { <br> nickname, <br> profileImg <br>}
+마이페이지(작성  목록) | /api/mypage/:uid | GET | {<br> uid:string <br> },| posts: { <br> postId, <br> placeName, <br> date, <br> postImg <br>}
+마이페이지(북마크 목록) | /api/mypage/:uid | GET | saved :{ <br> uid: string, <br> postId:string, <br> } <br> posts:{ <br> id:string, <br> }  | posts: { <br> id, <br> placeName, <br> date, <br> postImg <br> } 
+카테고리 별 데이터 조회(메인) | /api/:nation | GET | posts: { <br>nation, <br> category <br> } | posts: {<br>placeName, <br> postImg, <br> author <br> } <br> likes:{ <br> postId, <br> state <br>}
+베스트 또갈집 | /api/:nation | GET |posts:{<br>nation<br>} <br> likes:{ <br> postId, <br> state <br> } | posts: {<br>postImg,<br>placeName,<br>postContent<br>}
+데이터 조회(카테고리) | /api/:nation/:category | GET | posts: { <br>nation, <br> category, <br> id, <br> placeName, <br> author, <br> postImg, <br> } <br> likes:{ <br> postId, <br> state } | posts: {<br>placeName,<br>postImg,<br>author<br>} <br> likes:{<br>postId,<br>state<br>}
+포스트 조회 | /api/detail/:postId | GET | posts: {<br>id<br>} | posts: <br>placeName,<br>postImg,<br>postContent,<br>placeLocation<br>}<br>likes:{<br>postId<br>state<br>}
+포스트 추가 | /api/create | POST |posts:{<br>nation:string,<br>category:string,<br>placeName:string,<br>placeLocation:string,<br>postImg:string,<br>postContent:string,<br>author:user.nickname,<br>uid:user.id,<br>id:string,<br>date:timeStamp<br>}|-
+포스트 삭제 | /api/posts/:postId | DELETE | posts:{<br>postId:string, <br>uid:user.id<br>} | -
+포스트 수정 | /api/posts/:postId | PATCH |posts:{<br>id, <br>uid:user.id<br>},<br>{<br>placeName:string,<Br>category:string,<Br>postImg:string,<br>postContent:string,<br>} | posts: { <br> placeName,<br>category,<br>postImg,<br>postContent<br>}
+추천/비추천 조회 | /api/likes | GET | likes: {<br>postId:string,<br>uid:string,<br>state:string<br>} | likes:{<br>postId,<br>state<br>}
+추천/비추천 추가 | /api/likes | POST | likes: {<br>id:string,<br>postId:post.id,<br>uid:user.id<br>state:string<br>} | -
+댓글 추가 | /api/comments | POST |  { <br> author:user.nickname,<br>uid:user.id<br>id:string,<br>postId:post.id,<br>comment:string,<br>} | comments: {<br>author,<br>comment<br>}
+댓글 삭제 | /api/comments | DELETE| comments:{<br>uid:user.id<br>id<br>} | -
+댓글 수정 | /api/comments | PATCH| comments:{<br>uid:user.id<br>id<br>},<br>{<br>comment:string<br>} | comments:{<br>author,<br>comment<br>}
 
