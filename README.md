@@ -7,6 +7,20 @@
     - google api를 통해 지도 정보 제공
 - 또간다/안간다 버튼 및 댓글을 통해 다양한 유저의 의견을 공유한다.
 
+## Stacks
+
+### Environment
+
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+
+### Development
+
+<img  src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img  src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+
+---
+
 ## 화면 구성
 
 |          메인 페이지            |                리스트 페이지1                  |
