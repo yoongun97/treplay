@@ -15,8 +15,6 @@ function NationPage() {
   const [selectedCategory, setSelectedCategory] = useState("숙박");
 
   const fetchData = async () => {
-    window.scrollTo(0, 0);
-    // 처음 화면 접속 시 최상단으로 이동하게 함
     const postsQ = query(collection(db, "posts"));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
@@ -32,7 +30,11 @@ function NationPage() {
     // 모든 좋아요 데이터 저장
     setAllLikedData(likedData);
   };
-  useEffect(() => fetchData, []);
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   // 리액트 쿼리로 로딩/에러 처리
 
