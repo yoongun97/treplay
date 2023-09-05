@@ -127,6 +127,14 @@ const Edit = () => {
       console.log(error);
     }
   };
+
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   return (
     <s.EditContainer>
       {post ? (
