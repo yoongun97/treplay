@@ -42,8 +42,8 @@ const TopButtonContainer = styled.div`
     position: fixed;
     bottom: 100px;
     right: 110px;
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     background: url(${process.env.PUBLIC_URL}/image/topbutton_blue.png)
       no-repeat center / cover;
     border: none;
