@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -26,6 +26,8 @@ export const NextButton = styled.div`
 export const PageNumberContianer = styled.div`
   display: flex;
   gap: 6px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const PageNumberButton = styled.div`
@@ -43,4 +45,20 @@ export const PageNumberButton = styled.div`
     color: #fff;
     background-color: #0a58be;
   }
+`;
+
+export const PageInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #b4b4b4;
+  margin-top: 10px;
+`;
+
+export const DummyButton = styled.div`
+  width: 24px;
+  height: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+  visibility: hidden; /* 화면에서 숨김 */
 `;

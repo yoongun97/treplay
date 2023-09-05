@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -16,24 +16,35 @@ function CategoryPage() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState('date');
 
   const queryClient = useQueryClient();
 
-  const handleLikesSort = () => {
-    setSortOption('likes');
-
-    // 캐시를 무효화하여 새로운 데이터를 가져옵니다.
+  const handleLikesSort = useCallback(() => {
     queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
-  };
+    setSortOption('likes');
+  }, [queryClient, category, currentPage]);
 
-  const handleDateSort = () => {
+  const handleDateSort = useCallback(() => {
+    queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
     setSortOption('date');
-    queryClient.invalidateQueries(['posts', category]);
-  };
+  }, [queryClient, category, currentPage]);
+
+  // const handleLikesSort = useMemo(() => {
+  //   return () => {
+  //     queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
+  //     setSortOption('likes');
+  //   };
+  // }, [queryClient, category, currentPage, setSortOption]);
+
+  // const handleDateSort = useMemo(() => {
+  //   return () => {
+  //     queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
+  //     setSortOption('date');
+  //   };
+  // }, [queryClient, category, currentPage, setSortOption]);
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
