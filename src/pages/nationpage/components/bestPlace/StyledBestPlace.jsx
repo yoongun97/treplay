@@ -44,6 +44,7 @@ export const PhrasesBox = styled.div`
     color: #222;
     font-size: 22px;
     font-weight: 500;
+    line-height: 36px;
   }
 
   & > div {
