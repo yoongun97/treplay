@@ -5,7 +5,6 @@ import {
   query,
   where,
   deleteDoc,
-  doc,
 } from "@firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -129,10 +128,8 @@ export default function Likes() {
     } else if (!!userOwnData === false) {
       if (state === "dislike") {
         setDislikes(true);
-        console.log("비추");
       } else if (state === "like") {
         setLikes(true);
-        console.log("강추");
       }
       const newLike = { postId: id, state, uid: user.uid };
       await addDoc(collection(db, "likes"), newLike);
