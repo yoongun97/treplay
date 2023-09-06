@@ -10,14 +10,13 @@ import * as s from './StyledCategoryPage';
 import Swal from 'sweetalert2';
 
 //콘솔 지우기
+const POSTS_VIEW_PAGE = 3;
 
 function CategoryPage() {
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
-  //const POSTS_VIEW_PAGE => 상수 대문자 변경 안한다. 암묵적인 룰 , 식 밖으로
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState('date');
 
@@ -49,7 +48,6 @@ function CategoryPage() {
 
       return placeNameMatch || placeLocationMatch;
     });
-    console.log({ searchResults, searchData });
     setFilteredPosts(searchResults);
     setCurrentPage(1);
   };
@@ -100,11 +98,12 @@ function CategoryPage() {
     });
   };
 
+  // Date 객체로 변환 후 비교
+  // sort가 posts데이터도 바꿔버림
+  //const copy = [...posts] copy.sort() 기존의 데이터를 변경 되는것이 위험성이 있다.
   const sortPostsByDate = (posts) => {
-    // Date 객체로 변환 후 비교
-    // sort가 posts데이터도 바꿔버림
-    //const copy = [...posts] copy.sort() 기존의 데이터를 변경 되는것이 위험성이 있다.
-    return posts.sort((a, b) => {
+    const copyPosts = [...posts];
+    return copyPosts.sort((a, b) => {
       const dateA = a.date.toDate();
       const dateB = b.date.toDate();
 
@@ -115,7 +114,6 @@ function CategoryPage() {
 
   const sortPosts = (posts, sortOption) => {
     if (sortOption === 'likes') {
-      console.log({ posts });
       return sortPostsByLikes(posts);
     } else if (sortOption === 'date') {
       return sortPostsByDate(posts);
@@ -137,8 +135,8 @@ function CategoryPage() {
 
   useEffect(() => {
     if (posts && posts.length > 0) {
-      const indexOfLastPost = currentPage * postsViewPage;
-      const indexOfFirstPost = indexOfLastPost - postsViewPage;
+      const indexOfLastPost = currentPage * POSTS_VIEW_PAGE;
+      const indexOfFirstPost = indexOfLastPost - POSTS_VIEW_PAGE;
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
       const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
@@ -146,14 +144,12 @@ function CategoryPage() {
   }, [posts, sortOption, currentPage]);
 
   if (error) {
-    console.error('데이터를 가져올 수 없습니다', error);
     return Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' });
   }
 
   if (isLoading) {
     return '정보를 가져오고 있습니다.';
   }
-  //페이지 네이션
 
   return (
     <s.CategoryPageContainer>
@@ -233,7 +229,7 @@ function CategoryPage() {
         )}
       </s.PostsContainer>
       <PageNation
-        postsViewPage={postsViewPage}
+        postsViewPage={POSTS_VIEW_PAGE}
         totalPosts={posts.length}
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달

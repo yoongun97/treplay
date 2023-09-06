@@ -1,10 +1,10 @@
-import { useAtom } from 'jotai';
-import React from 'react';
-import { userAtom } from '../store/userAtom';
-import { Link, useParams } from 'react-router-dom';
-import { getAuth, signOut } from 'firebase/auth';
-import { styled } from 'styled-components';
-import Swal from 'sweetalert2';
+import { useAtom } from "jotai";
+import React from "react";
+import { userAtom } from "../store/userAtom";
+import { Link, useParams } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { styled } from "styled-components";
+import Swal from "sweetalert2";
 
 const Header = () => {
   const { nation } = useParams();
@@ -14,19 +14,19 @@ const Header = () => {
   const logoutHandler = () => {
     signOut(auth)
       .then(() => {
-        Swal.fire({ title: '로그아웃에 성공했습니다.', icon: 'success' });
+        Swal.fire({ title: "로그아웃에 성공했습니다.", icon: "success" });
       })
       .catch((error) => {
         Swal.fire({
-          title: '로그아웃에 실패하였습니다. 다시 시도해 주세요',
-          icon: 'error',
+          title: "로그아웃에 실패하였습니다. 다시 시도해 주세요",
+          icon: "error",
         });
       });
   };
   return (
     // params에 국가가 있으면 관광명소/맛집/숙박 보이게 함...
     <HeaderContainer>
-      <HomeLink to={'/'}></HomeLink>
+      <HomeLink to={"/"}></HomeLink>
       {nation && (
         <CategoryContainer>
           <Link to={`/${nation}/관광명소`}>관광명소</Link>
@@ -42,7 +42,7 @@ const Header = () => {
       ) : (
         <LoginContainer>
           <Link to={`/login`}>로그인</Link>
-          <Link to={'/signup'}>회원가입</Link>
+          <Link to={"/signup"}>회원가입</Link>
         </LoginContainer>
       )}
     </HeaderContainer>
@@ -60,7 +60,7 @@ const HeaderContainer = styled.div`
   height: 90px;
   padding: 0px 320px;
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -81,7 +81,7 @@ const HomeLink = styled(Link)`
 const CategoryContainer = styled.div`
   flex-grow: 1;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 500;
   text-align: right;
 
   & > a {
@@ -98,7 +98,7 @@ const LoginContainer = styled.div`
   align-items: center;
   margin-left: 100px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   color: #bfbfbf;
 
   & > a {
@@ -111,7 +111,7 @@ const LoginContainer = styled.div`
   }
 
   & > a:first-child::after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     top: 50%;

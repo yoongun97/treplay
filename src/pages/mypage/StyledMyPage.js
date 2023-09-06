@@ -17,7 +17,7 @@ export const UserInfoInner = styled.div`
   & > h3 {
     text-align: center;
     font-size: 32px;
-    font-weight: 500;
+    font-weight: 600;
   }
 `;
 export const ListContainer = styled.div`
@@ -37,7 +37,7 @@ export const ChangeButton = styled.div`
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
   color: ${(props) => (props.selected ? "#fff" : "#878d94")};
   font-size: 20px;
-  font-weight: ${(props) => (props.selected ? "400" : "300")};
+  font-weight: ${(props) => (props.selected ? "500" : "400")};
   line-height: 54px;
   text-align: center;
   transition: 0.3s;
@@ -46,13 +46,11 @@ export const ChangeButton = styled.div`
   &:first-child {
     border-top-left-radius: 60px;
     border-bottom-left-radius: 60px;
-    border-right: 1px solid #d7d7d7;
   }
 
   &:last-child {
     border-top-right-radius: 60px;
     border-bottom-right-radius: 60px;
-    border-left: 1px solid #d7d7d7;
   }
 
   /* 현재 선택된 버튼은 hover 되지 않도록 함 */

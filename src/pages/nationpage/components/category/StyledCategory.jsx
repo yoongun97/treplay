@@ -23,7 +23,7 @@ export const CategoryBox = styled(Link)`
   background-color: #999;
 
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 500;
   color: white;
 
   background-position: center;

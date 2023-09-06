@@ -11,7 +11,7 @@ export const BarContainer = styled.div`
   align-items: center;
   margin: 0 auto;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
 `;
 export const LikesBar = styled.div`
@@ -51,7 +51,7 @@ export const ButtonContainer = styled.div`
     border-radius: 60px;
     outline: none;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   & > button > div {
@@ -64,7 +64,7 @@ export const ButtonContainer = styled.div`
 
   & p {
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
   }
 
   & > button > div > span:first-child {

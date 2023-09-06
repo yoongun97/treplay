@@ -22,7 +22,7 @@ export const CategoryButton = styled.div`
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
   color: ${(props) => (props.selected ? "#fff" : "#878d94")};
   font-size: 20px;
-  font-weight: ${(props) => (props.selected ? "400" : "300")};
+  font-weight: ${(props) => (props.selected ? "500" : "400")};
   line-height: 54px;
   text-align: center;
   transition: 0.3s;
@@ -75,7 +75,7 @@ export const PreviewListBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -85,7 +85,7 @@ export const PreviewListBox = styled(Link)`
   & > p {
     padding-bottom: 8px;
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 26px;
     color: #777;
   }
@@ -111,7 +111,7 @@ export const LikesContainer = styled.div`
     display: flex;
     align-items: center;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   & > div > img {
