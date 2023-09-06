@@ -13,10 +13,16 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import * as s from './StyledComments';
+import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
 import Swal from 'sweetalert2';
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
+
+  const [user] = useAtom(userAtom);
+  const navigate = useNavigate();
 
   const [comment, setComment] = useState('');
 
@@ -65,6 +71,11 @@ function Comments({ id }) {
     return <div>{error.message}</div>;
   }
 
+  //댓글 등록
+  const commentChange = (e) => {
+    setComment(e.target.value);
+  };
+
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
     return text.split('\n').map((line, index) => (
@@ -74,12 +85,6 @@ function Comments({ id }) {
       </span>
     ));
   };
-
-  //댓글 등록
-  const commentChange = (e) => {
-    setComment(e.target.value);
-  };
-
   const commentSubmit = async (e) => {
     e.preventDefault();
     if (comment.trim() === '') {
@@ -190,11 +195,11 @@ function Comments({ id }) {
               </>
             ) : (
               <>
-                <img src={comment.photoURL}></img>
+                <img src={comment.photoURL} alt="프로필 이미지"></img>
                 <s.TextContainer>
                   <p>{comment.author}</p>
                   {/* 줄 바꿈 함수 추가 */}
-                  <div>{lineChangeText(comment.comment)}</div>
+                  <p>{lineChangeText(comment.comment)}</p>
                   {currentUser && comment.userId === currentUser.uid && (
                     <s.StartEditButtonContainer>
                       <button

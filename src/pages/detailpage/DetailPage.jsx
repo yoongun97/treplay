@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PlaceMap from '../../components/place/PlaceMap';
 import { deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
@@ -9,7 +9,7 @@ import Bookmark from '../../components/bookmark/Bookmark';
 import Comments from '../../components/comments/Comments';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../store/userAtom';
-import ImageCarousel from '../../components/imageslide/ImageCarousel';
+import ImageCarousel from '../../components/imageslide/detailpageSlide/ImageCarousel';
 import * as s from './StyledDetailPage';
 import Swal from 'sweetalert2';
 
@@ -68,6 +68,13 @@ function DetailPage() {
     }
   });
 
+  // 페이지 언마운트 시 최상단으로 스크롤 이동
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   if (isLoading) {
     return <div>데이터 가져오는 중...</div>;
   }
@@ -121,7 +128,7 @@ function DetailPage() {
                 ></img>
               </button>
             </s.ReactButtonContainer>
-            {user.uid === post?.uid ? (
+            {user && user.uid === post?.uid ? (
               <s.EditButtonContainer>
                 <button
                   onClick={() => {

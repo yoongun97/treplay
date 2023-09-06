@@ -17,18 +17,20 @@ const Bookmark = () => {
   const { id } = useParams();
   const [isSaved, setIsSaved] = useState(false);
   const [user] = useAtom(userAtom);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     const q = query(collection(db, 'saved'), where('postId', '==', id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
 
-    const userSavedData = data?.find((doc) => doc.uid === user.uid);
+    if (user) {
+      const userSavedData = data?.find((doc) => doc.uid === user.uid);
 
-    if (!!userSavedData === true) {
-      setIsSaved(true);
+      if (!!userSavedData === true) {
+        setIsSaved(true);
+      }
     }
-
     // const userOwnData = data?.find((doc) => doc.uid === user.uid);
   };
 
@@ -44,15 +46,18 @@ const Bookmark = () => {
   const bookmarkHandler = async (e) => {
     e.preventDefault();
 
-    if (isSaved === false) {
-      const newSaved = {
-        postId: id,
-        uid: user.uid,
-      };
-      const q = query(collection(db, 'saved'));
-      await addDoc(q, newSaved);
+    if (!user) {
+      navigate("/suggest");
+    } else {
+      if (isSaved === false) {
+        const newSaved = {
+          postId: id,
+          uid: user.uid,
+        };
+        const q = query(collection(db, "saved"));
+        await addDoc(q, newSaved);
 
-      setIsSaved(true);
+        setIsSaved(true);
 
       return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
     } else if (isSaved === true) {

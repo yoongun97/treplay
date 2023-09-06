@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,9 @@ import NaverLogin from './sns/NaverLogin';
 import Swal from 'sweetalert2';
 
 function Login() {
+  const navigate = useNavigate();
+  const url = sessionStorage.getItem('url');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,10 +22,10 @@ function Login() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const navigate = useNavigate();
-
   const loginHandler = async (e) => {
     e.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
     try {
       if (!email) {
         setErrorMsg('이메일을 입력해 주세요.');
@@ -34,17 +37,25 @@ function Login() {
         passwordInputRef.current.focus();
         return;
       }
+      if (!emailRegex.test(email)) {
+        setErrorMsg('잘못된 이메일 형식입니다.');
+        emailInputRef.current.focus();
+        return;
+      }
+      if (password.length < 6) {
+        setErrorMsg('비밀번호는 6자리 이상입니다.');
+        passwordInputRef.current.focus();
+        return;
+      }
       await signInWithEmailAndPassword(auth, email, password);
 
       // 이전 페이지로 이동
-      navigate(-1);
+      navigate(`${url}`);
     } catch (error) {
       if (error.code === 'auth/user-not-found') {
-        setErrorMsg('등록되지 않은 이메일입니다.');
-      } else if (error.code === 'auth/invalid-email') {
-        setErrorMsg('잘못된 이메일 형식입니다.');
+        setErrorMsg(getErrorMessage(error.code));
       } else if (error.code === 'auth/wrong-password') {
-        setErrorMsg('비밀번호가 일치하지 않습니다.');
+        setErrorMsg(getErrorMessage(error.code));
       } else {
         Swal.fire({ title: `${getErrorMessage(error.code)}`, icon: 'error' });
       }
@@ -57,8 +68,6 @@ function Login() {
     switch (errorCode) {
       case 'auth/user-not-found':
         return '가입되지 않은 이메일입니다.';
-      case 'auth/invalid-email':
-        return '잘못된 이메일 형식입니다. email@email.com 형식으로 작성해 주세요';
       case 'auth/wrong-password':
         return '비밀번호가 일치하지 않습니다.';
       case 'auth/network-request-failed':
@@ -71,6 +80,13 @@ function Login() {
         return '로그인에 실패하였습니다.';
     }
   };
+
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   return (
     <s.LoginContainer>

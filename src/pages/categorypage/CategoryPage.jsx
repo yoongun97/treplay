@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import PageNation from '../../components/pageNation/PageNation';
 import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
 import Search from '../../components/search/Search';
 import * as s from './StyledCategoryPage';
 import Swal from 'sweetalert2';
@@ -14,7 +12,6 @@ import Swal from 'sweetalert2';
 //콘솔 지우기
 
 function CategoryPage() {
-  const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
@@ -36,21 +33,6 @@ function CategoryPage() {
     setSortOption('date');
   }, [queryClient, category, currentPage]);
 
-  // const handleLikesSort = useMemo(() => {
-  //   return () => {
-  //     queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
-  //     setSortOption('likes');
-  //   };
-  // }, [queryClient, category, currentPage, setSortOption]);
-
-  // const handleDateSort = useMemo(() => {
-  //   return () => {
-  //     queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
-  //     setSortOption('date');
-  //   };
-  // }, [queryClient, category, currentPage, setSortOption]);
-
-  //firebase db에서 애초에 정렬을 해서 가져오는
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
       const totalSearchData = searchData.toLowerCase().replace(' ', '');
@@ -148,6 +130,12 @@ function CategoryPage() {
   } = useQuery(['posts', category, currentPage, sortOption], fetchPosts);
 
   useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  });
+
+  useEffect(() => {
     if (posts && posts.length > 0) {
       const indexOfLastPost = currentPage * postsViewPage;
       const indexOfFirstPost = indexOfLastPost - postsViewPage;
@@ -163,7 +151,7 @@ function CategoryPage() {
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.'; //스켈레톤 ui??
+    return '정보를 가져오고 있습니다.';
   }
   //페이지 네이션
 
@@ -211,17 +199,14 @@ function CategoryPage() {
             </s.OffButton>
           )}
         </s.FilterContainer>
-        {!!user ? (
-          <s.WriteButton to={`/create`}>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
-              alt="writing_icon"
-            ></img>
-            <span>글쓰기</span>
-          </s.WriteButton>
-        ) : (
-          <></>
-        )}
+
+        <s.WriteButton to={'/create'}>
+          <img
+            src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
+            alt="writing_icon"
+          ></img>
+          <span>글쓰기</span>
+        </s.WriteButton>
       </s.MiddleContainer>
       <s.PostsContainer>
         {/* 아래에 처리 가능하다 위에 있는 에러등.. */}

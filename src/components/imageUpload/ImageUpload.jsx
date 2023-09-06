@@ -11,6 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import * as s from './StyledImageUpload';
 import Swal from 'sweetalert2';
 
+const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
+
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [post] = useAtom(postAtom);
@@ -19,11 +22,29 @@ function ImageUpload() {
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
-  const [selectedFileNames, setSelectedFileNames] = useState([]);
+  const [, setSelectedFileNames] = useState([]);
+
+  // 이미지 파일 확장자를 확인하는 함수
+  function isImageFile(fileName) {
+    const allowedExtensions = ['jpg', 'png', 'gif'];
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    return allowedExtensions.includes(fileExtension);
+  }
 
   // 이미지 파일 선택
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
+    for (const file of files) {
+      if (!isImageFile(file.name)) {
+        alert('파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!');
+        return;
+      }
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert(`파일 크기는 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다!`);
+        return;
+      }
+    }
+
     setSelectedFiles(files);
 
     //이미지 선택 이름,미리보기
@@ -40,14 +61,6 @@ function ImageUpload() {
       prevNames.filter((_, i) => i !== index)
     );
     setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-  };
-
-  // 선택한 이미지 파일 삭제
-
-  const handleDelete = (fileName) => {
-    const updatedFiles = selectedFiles.filter((file) => file.name !== fileName);
-    setSelectedFiles(updatedFiles);
-    document.getElementById('file-input').value = ''; // 파일 선택 초기화
   };
 
   // 이미지 파일 업로드 함수
@@ -114,7 +127,9 @@ function ImageUpload() {
       <s.FileContainer>
         <s.TextContainer>
           <h4>첨부파일</h4>
-          <p>.jpg .png .jpeg 형식의 00mb 미만의 파일만 등록이 가능합니다.</p>
+          <p>
+            .jpg .png .jpeg .gif 형식의 5mb 이하의 파일만 등록이 가능합니다.
+          </p>
         </s.TextContainer>
         <s.StyledLabel>
           <img
@@ -127,6 +142,7 @@ function ImageUpload() {
             type="file"
             onChange={handleFileSelect}
             multiple
+            accept=".gif, .jpg, .png, .jpeg"
           />
         </s.StyledLabel>
       </s.FileContainer>

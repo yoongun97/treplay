@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
@@ -8,7 +8,12 @@ import * as s from "./StyledCreate";
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
-
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
   return (
     <s.CreateContainer>
       <s.SelectBoxContainer>
