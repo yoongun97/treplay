@@ -77,9 +77,9 @@ export default function Likes() {
   // 또가요 버튼 함수 구현
   const likesButtonHandler = async (e, state) => {
     e.preventDefault();
-    // 추천/비추천 해 둔 상태일 때
+    // 추천/비추천 해 둔 상태일 때 (기등록 시)
     if (!!userOwnData === true) {
-      // 이미 누른 버튼을 또 누를 때
+      // 이미 누른 버튼을 또 누를 때 (취소)
       if (userOwnData.state === state) {
         const q = query(
           collection(db, "likes"),
@@ -104,7 +104,9 @@ export default function Likes() {
         } else if (state === "dislike") {
           return alert("안가요 취소 완료!");
         }
-      } else if (userOwnData.state !== state) {
+      }
+      // 현재 눌러둔 것과 반대의 것을 누를 때 (변경)
+      else if (userOwnData.state !== state) {
         const q = query(
           collection(db, "likes"),
           where("postId", "==", id),
@@ -129,7 +131,7 @@ export default function Likes() {
         }
       }
     }
-    // 아직 추천/비추천 하지 않았을 때
+    // 아직 추천/비추천 하지 않았을 때 (처음 등록 시)
     else if (!!userOwnData === false) {
       if (state === "dislike") {
         setDislikes(true);
