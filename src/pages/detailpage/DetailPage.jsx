@@ -9,7 +9,7 @@ import Bookmark from "../../components/bookmark/Bookmark";
 import Comments from "../../components/comments/Comments";
 import { useAtom } from "jotai";
 import { userAtom } from "../../store/userAtom";
-import ImageCarousel from "../../components/imageslide/ImageCarousel";
+import ImageCarousel from "../../components/imageslide/detailpageSlide/ImageCarousel";
 import * as s from "./StyledDetailPage";
 
 function DetailPage() {
@@ -109,7 +109,7 @@ function DetailPage() {
                 ></img>
               </button>
             </s.ReactButtonContainer>
-            {user.uid === post?.uid ? (
+            {user && user.uid === post?.uid ? (
               <s.EditButtonContainer>
                 <button
                   onClick={() => {

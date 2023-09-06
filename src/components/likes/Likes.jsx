@@ -7,6 +7,7 @@ import { userAtom } from "../../store/userAtom";
 import * as s from "./StyledLikes";
 import { StyleSheetManager } from "styled-components";
 import isPropValid from "@emotion/is-prop-valid";
+import { useNavigate } from "react-router-dom";
 
 export default function Likes() {
   const { id } = useParams();
@@ -15,6 +16,8 @@ export default function Likes() {
   const [dislikes, setDislikes] = useState(false);
 
   const [user] = useAtom(userAtom);
+
+  const navigate = useNavigate();
 
   // 또가요, 안가요 각각의 개수와 총합, 그리고 각 퍼센테이지를 구하기 위한 데이터들
   const [likesCount, setLikesCount] = useState(0);
@@ -38,13 +41,15 @@ export default function Likes() {
     setLikesCount(likedData.length);
     setDislikesCount(dislikedData.length);
 
-    // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
-    const userOwnData = data?.find((doc) => doc.uid === user.uid);
+    if (user) {
+      // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
+      const userOwnData = data?.find((doc) => doc.uid === user.uid);
 
-    if (userOwnData?.state === "like") {
-      return setLikes(true);
-    } else if (userOwnData?.state === "dislike") {
-      return setDislikes(true);
+      if (userOwnData?.state === "like") {
+        return setLikes(true);
+      } else if (userOwnData?.state === "dislike") {
+        return setDislikes(true);
+      }
     }
   };
 
@@ -103,7 +108,13 @@ export default function Likes() {
         <s.ButtonContainer>
           {/* 또가요 버튼 */}
           <s.LikesButton
-            onClick={(e) => likesButtonHandler(e, "like")}
+            onClick={(e) => {
+              if (!user) {
+                navigate("/suggest");
+              } else {
+                likesButtonHandler(e, "like");
+              }
+            }}
             disabled={likes}
           >
             <div>
@@ -114,7 +125,13 @@ export default function Likes() {
           </s.LikesButton>
           {/* 안가요 버튼 */}
           <s.DislikesButton
-            onClick={(e) => likesButtonHandler(e, "dislike")}
+            onClick={(e) => {
+              if (!user) {
+                navigate("/suggest");
+              } else {
+                likesButtonHandler(e, "like");
+              }
+            }}
             disabled={dislikes}
           >
             <div>

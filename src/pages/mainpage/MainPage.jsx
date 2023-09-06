@@ -2,6 +2,7 @@ import React from "react";
 import Footer from "../../common/Footer";
 import MainHeader from "./mainheader/MainHeader";
 import * as s from "./StyledMainPage";
+import ButtonCarousel from "../../components/imageslide/mainpageSlide/ButtonCarousel";
 
 function MainPage() {
   return (
@@ -26,6 +27,7 @@ function MainPage() {
               </s.NationInner>
             </s.NationContainer>
             <s.NextButton />
+            {/* <ButtonCarousel /> */}
           </s.ButtonContainer>
         </s.MainInner>
       </s.MainContainer>
