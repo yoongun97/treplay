@@ -61,7 +61,7 @@ export const LikesContainer = styled.div`
   height: 38px;
   padding: 0px 20px;
   border-radius: 10px;
-  border: 1px solid #222;
+  border: 1px solid #777;
   & > div {
     display: flex;
     align-items: center;
