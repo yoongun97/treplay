@@ -15,7 +15,7 @@ export const CategoryButtonContainer = styled.div`
 export const CategoryButton = styled.div`
   width: 130px;
   height: 54px;
-  margin: 60px 0 80px;
+  margin: 30px 0 80px;
 
   /* selected가 현재 선택한 카테고리를 뜻함. 이게 true이면 파랗게 만듦 */
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
