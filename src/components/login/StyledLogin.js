@@ -148,13 +148,11 @@ export const SnsLoginTitle = styled.div`
   background-color: #fff;
   z-index: 10;
 
-  & > span {
-    color: #777777;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 22px;
-  }
+  color: #777777;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
 `;
 
 export const SnsContainer = styled.div`
