@@ -1,4 +1,11 @@
-import { addDoc, collection, getDocs, query, where } from "@firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+} from "@firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { db } from "../../firebaseConfig";
@@ -7,6 +14,7 @@ import { userAtom } from "../../store/userAtom";
 import * as s from "./StyledLikes";
 import { StyleSheetManager } from "styled-components";
 import isPropValid from "@emotion/is-prop-valid";
+import { useNavigate } from "react-router-dom";
 
 export default function Likes() {
   const { id } = useParams();
@@ -15,6 +23,8 @@ export default function Likes() {
   const [dislikes, setDislikes] = useState(false);
 
   const [user] = useAtom(userAtom);
+
+  const navigate = useNavigate();
 
   // 또가요, 안가요 각각의 개수와 총합, 그리고 각 퍼센테이지를 구하기 위한 데이터들
   const [likesCount, setLikesCount] = useState(0);
@@ -38,13 +48,15 @@ export default function Likes() {
     setLikesCount(likedData.length);
     setDislikesCount(dislikedData.length);
 
-    // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
-    const userOwnData = data?.find((doc) => doc.uid === user.uid);
+    if (user) {
+      // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
+      const userOwnData = data?.find((doc) => doc.uid === user.uid);
 
-    if (userOwnData?.state === "like") {
-      return setLikes(true);
-    } else if (userOwnData?.state === "dislike") {
-      return setDislikes(true);
+      if (userOwnData?.state === "like") {
+        return setLikes(true);
+      } else if (userOwnData?.state === "dislike") {
+        return setDislikes(true);
+      }
     }
   };
 
@@ -53,41 +65,105 @@ export default function Likes() {
     setLikes(false);
     setDislikes(false);
     fetchData();
-  }, []);
+  }, [user]);
 
   // likes/dislikes의 변화가 있을 때 데이터를 다시 불러오게 해서 추천/비추천 중복으로 누르지 못하도록 함
   useEffect(() => {
     fetchData();
   }, [likes, dislikes]);
 
-  // 또가요/안가요 버튼을 누르면 작동되는 함수
+  // 또가요 버튼 함수 구현
   const likesButtonHandler = async (e, state) => {
     e.preventDefault();
 
-    // 이미 추천/비추천 기록이 있을 경우 알럿 발생
-    if (likes === true || dislikes === true) {
-      if (likes === true) {
-        return alert("이미 추천한 장소입니다");
-      } else if (likes === false) {
-        return alert("이미 비추천한 장소입니다");
+    if (likes === true) {
+      // 눌렀던 사람만 누를수 있도록 한다.
+      const q = query(
+        collection(db, "likes"),
+        where("postId", "==", id),
+        where("uid", "==", user.uid),
+        where("state", "==", "like")
+      );
+      const querySnapshot = await getDocs(q);
+      const showLike = querySnapshot.docs[0];
+      //deleteDoc으로 likes 입력값 삭제
+      if (showLike) {
+        await deleteDoc(showLike.ref);
       }
 
-      // 추천/비추천 기록 없을 경우 데이터 등록
-    } else if (likes === false && dislikes === false) {
-      const newLikes = { postId: id, state, uid: user.uid };
+      setLikes(false);
+      return alert("또가요 취소 완료! :(");
+    } else {
+      // 아직 좋아요를 하지 않은 경우
+      const newLike = { postId: id, state: "like", uid: user.uid };
+      await addDoc(collection(db, "likes"), newLike);
 
-      const q = query(collection(db, "likes"));
-      await addDoc(q, newLikes);
-
-      if (state === "like") {
-        setLikes(true);
-        return alert("또가요! 추천 완료! :)");
-      } else if (state === "dislike") {
-        setDislikes(true);
-        return alert("안가요... 비추천 완료! :(");
+      setLikes(true);
+      if (dislikes) {
+        setDislikes(false);
       }
+      return alert("또가요! 추천 완료! :)");
     }
   };
+
+  //안가요 버튼 함수 구현
+  const dislikeButtonHandler = async (e) => {
+    e.preventDefault();
+
+    if (dislikes === true) {
+      // 눌렀던 사람만 누를수 있도록 한다.
+      const q = query(
+        collection(db, "likes"),
+        where("postId", "==", id),
+        where("uid", "==", user.uid),
+        where("state", "==", "dislike")
+      );
+      const querySnapshot = await getDocs(q);
+      const showDislike = querySnapshot.docs[0];
+
+      if (showDislike) {
+        await deleteDoc(showDislike.ref);
+      }
+
+      setDislikes(false);
+      return alert("안가요 취소 완료! :)");
+    } else {
+      // 아직 싫어요를 하지 않은 경우
+      const newDislike = { postId: id, state: "dislike", uid: user.uid };
+      await addDoc(collection(db, "likes"), newDislike);
+
+      setDislikes(true);
+      if (likes) {
+        setLikes(false);
+      }
+      return alert("안가요... 비추천 완료! :(");
+    }
+  };
+
+  // // 이미 추천/비추천 기록이 있을 경우 알럿 발생
+  //   if (likes === true || dislikes === true) {
+  //     if (likes === true) {
+  //       return alert('이미 추천한 장소입니다');
+  //     } else if (likes === false) {
+  //       return alert('이미 비추천한 장소입니다');
+  //     }
+
+  //     // 추천/비추천 기록 없을 경우 데이터 등록
+  //   } else if (likes === false && dislikes === false) {
+  //     const newLikes = { postId: id, state, uid: user.uid };
+
+  //     const q = query(collection(db, 'likes'));
+  //     await addDoc(q, newLikes);
+
+  //     if (state === 'like') {
+  //       setLikes(true);
+  //       return alert('또가요! 추천 완료! :)');
+  //     } else if (state === 'dislike') {
+  //       setDislikes(true);
+  //       return alert('안가요... 비추천 완료! :(');
+  //     }
+  //   }
+  // };
 
   return (
     <StyleSheetManager shouldForwardProp={(prop) => isPropValid(prop)}>
@@ -103,8 +179,13 @@ export default function Likes() {
         <s.ButtonContainer>
           {/* 또가요 버튼 */}
           <s.LikesButton
-            onClick={(e) => likesButtonHandler(e, "like")}
-            disabled={likes}
+            onClick={(e) => {
+              if (!user) {
+                navigate("/suggest");
+              } else {
+                likesButtonHandler(e, "like");
+              }
+            }}
           >
             <div>
               <span></span>
@@ -114,7 +195,13 @@ export default function Likes() {
           </s.LikesButton>
           {/* 안가요 버튼 */}
           <s.DislikesButton
-            onClick={(e) => likesButtonHandler(e, "dislike")}
+            onClick={(e) => {
+              if (!user) {
+                navigate("/suggest");
+              } else {
+                dislikeButtonHandler(e, "dislike");
+              }
+            }}
             disabled={dislikes}
           >
             <div>

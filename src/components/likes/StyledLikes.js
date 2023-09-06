@@ -93,17 +93,17 @@ export const LikesButton = styled.button`
 `;
 export const DislikesButton = styled.button`
   border: 1px solid ${(props) => (props.disabled ? "#fcd71e" : "#fcd71e")};
-  color: ${(props) => (props.disabled ? "#fff" : "#fcd71e")};
+  color: ${(props) => (props.disabled ? "#222" : "#fcd71e")};
   background-color: ${(props) => (props.disabled ? "#fcd71e" : "#fff")};
 
   & > p {
-    color: ${(props) => (props.disabled ? "#fff" : "#222")};
+    color: ${(props) => (props.disabled ? "#222" : "#222")};
   }
 
   & > div > span:first-child {
     background-image: ${(props) =>
       props.disabled
-        ? `url(${process.env.PUBLIC_URL}/icon/dislike_icon_white.svg)`
+        ? `url(${process.env.PUBLIC_URL}/icon/dislike_icon_black.svg)`
         : `url(${process.env.PUBLIC_URL}/icon/dislike_icon.svg)`};
   }
 `;

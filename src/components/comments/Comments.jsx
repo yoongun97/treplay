@@ -13,9 +13,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import * as s from "./StyledComments";
+import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
+
+  const [user] = useAtom(userAtom);
+  const navigate = useNavigate();
 
   const [comment, setComment] = useState("");
 
@@ -65,7 +71,9 @@ function Comments({ id }) {
   }
 
   //댓글 등록
-  const commentChange = (e) => setComment(e.target.value);
+  const commentChange = (e) => {
+    setComment(e.target.value);
+  };
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
@@ -76,10 +84,15 @@ function Comments({ id }) {
       </span>
     ));
   };
-
   const commentSubmit = async (e) => {
     e.preventDefault();
-    if (comment === "") {
+
+    if (comment.trim() === "") {
+      return alert("댓글을 입력해주세요");
+    }
+
+    if (!user) {
+      navigate("/suggest"); // 로그인 페이지 경로로 변경
       return;
     }
 
@@ -106,6 +119,7 @@ function Comments({ id }) {
       await deleteDoc(doc(db, "comments", commentId));
       setComments(post.comments.filter((comment) => comment.id !== commentId));
       queryClient.invalidateQueries("post");
+      window.confirm("댓글을 삭제하시겠습니까?");
     } catch (error) {
       console.error("댓글 삭제 에러: ", error);
     }
@@ -123,6 +137,9 @@ function Comments({ id }) {
 
   const updateEditedComment = (e) => {
     setEditedComment(e.target.value);
+    if (e.target.value.trim().length === 0) {
+      alert("한 글자 이상 입력해주세요");
+    }
   };
 
   const saveEditedComment = async (commentId) => {
@@ -177,7 +194,7 @@ function Comments({ id }) {
                 <s.TextContainer>
                   <p>{comment.author}</p>
                   {/* 줄 바꿈 함수 추가 */}
-                  <div>{lineChangeText(comment.comment)}</div>
+                  <p>{lineChangeText(comment.comment)}</p>
                   {currentUser && comment.userId === currentUser.uid && (
                     <s.StartEditButtonContainer>
                       <button
