@@ -25,7 +25,7 @@ export const CommentInputForm = styled.form`
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
-    color: #222;
+    color: #878d94;
   }
 
   & > input {
@@ -80,8 +80,10 @@ export const TextContainer = styled.div`
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 12px;
+    color: #222;
   }
   & > p:last-of-type {
+    color: #878d94;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
