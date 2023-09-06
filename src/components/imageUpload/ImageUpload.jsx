@@ -20,9 +20,30 @@ function ImageUpload() {
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   const [selectedFileNames, setSelectedFileNames] = useState([]);
 
+  // 이미지 파일 확장자를 확인하는 함수
+  function isImageFile(fileName) {
+    const allowedExtensions = ["jpg", "png", "gif"];
+    const fileExtension = fileName.split(".").pop().toLowerCase();
+    return allowedExtensions.includes(fileExtension);
+  }
+
+  const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
+  const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
+
   // 이미지 파일 선택
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
+    for (const file of files) {
+      if (!isImageFile(file.name)) {
+        alert("파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!");
+        return;
+      }
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert(`파일 크기는 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다!`);
+        return;
+      }
+    }
+
     setSelectedFiles(files);
 
     //이미지 선택 이름,미리보기
@@ -113,7 +134,9 @@ function ImageUpload() {
       <s.FileContainer>
         <s.TextContainer>
           <h4>첨부파일</h4>
-          <p>.jpg .png .jpeg 형식의 00mb 미만의 파일만 등록이 가능합니다.</p>
+          <p>
+            .jpg .png .jpeg .gif 형식의 5mb 이하의 파일만 등록이 가능합니다.
+          </p>
         </s.TextContainer>
         <s.StyledLabel>
           <img
@@ -126,6 +149,7 @@ function ImageUpload() {
             type="file"
             onChange={handleFileSelect}
             multiple
+            accept=".gif, .jpg, .png, .jpeg"
           />
         </s.StyledLabel>
       </s.FileContainer>
