@@ -5,12 +5,13 @@ import {
   getDocs,
   query,
   where,
-} from "@firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { db } from "../../firebaseConfig";
-import { useParams } from "react-router";
-import { userAtom } from "../../store/userAtom";
-import { useAtom } from "jotai";
+} from '@firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../firebaseConfig';
+import { useParams } from 'react-router';
+import { userAtom } from '../../store/userAtom';
+import { useAtom } from 'jotai';
+import Swal from 'sweetalert2';
 
 const Bookmark = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const Bookmark = () => {
   const [user] = useAtom(userAtom);
 
   const fetchData = async () => {
-    const q = query(collection(db, "saved"), where("postId", "==", id));
+    const q = query(collection(db, 'saved'), where('postId', '==', id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
 
@@ -48,14 +49,14 @@ const Bookmark = () => {
         postId: id,
         uid: user.uid,
       };
-      const q = query(collection(db, "saved"));
+      const q = query(collection(db, 'saved'));
       await addDoc(q, newSaved);
 
       setIsSaved(true);
 
-      return alert("북마크 저장 완료!");
+      return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
     } else if (isSaved === true) {
-      const q = query(collection(db, "saved"), where("uid", "==", user.uid));
+      const q = query(collection(db, 'saved'), where('uid', '==', user.uid));
       const querySnapshot = await getDocs(q);
       console.log(querySnapshot);
       querySnapshot.forEach(async (doc) => {
@@ -68,7 +69,7 @@ const Bookmark = () => {
       //   와 같은 에러문이 발생함. 따라서 user.uid 를 string 처리도 해 봤는데 제대로 되지 않음... 현재 컴포넌트에서 toString 사용하는 구간 없음
 
       setIsSaved(false);
-      return alert("북마크 취소 완료!");
+      return Swal.fire({ title: '북마크 취소 완료!', icon: 'error' });
     }
   };
 

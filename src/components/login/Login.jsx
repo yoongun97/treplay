@@ -1,18 +1,19 @@
-import React, { useRef, useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
-import * as s from "./StyledLogin";
-import FacebookLogin from "./sns/FacebookLogin";
-import GoogleLogin from "./sns/GoogleLogin";
-import NaverLogin from "./sns/NaverLogin";
+import React, { useRef, useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+import * as s from './StyledLogin';
+import FacebookLogin from './sns/FacebookLogin';
+import GoogleLogin from './sns/GoogleLogin';
+import NaverLogin from './sns/NaverLogin';
+import Swal from 'sweetalert2';
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // error msg 선택
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   // focus 줄 input 참조
   const emailInputRef = useRef();
@@ -24,12 +25,12 @@ function Login() {
     e.preventDefault();
     try {
       if (!email) {
-        setErrorMsg("이메일을 입력해 주세요.");
+        setErrorMsg('이메일을 입력해 주세요.');
         emailInputRef.current.focus();
         return;
       }
       if (!password) {
-        setErrorMsg("비밀번호를 입력해 주세요.");
+        setErrorMsg('비밀번호를 입력해 주세요.');
         passwordInputRef.current.focus();
         return;
       }
@@ -38,14 +39,14 @@ function Login() {
       // 이전 페이지로 이동
       navigate(-1);
     } catch (error) {
-      if (error.code === "auth/user-not-found") {
-        setErrorMsg("등록되지 않은 이메일입니다.");
-      } else if (error.code === "auth/invalid-email") {
-        setErrorMsg("잘못된 이메일 형식입니다.");
-      } else if (error.code === "auth/wrong-password") {
-        setErrorMsg("비밀번호가 일치하지 않습니다.");
+      if (error.code === 'auth/user-not-found') {
+        setErrorMsg('등록되지 않은 이메일입니다.');
+      } else if (error.code === 'auth/invalid-email') {
+        setErrorMsg('잘못된 이메일 형식입니다.');
+      } else if (error.code === 'auth/wrong-password') {
+        setErrorMsg('비밀번호가 일치하지 않습니다.');
       } else {
-        alert(getErrorMessage(error.code));
+        Swal.fire({ title: `${getErrorMessage(error.code)}`, icon: 'error' });
       }
 
       console.log(error.code);
@@ -54,20 +55,20 @@ function Login() {
 
   const getErrorMessage = (errorCode) => {
     switch (errorCode) {
-      case "auth/user-not-found":
-        return "가입되지 않은 이메일입니다.";
-      case "auth/invalid-email":
-        return "잘못된 이메일 형식입니다. email@email.com 형식으로 작성해 주세요";
-      case "auth/wrong-password":
-        return "비밀번호가 일치하지 않습니다.";
-      case "auth/network-request-failed":
-        return "네트워크 연결에 실패 하였습니다.";
-      case "auth/internal-error":
-        return "잘못된 요청입니다.";
-      case "auth/too-many-requests":
-        return "너무 많은 요청이 감지되었습니다. 잠시 뒤 다시 시도해 주세요";
+      case 'auth/user-not-found':
+        return '가입되지 않은 이메일입니다.';
+      case 'auth/invalid-email':
+        return '잘못된 이메일 형식입니다. email@email.com 형식으로 작성해 주세요';
+      case 'auth/wrong-password':
+        return '비밀번호가 일치하지 않습니다.';
+      case 'auth/network-request-failed':
+        return '네트워크 연결에 실패 하였습니다.';
+      case 'auth/internal-error':
+        return '잘못된 요청입니다.';
+      case 'auth/too-many-requests':
+        return '너무 많은 요청이 감지되었습니다. 잠시 뒤 다시 시도해 주세요';
       default:
-        return "로그인에 실패하였습니다.";
+        return '로그인에 실패하였습니다.';
     }
   };
 
@@ -83,7 +84,7 @@ function Login() {
               placeholder="이메일을 입력해주세요"
               onChange={(e) => {
                 setEmail(e.target.value);
-                setErrorMsg("");
+                setErrorMsg('');
               }}
               autoFocus
               autoComplete="email"
@@ -97,7 +98,7 @@ function Login() {
               placeholder="비밀번호를 입력해주세요"
               onChange={(e) => {
                 setPassword(e.target.value);
-                setErrorMsg("");
+                setErrorMsg('');
               }}
               autoComplete="password"
               ref={passwordInputRef}
@@ -115,21 +116,21 @@ function Login() {
           <s.BtnBox>
             <s.NaviBtn
               onClick={() => {
-                navigate("/idpw/inquiry");
+                navigate('/idpw/inquiry');
               }}
             >
               아이디 찾기
             </s.NaviBtn>
             <s.NaviBtn
               onClick={() => {
-                navigate("/idpw/inquiry");
+                navigate('/idpw/inquiry');
               }}
             >
               비밀번호 찾기
             </s.NaviBtn>
             <s.NaviBtn
               onClick={() => {
-                navigate("/signup");
+                navigate('/signup');
               }}
             >
               회원가입

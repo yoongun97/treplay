@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as s from './StyledSearch';
+import Swal from 'sweetalert2';
 
 const Search = ({ onSearch }) => {
   const [search, setSearch] = useState('');
@@ -12,7 +13,7 @@ const Search = ({ onSearch }) => {
     if (e.key === 'Enter') {
       onSearch(search);
       if (search.trim().length === 0) {
-        alert('한 글자 이상 입력해주세요');
+        Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
       } else {
         onSearch(search);
       }
@@ -22,7 +23,7 @@ const Search = ({ onSearch }) => {
   const handleSearch = () => {
     onSearch(search);
     if (search.trim().length === 0) {
-      alert('한 글자 이상 입력해주세요');
+      Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
     } else {
       onSearch(search);
     }

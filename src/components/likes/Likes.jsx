@@ -14,6 +14,7 @@ import { userAtom } from '../../store/userAtom';
 import * as s from './StyledLikes';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+import Swal from 'sweetalert2';
 
 export default function Likes() {
   const { id } = useParams();
@@ -87,7 +88,7 @@ export default function Likes() {
       }
 
       setLikes(false);
-      return alert('또가요 취소 완료! :(');
+      return Swal.fire({ title: '또가요 취소 완료! :(', icon: 'success' });
     } else {
       // 아직 좋아요를 하지 않은 경우
       const newLike = { postId: id, state: 'like', uid: user.uid };
@@ -97,7 +98,7 @@ export default function Likes() {
       if (dislikes) {
         setDislikes(false);
       }
-      return alert('또가요! 추천 완료! :)');
+      return Swal.fire({ title: '또가요! 추천 완료!', icon: 'success' });
     }
   };
 
@@ -121,7 +122,7 @@ export default function Likes() {
       }
 
       setDislikes(false);
-      return alert('안가요 취소 완료! :)');
+      return Swal.fire({ title: '안가요 취소 완료! :)', icon: 'success' });
     } else {
       // 아직 싫어요를 하지 않은 경우
       const newDislike = { postId: id, state: 'dislike', uid: user.uid };
@@ -131,7 +132,7 @@ export default function Likes() {
       if (likes) {
         setLikes(false);
       }
-      return alert('안가요... 비추천 완료! :(');
+      return Swal.fire({ title: '안가요... 비추천 완료! :(', icon: 'success' });
     }
   };
 

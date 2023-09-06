@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { db, storage } from "../../firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { db, storage } from '../../firebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import {
   getDownloadURL,
   ref,
   uploadBytes,
   deleteObject,
-} from "firebase/storage";
-import * as s from "./StyledEdit";
+} from 'firebase/storage';
+import * as s from './StyledEdit';
+import Swal from 'sweetalert2';
 
 const Edit = () => {
   const { id } = useParams();
   const [post, setpost] = useState(null);
-  const [editContent, setEditContent] = useState("");
-  const [editOneLineContent, setEditOneLineContent] = useState("");
+  const [editContent, setEditContent] = useState('');
+  const [editOneLineContent, setEditOneLineContent] = useState('');
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
   const [selectedFileNames, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   //장소와 카테고리 받기
-  const [nation, setNation] = useState("");
-  const [category, setCategory] = useState("");
+  const [nation, setNation] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const editPostData = doc(db, "posts", id);
+      const editPostData = doc(db, 'posts', id);
       const docSnapshot = await getDoc(editPostData);
       //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
@@ -61,7 +62,7 @@ const Edit = () => {
   };
 
   const handleImageDelete = async (imageUrl) => {
-    console.log("Deleting image:", imageUrl);
+    console.log('Deleting image:', imageUrl);
     try {
       // 이미지 Storage에서 삭제
       const imageDelete = ref(storage, imageUrl);
@@ -71,13 +72,13 @@ const Edit = () => {
       const updatedImageUrls = post.postImgs.filter((url) => url !== imageUrl);
 
       // Firestore 데이터베이스 업데이트
-      const editData = doc(db, "posts", id);
+      const editData = doc(db, 'posts', id);
       await updateDoc(editData, { postImgs: updatedImageUrls });
 
       // 컴포넌트의 상태 업데이트
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
-      console.error("이미지 삭제 오류:", error);
+      console.error('이미지 삭제 오류:', error);
     }
   };
   //미리보기 이미지 삭제
@@ -93,7 +94,7 @@ const Edit = () => {
 
   const handlePostSave = async () => {
     try {
-      const editData = doc(db, "posts", id);
+      const editData = doc(db, 'posts', id);
       // 업데이트할 필드와 값을 담을 빈 객체 생성
       const updateData = {};
 
@@ -123,8 +124,7 @@ const Edit = () => {
 
       navigate(`/detail/${id}`);
     } catch (error) {
-      alert("게시물 수정 오류");
-      console.log(error);
+      Swal.fire({ title: '게시물 수정 오류', icon: 'warning' });
     }
   };
   return (

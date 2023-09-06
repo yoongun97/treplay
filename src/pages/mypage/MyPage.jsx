@@ -1,17 +1,18 @@
-import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
-import { userAtom } from "../../store/userAtom";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useParams } from "react-router-dom";
-import SavedList from "./components/savedList/SavedList";
-import { useQuery } from "react-query";
-import ProfileImage from "./components/profileImage/ProfileImage";
-import SuggestLogin from "../../components/login/SuggestLogin";
-import Nickname from "./components/nickname/Nickname";
-import PageNation from "../../components/pageNation/PageNation";
-import MyList from "./components/myList/MyList";
-import * as s from "./StyledMyPage";
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
+import { userAtom } from '../../store/userAtom';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useParams } from 'react-router-dom';
+import SavedList from './components/savedList/SavedList';
+import { useQuery } from 'react-query';
+import ProfileImage from './components/profileImage/ProfileImage';
+import SuggestLogin from '../../components/login/SuggestLogin';
+import Nickname from './components/nickname/Nickname';
+import PageNation from '../../components/pageNation/PageNation';
+import MyList from './components/myList/MyList';
+import * as s from './StyledMyPage';
+import Swal from 'sweetalert2';
 
 function MyPage() {
   const [user] = useAtom(userAtom);
@@ -31,7 +32,7 @@ function MyPage() {
 
   const fetchData = async () => {
     // 유저 데이터
-    const userQ = query(collection(db, "users"));
+    const userQ = query(collection(db, 'users'));
     const querySnapshot = await getDocs(userQ);
     const data = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -41,7 +42,7 @@ function MyPage() {
     setOwnData(data.find((item) => item.uid === userUid));
 
     // 또가요 데이터
-    const likedQ = query(collection(db, "likes"));
+    const likedQ = query(collection(db, 'likes'));
     const likedQuerySnapshot = await getDocs(likedQ);
     const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
 
@@ -49,12 +50,12 @@ function MyPage() {
     setAllLikedData(likedData);
 
     // 내 저장 데이터
-    const savedQ = query(collection(db, "saved"), where("uid", "==", userUid));
+    const savedQ = query(collection(db, 'saved'), where('uid', '==', userUid));
     const savedQuerySnapshot = await getDocs(savedQ);
     const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
 
     // 모든 글 데이터
-    const postsQ = query(collection(db, "posts"));
+    const postsQ = query(collection(db, 'posts'));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -97,14 +98,17 @@ function MyPage() {
 
   // 리액트 쿼리로 로딩/에러 처리
 
-  const { isLoading, isError, error } = useQuery("userData", fetchData);
+  const { isLoading, isError, error } = useQuery('userData', fetchData);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
   }
 
   if (isError) {
-    return alert(`에러 발생! Error Code: ${error.message}`);
+    return Swal.fire({
+      title: `에러 발생! Error Code: ${error.message}`,
+      icon: 'error',
+    });
   }
 
   // 페이지 변경 이벤트 핸들러

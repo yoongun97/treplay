@@ -1,9 +1,10 @@
-import { useAtom } from "jotai";
-import React from "react";
-import { userAtom } from "../store/userAtom";
-import { Link, useParams } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
-import { styled } from "styled-components";
+import { useAtom } from 'jotai';
+import React from 'react';
+import { userAtom } from '../store/userAtom';
+import { Link, useParams } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
+import { styled } from 'styled-components';
+import Swal from 'sweetalert2';
 
 const Header = () => {
   const { nation } = useParams();
@@ -13,10 +14,13 @@ const Header = () => {
   const logoutHandler = () => {
     signOut(auth)
       .then(() => {
-        alert("로그아웃 되었습니다");
+        Swal.fire({ title: '로그아웃에 성공했습니다.', icon: 'success' });
       })
-      .catch(() => {
-        alert("로그아웃에 실패하였습니다. 다시 시도해 주세요");
+      .catch((error) => {
+        Swal.fire({
+          title: '로그아웃에 실패하였습니다. 다시 시도해 주세요',
+          icon: 'error',
+        });
       });
   };
 
@@ -26,7 +30,7 @@ const Header = () => {
       {!!nation ? (
         !!user ? (
           <>
-            <HomeLink to={"/"}></HomeLink>
+            <HomeLink to={'/'}></HomeLink>
             <CategoryContainer>
               <Link to={`/${nation}/관광명소`}>관광명소</Link>
               <Link to={`/${nation}/맛집`}>맛집</Link>
@@ -39,7 +43,7 @@ const Header = () => {
           </>
         ) : (
           <>
-            <HomeLink to={"/"}></HomeLink>
+            <HomeLink to={'/'}></HomeLink>
             <CategoryContainer>
               <Link to={`/${nation}/관광명소`}>관광명소</Link>
               <Link to={`/${nation}/맛집`}>맛집</Link>
@@ -47,13 +51,13 @@ const Header = () => {
             </CategoryContainer>
             <LoginContainer>
               <Link to={`/login`}>로그인</Link>
-              <Link to={"/signup"}>회원가입</Link>
+              <Link to={'/signup'}>회원가입</Link>
             </LoginContainer>
           </>
         )
       ) : !!user ? (
         <>
-          <HomeLink to={"/"}></HomeLink>
+          <HomeLink to={'/'}></HomeLink>
           <LoginContainer>
             <Link to={`/mypage/${user?.uid}`}>내프로필</Link>
             <span onClick={logoutHandler}>로그아웃</span>
@@ -61,10 +65,10 @@ const Header = () => {
         </>
       ) : (
         <>
-          <HomeLink to={"/"}></HomeLink>
+          <HomeLink to={'/'}></HomeLink>
           <LoginContainer>
             <Link to={`/login`}>로그인</Link>
-            <Link to={"/signup"}>회원가입</Link>
+            <Link to={'/signup'}>회원가입</Link>
           </LoginContainer>
         </>
       )}
@@ -83,7 +87,7 @@ const HeaderContainer = styled.div`
   height: 90px;
   padding: 0px 320px;
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
@@ -134,7 +138,7 @@ const LoginContainer = styled.div`
   }
 
   & > a:first-child::after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     top: 50%;

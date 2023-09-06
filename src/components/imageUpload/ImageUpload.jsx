@@ -1,14 +1,15 @@
-import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
-import { storage, auth } from "../../firebaseConfig";
-import React, { useState } from "react";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
-import { useMutation } from "react-query";
-import { userAtom } from "../../store/userAtom";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
-import * as s from "./StyledImageUpload";
+import { getDownloadURL, uploadBytes, ref } from 'firebase/storage';
+import { storage, auth } from '../../firebaseConfig';
+import React, { useState } from 'react';
+import { useAtom } from 'jotai';
+import { postAtom } from '../../store/postAtom';
+import { useMutation } from 'react-query';
+import { userAtom } from '../../store/userAtom';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+import * as s from './StyledImageUpload';
+import Swal from 'sweetalert2';
 
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -46,25 +47,25 @@ function ImageUpload() {
   const handleDelete = (fileName) => {
     const updatedFiles = selectedFiles.filter((file) => file.name !== fileName);
     setSelectedFiles(updatedFiles);
-    document.getElementById("file-input").value = ""; // 파일 선택 초기화
+    document.getElementById('file-input').value = ''; // 파일 선택 초기화
   };
 
   // 이미지 파일 업로드 함수
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    if (post.nation === "") {
-      alert("나라를 선택해주세요.");
-    } else if (post.category === "") {
-      alert("카테고리를 선택해주세요.");
-    } else if (post.category === "") {
-      alert("카테고리를 선택해주세요.");
-    } else if (post.placeName === "") {
-      alert("장소를 선택해주세요.");
-    } else if (post.postContent === "") {
-      alert("내용을 입력해주세요.");
+    if (post.nation === '') {
+      Swal.fire({ title: '나라를 선택해주세요.', icon: 'warning' });
+    } else if (post.category === '') {
+      Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
+    } else if (post.category === '') {
+      Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
+    } else if (post.placeName === '') {
+      Swal.fire({ title: '장소를 선택해주세요.', icon: 'warning' });
+    } else if (post.postContent === '') {
+      Swal.fire({ title: '내용을 입력해주세요.', icon: 'warning' });
     } else if (selectedFiles.length === 0) {
-      alert("파일을 선택해주세요.");
+      Swal.fire({ title: '파일을 선택해주세요.', icon: 'warning' });
     } else {
       const newDownloadURLs = []; // 새로운 downloadURL 배열 생성
 
@@ -87,7 +88,7 @@ function ImageUpload() {
 
       // 업로드 후 선택한 파일 목록 초기화
       setSelectedFiles([]);
-      document.getElementById("file-input").value = ""; // 파일 선택 초기화
+      document.getElementById('file-input').value = ''; // 파일 선택 초기화
     }
   };
 
@@ -100,7 +101,7 @@ function ImageUpload() {
     };
 
     // Firestore에서 'posts' 컬렉션에 대한 참조 생성하기
-    const collectionRef = collection(db, "posts");
+    const collectionRef = collection(db, 'posts');
     // 'posts' 컬렉션에 newPost 문서를 추가합니다.
     const docRef = await addDoc(collectionRef, newPost);
 

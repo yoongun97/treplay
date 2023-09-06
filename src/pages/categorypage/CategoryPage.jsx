@@ -9,6 +9,9 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../../store/userAtom';
 import Search from '../../components/search/Search';
 import * as s from './StyledCategoryPage';
+import Swal from 'sweetalert2';
+
+//콘솔 지우기
 
 function CategoryPage() {
   const [user] = useAtom(userAtom);
@@ -17,6 +20,7 @@ function CategoryPage() {
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
+  //const POSTS_VIEW_PAGE => 상수 대문자 변경 안한다. 암묵적인 룰 , 식 밖으로
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState('date');
 
@@ -46,6 +50,7 @@ function CategoryPage() {
   //   };
   // }, [queryClient, category, currentPage, setSortOption]);
 
+  //firebase db에서 애초에 정렬을 해서 가져오는
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
       const totalSearchData = searchData.toLowerCase().replace(' ', '');
@@ -115,6 +120,8 @@ function CategoryPage() {
 
   const sortPostsByDate = (posts) => {
     // Date 객체로 변환 후 비교
+    // sort가 posts데이터도 바꿔버림
+    //const copy = [...posts] copy.sort() 기존의 데이터를 변경 되는것이 위험성이 있다.
     return posts.sort((a, b) => {
       const dateA = a.date.toDate();
       const dateB = b.date.toDate();
@@ -152,11 +159,11 @@ function CategoryPage() {
 
   if (error) {
     console.error('데이터를 가져올 수 없습니다', error);
-    return alert('데이터를 가져올 수 없습니다');
+    return Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' });
   }
 
   if (isLoading) {
-    return '정보를 가져오고 있습니다.';
+    return '정보를 가져오고 있습니다.'; //스켈레톤 ui??
   }
   //페이지 네이션
 
@@ -216,8 +223,9 @@ function CategoryPage() {
           <></>
         )}
       </s.MiddleContainer>
-      {/* //수정 */}
       <s.PostsContainer>
+        {/* 아래에 처리 가능하다 위에 있는 에러등.. */}
+        {/* 이즈로딩 */}
         {filteredPosts.length > 0 ? (
           filteredPosts
             .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기

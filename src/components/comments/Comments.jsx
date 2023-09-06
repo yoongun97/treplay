@@ -13,6 +13,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import * as s from './StyledComments';
+import Swal from 'sweetalert2';
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
@@ -82,7 +83,7 @@ function Comments({ id }) {
   const commentSubmit = async (e) => {
     e.preventDefault();
     if (comment.trim() === '') {
-      return alert('댓글을 입력해주세요');
+      return Swal.fire({ title: '댓글을 입력해주세요', icon: 'warning' });
     }
 
     try {
@@ -98,19 +99,29 @@ function Comments({ id }) {
       setComment('');
       queryClient.invalidateQueries('post');
     } catch (error) {
-      console.error('댓글 추가 에러: ', error);
+      Swal.fire({ title: '댓글이 추가되지 않았습니다', icon: 'warning' });
     }
   };
 
   //댓글삭제
   const handleDeleteComment = async (commentId) => {
-    try {
-      await deleteDoc(doc(db, 'comments', commentId));
-      setComments(post.comments.filter((comment) => comment.id !== commentId));
-      queryClient.invalidateQueries('post');
-      window.confirm('댓글을 삭제하시겠습니까?');
-    } catch (error) {
-      console.error('댓글 삭제 에러: ', error);
+    const result = await Swal.fire({
+      title: '댓글을 삭제하시겠습니까?',
+      showCancelButton: true, // 취소 버튼 표시
+      confirmButtonText: '삭제', // 확인 버튼 텍스트
+      showCloseButton: true, // 닫기 버튼 표시
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteDoc(doc(db, 'comments', commentId));
+        setComments(
+          post.comments.filter((comment) => comment.id !== commentId)
+        );
+        queryClient.invalidateQueries('post');
+      } catch (error) {
+        Swal.fire({ title: '댓글이 삭제되지 않았습니다', icon: 'warning' });
+      }
     }
   };
 
@@ -127,7 +138,7 @@ function Comments({ id }) {
   const updateEditedComment = (e) => {
     setEditedComment(e.target.value);
     if (e.target.value.trim().length === 0) {
-      alert('한 글자 이상 입력해주세요');
+      Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
     }
   };
 
