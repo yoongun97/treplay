@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Category from "./components/category/Category";
-import MiddleBanner from "./components/middleBanner/MiddleBanner";
-import Preview from "./components/preview/Preview";
-import EventBanner from "./components/eventBanner/EventBanner";
-import BestPlace from "./components/bestPlace/BestPlace";
-import MainCarousel from "../../components/imageslide/nationpageSlide/MainCarousel";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from 'react';
+import Category from './components/category/Category';
+import MiddleBanner from './components/middleBanner/MiddleBanner';
+import Preview from './components/preview/Preview';
+import EventBanner from './components/eventBanner/EventBanner';
+import BestPlace from './components/bestPlace/BestPlace';
+import MainCarousel from '../../components/imageslide/nationpageSlide/MainCarousel';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useQuery } from 'react-query';
+import Swal from 'sweetalert2';
 
 function NationPage() {
-  const [selectedCategory, setSelectedCategory] = useState("숙박");
+  const [selectedCategory, setSelectedCategory] = useState('숙박');
 
   useEffect(() => {
     return () => {
@@ -19,25 +20,28 @@ function NationPage() {
   }, []);
 
   const fetchData = async () => {
-    const postsQ = query(collection(db, "posts"));
+    const postsQ = query(collection(db, 'posts'));
     const postsQuerySnapshot = await getDocs(postsQ);
     const postsData = postsQuerySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
-    const likedQ = query(collection(db, "likes"));
+    const likedQ = query(collection(db, 'likes'));
     const likedQuerySnapshot = await getDocs(likedQ);
     const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
     return { posts: postsData, allLikedData: likedData };
   };
   // 리액트 쿼리로 로딩/에러 처리
-  const { data, isLoading, iserror, error } = useQuery("userData", fetchData);
+  const { data, isLoading, iserror, error } = useQuery('userData', fetchData);
 
   if (isLoading) {
     return <div>로딩 중입니다...</div>;
   }
   if (iserror) {
-    return alert(`에러 발생! Error Code: ${error.message}`);
+    return Swal.fire({
+      title: `에러 발생! Error Code: ${error.message}`,
+      icon: 'error',
+    });
   }
   const { posts, allLikedData } = data;
 

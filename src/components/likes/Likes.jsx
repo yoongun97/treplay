@@ -5,16 +5,17 @@ import {
   query,
   where,
   deleteDoc,
-} from "@firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { db } from "../../firebaseConfig";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import * as s from "./StyledLikes";
-import { StyleSheetManager } from "styled-components";
-import isPropValid from "@emotion/is-prop-valid";
-import { useNavigate } from "react-router-dom";
+} from '@firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { db } from '../../firebaseConfig';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import * as s from './StyledLikes';
+import { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function Likes() {
   const { id } = useParams();
@@ -39,13 +40,13 @@ export default function Likes() {
 
   // 처음 랜더링될 때 user의 uid와 동일한 uid를 가진 likes의 정보가 있으면 likes/dislikes를 true 처리해서 버튼 누르지 못하도록 함
   const fetchData = async () => {
-    const q = query(collection(db, "likes"), where("postId", "==", id));
+    const q = query(collection(db, 'likes'), where('postId', '==', id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
 
     // likes, dislikes 의 누적 개수를 저장하기 위한 부분
-    const likedData = data?.filter((doc) => doc.state === "like");
-    const dislikedData = data?.filter((doc) => doc.state === "dislike");
+    const likedData = data?.filter((doc) => doc.state === 'like');
+    const dislikedData = data?.filter((doc) => doc.state === 'dislike');
     setLikesCount(likedData.length);
     setDislikesCount(dislikedData.length);
 
@@ -54,9 +55,9 @@ export default function Likes() {
 
       setUserOwnData(ownData);
 
-      if (ownData?.state === "like") {
+      if (ownData?.state === 'like') {
         return setLikes(true);
-      } else if (ownData?.state === "dislike") {
+      } else if (ownData?.state === 'dislike') {
         return setDislikes(true);
       }
     }
@@ -82,9 +83,9 @@ export default function Likes() {
       // 이미 누른 버튼을 또 누를 때 (취소)
       if (userOwnData.state === state) {
         const q = query(
-          collection(db, "likes"),
-          where("postId", "==", id),
-          where("uid", "==", user.uid)
+          collection(db, 'likes'),
+          where('postId', '==', id),
+          where('uid', '==', user.uid)
         );
         const querySnapshot = await getDocs(q);
         const showLike = querySnapshot.docs[0];
@@ -93,24 +94,24 @@ export default function Likes() {
           await deleteDoc(showLike.ref);
         }
 
-        if (state === "dislike") {
+        if (state === 'dislike') {
           setDislikes(!dislikes);
-        } else if (state === "like") {
+        } else if (state === 'like') {
           setLikes(!likes);
         }
 
-        if (state === "like") {
-          return alert("또가요 취소 완료!");
-        } else if (state === "dislike") {
-          return alert("안가요 취소 완료!");
+        if (state === 'like') {
+          return Swal.fire({ title: '또가요 취소 완료!', icon: 'success' });
+        } else if (state === 'dislike') {
+          return Swal.fire({ title: '안가요 취소 완료!', icon: 'success' });
         }
       }
       // 현재 눌러둔 것과 반대의 것을 누를 때 (변경)
       else if (userOwnData.state !== state) {
         const q = query(
-          collection(db, "likes"),
-          where("postId", "==", id),
-          where("uid", "==", user.uid)
+          collection(db, 'likes'),
+          where('postId', '==', id),
+          where('uid', '==', user.uid)
         );
         const querySnapshot = await getDocs(q);
         const showLike = querySnapshot.docs[0];
@@ -119,32 +120,35 @@ export default function Likes() {
           await deleteDoc(showLike.ref);
         }
         const newLike = { postId: id, state, uid: user.uid };
-        await addDoc(collection(db, "likes"), newLike);
+        await addDoc(collection(db, 'likes'), newLike);
 
         setLikes(!likes);
         setDislikes(!dislikes);
 
-        if (state === "like") {
-          return alert("또가요! 추천 완료 :)");
-        } else if (state === "dislike") {
-          return alert("안가요! 비추천 완료 :(");
+        if (state === 'like') {
+          return Swal.fire({ title: '또가요! 추천 완료 :)', icon: 'success' });
+        } else if (state === 'dislike') {
+          return Swal.fire({
+            title: '안가요! 비추천 완료 :(',
+            icon: 'success',
+          });
         }
       }
     }
     // 아직 추천/비추천 하지 않았을 때 (처음 등록 시)
     else if (!!userOwnData === false) {
-      if (state === "dislike") {
+      if (state === 'dislike') {
         setDislikes(true);
-      } else if (state === "like") {
+      } else if (state === 'like') {
         setLikes(true);
       }
       const newLike = { postId: id, state, uid: user.uid };
-      await addDoc(collection(db, "likes"), newLike);
+      await addDoc(collection(db, 'likes'), newLike);
 
-      if (state === "like") {
-        return alert("또가요! 추천 완료 :)");
-      } else if (state === "dislike") {
-        return alert("안가요! 비추천 완료 :(");
+      if (state === 'like') {
+        return Swal.fire({ title: '또가요! 추천 완료 :)', icon: 'success' });
+      } else if (state === 'dislike') {
+        return Swal.fire({ title: '안가요! 비추천 완료 :(', icon: 'success' });
       }
     }
   };
@@ -165,9 +169,9 @@ export default function Likes() {
           <s.LikesButton
             onClick={(e) => {
               if (!user) {
-                navigate("/suggest");
+                navigate('/suggest');
               } else {
-                likesButtonHandler(e, "like");
+                likesButtonHandler(e, 'like');
               }
             }}
             activated={likes}
@@ -182,9 +186,9 @@ export default function Likes() {
           <s.DislikesButton
             onClick={(e) => {
               if (!user) {
-                navigate("/suggest");
+                navigate('/suggest');
               } else {
-                likesButtonHandler(e, "dislike");
+                likesButtonHandler(e, 'dislike');
               }
             }}
             activated={dislikes}

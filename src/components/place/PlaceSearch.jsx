@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
-import * as s from "./StyledPlaceSearch";
+import React, { useState } from 'react';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { useAtom } from 'jotai';
+import { postAtom } from '../../store/postAtom';
+import * as s from './StyledPlaceSearch';
+import Swal from 'sweetalert2';
 
 // 지도의 크기와 초기 중심 좌표를 설정
 const containerStyle = {
-  width: "800px",
-  height: "400px",
+  width: '800px',
+  height: '400px',
 };
 const center = {
   lat: 37.5656,
@@ -19,12 +20,12 @@ function PlaceSearch() {
 
   // Google 지도 API를 로드하고, isLoaded 변수를 통해 API 로드 상태를 확인
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
   });
 
   const [map, setMap] = useState(null);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [selectedResult, setSelectedResult] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
 
@@ -40,14 +41,14 @@ function PlaceSearch() {
   // 입력한 주소를 기반으로 Google Places API를 통해 장소 검색
   const handleSearch = async () => {
     if (!searchInput) {
-      alert("장소를 입력해주세요.");
+      Swal.fire({ title: '장소를 입력해주세요.', icon: 'warning' });
     } else {
       // Google Places API의 서비스를 생성
       const service = new window.google.maps.places.PlacesService(map);
       // 장소 검색에 사용할 요청
       const request = {
         query: searchInput,
-        fields: ["name", "formatted_address", "geometry"],
+        fields: ['name', 'formatted_address', 'geometry'],
       };
       // 검색어에 대한 결과를 받아온다.
       service.textSearch(request, (results, status) => {
@@ -73,7 +74,7 @@ function PlaceSearch() {
 
   // 엔터 키 이벤트 핸들러
   const handleEnterKey = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -116,7 +117,7 @@ function PlaceSearch() {
         )}
       </s.SearchContainer>
 
-      <div style={{ display: "none" }}>
+      <div style={{ display: 'none' }}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
