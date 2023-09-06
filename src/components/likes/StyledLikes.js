@@ -97,7 +97,7 @@ export const DislikesButton = styled.button`
   background-color: ${(props) => (props.disabled ? "#fcd71e" : "#fff")};
 
   & > p {
-    color: ${(props) => (props.disabled ? "#222" : "#222")};
+    color: #222;
   }
 
   & > div > span:first-child {
