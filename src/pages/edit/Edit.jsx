@@ -10,6 +10,9 @@ import {
 } from "firebase/storage";
 import * as s from "./StyledEdit";
 
+const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
+
 const Edit = () => {
   const { id } = useParams();
   const [post, setpost] = useState(null);
@@ -23,6 +26,13 @@ const Edit = () => {
   //장소와 카테고리 받기
   const [nation, setNation] = useState("");
   const [category, setCategory] = useState("");
+
+  // 이미지 파일 확장자를 확인하는 함수
+  function isImageFile(fileName) {
+    const allowedExtensions = ["jpg", "png", "gif"];
+    const fileExtension = fileName.split(".").pop().toLowerCase();
+    return allowedExtensions.includes(fileExtension);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +59,20 @@ const Edit = () => {
   };
 
   const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      if (!isImageFile(file.name)) {
+        alert("파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!");
+        return;
+      }
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert(`파일 크기는 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다!`);
+        return;
+      }
+    }
+
+    setEditImage(files);
+
     const selectedImages = Array.from(e.target.files);
     //이미지 선택 이름,미리보기
     const fileNames = selectedImages.map((image) => image.name);
@@ -56,8 +80,6 @@ const Edit = () => {
 
     const previews = selectedImages.map((image) => URL.createObjectURL(image));
     setSelectedFilePreviews(previews);
-
-    setEditImage(selectedImages);
   };
 
   const handleImageDelete = async (imageUrl) => {
@@ -127,6 +149,14 @@ const Edit = () => {
       console.log(error);
     }
   };
+
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   return (
     <s.EditContainer>
       {post ? (
@@ -145,7 +175,7 @@ const Edit = () => {
             <s.TextContainer>
               <h4>첨부파일</h4>
               <p>
-                .jpg .png .jpeg 형식의 00mb 미만의 파일만 등록이 가능합니다.
+                .jpg .png .jpeg .gif 형식의 5mb 이하의 파일만 등록이 가능합니다.
               </p>
             </s.TextContainer>
             <s.StyledLabel>
@@ -158,6 +188,7 @@ const Edit = () => {
                 type="file"
                 onChange={handleImageChange}
                 multiple
+                accept=".gif, .jpg, .png, .jpeg"
               />
             </s.StyledLabel>
           </s.FileContainer>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PlaceMap from "../../components/place/PlaceMap";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -55,6 +55,13 @@ function DetailPage() {
       return;
     }
   });
+
+  // 페이지 언마운트 시 최상단으로 스크롤 이동
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   if (isLoading) {
     return <div>데이터 가져오는 중...</div>;

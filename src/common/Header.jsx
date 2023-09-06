@@ -19,54 +19,27 @@ const Header = () => {
         alert("로그아웃에 실패하였습니다. 다시 시도해 주세요");
       });
   };
-
   return (
     // params에 국가가 있으면 관광명소/맛집/숙박 보이게 함...
     <HeaderContainer>
-      {!!nation ? (
-        !!user ? (
-          <>
-            <HomeLink to={"/"}></HomeLink>
-            <CategoryContainer>
-              <Link to={`/${nation}/관광명소`}>관광명소</Link>
-              <Link to={`/${nation}/맛집`}>맛집</Link>
-              <Link to={`/${nation}/숙박`}>숙박</Link>
-            </CategoryContainer>
-            <LoginContainer>
-              <Link to={`/mypage/${user.uid}`}>내프로필</Link>
-              <span onClick={logoutHandler}>로그아웃</span>
-            </LoginContainer>
-          </>
-        ) : (
-          <>
-            <HomeLink to={"/"}></HomeLink>
-            <CategoryContainer>
-              <Link to={`/${nation}/관광명소`}>관광명소</Link>
-              <Link to={`/${nation}/맛집`}>맛집</Link>
-              <Link to={`/${nation}/숙박`}>숙박</Link>
-            </CategoryContainer>
-            <LoginContainer>
-              <Link to={`/login`}>로그인</Link>
-              <Link to={"/signup"}>회원가입</Link>
-            </LoginContainer>
-          </>
-        )
-      ) : !!user ? (
-        <>
-          <HomeLink to={"/"}></HomeLink>
-          <LoginContainer>
-            <Link to={`/mypage/${user?.uid}`}>내프로필</Link>
-            <span onClick={logoutHandler}>로그아웃</span>
-          </LoginContainer>
-        </>
+      <HomeLink to={"/"}></HomeLink>
+      {nation && (
+        <CategoryContainer>
+          <Link to={`/${nation}/관광명소`}>관광명소</Link>
+          <Link to={`/${nation}/맛집`}>맛집</Link>
+          <Link to={`/${nation}/숙박`}>숙박</Link>
+        </CategoryContainer>
+      )}
+      {user ? (
+        <LoginContainer>
+          <Link to={`/mypage/${user.uid}`}>내프로필</Link>
+          <span onClick={logoutHandler}>로그아웃</span>
+        </LoginContainer>
       ) : (
-        <>
-          <HomeLink to={"/"}></HomeLink>
-          <LoginContainer>
-            <Link to={`/login`}>로그인</Link>
-            <Link to={"/signup"}>회원가입</Link>
-          </LoginContainer>
-        </>
+        <LoginContainer>
+          <Link to={`/login`}>로그인</Link>
+          <Link to={"/signup"}>회원가입</Link>
+        </LoginContainer>
       )}
     </HeaderContainer>
   );

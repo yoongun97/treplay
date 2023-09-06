@@ -14,25 +14,39 @@ function NationPage() {
   const [allLikedData, setAllLikedData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("숙박");
 
-  const fetchData = async () => {
-    window.scrollTo(0, 0);
-    // 처음 화면 접속 시 최상단으로 이동하게 함
+  const fetchData = () => {
+    // Promise All로 고친 결과
     const postsQ = query(collection(db, "posts"));
-    const postsQuerySnapshot = await getDocs(postsQ);
-    const postsData = postsQuerySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    //모든 포스트 데이터 저장
-    setPosts(postsData);
-
     const likedQ = query(collection(db, "likes"));
-    const likedQuerySnapshot = await getDocs(likedQ);
-    const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
-    // 모든 좋아요 데이터 저장
-    setAllLikedData(likedData);
+
+    // async await try catch 로 변경하는 게 좋다
+
+    Promise.all([getDocs(postsQ), getDocs(likedQ)])
+      .then((results) => {
+        const postsQuerySnapshot = results[0];
+        // results[0]은 getDocs(postsQ)를 뜻함
+        const likedQuerySnapshot = results[1];
+
+        const postsData = postsQuerySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        // 모든 포스트 데이터 저장
+        setPosts(postsData);
+
+        const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
+        // 모든 좋아요 데이터 저장
+        setAllLikedData(likedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
-  useEffect(() => fetchData, []);
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   // 리액트 쿼리로 로딩/에러 처리
 

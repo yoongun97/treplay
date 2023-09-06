@@ -177,7 +177,7 @@ function Comments({ id }) {
                 <s.TextContainer>
                   <p>{comment.author}</p>
                   {/* 줄 바꿈 함수 추가 */}
-                  <div>{lineChangeText(comment.comment)}</div>
+                  <p>{lineChangeText(comment.comment)}</p>
                   {currentUser && comment.userId === currentUser.uid && (
                     <s.StartEditButtonContainer>
                       <button
