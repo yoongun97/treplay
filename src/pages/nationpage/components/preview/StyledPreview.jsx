@@ -62,7 +62,7 @@ export const PreviewListBox = styled(Link)`
   & > h4 {
     margin-top: 20px;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 26px;
     color: #222;
     overflow: hidden;
