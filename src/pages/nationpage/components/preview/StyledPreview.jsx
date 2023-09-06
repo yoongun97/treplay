@@ -132,7 +132,7 @@ export const LikesBox = styled.div`
     right: 0;
     width: 1px;
     height: 16px;
-    background-color: #222;
+    background-color: #777;
   }
 `;
 export const DislikesBox = styled.div`

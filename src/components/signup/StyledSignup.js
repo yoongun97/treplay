@@ -176,14 +176,9 @@ export const AgreementTitleBox = styled.div`
   width: 500px;
   height: 48px;
   display: flex;
+  align-items: center;
   background-color: #f6faff;
   margin-bottom: 16px;
-`;
-
-export const AgreementCheckBox = styled.input`
-  width: 20px;
-  height: 20px;
-  margin: 3px 12px 3px 16px;
 `;
 
 export const AgreementTitle = styled.p`
@@ -191,6 +186,16 @@ export const AgreementTitle = styled.p`
   margin-bottom: 13px;
   font-size: 18px;
   font-weight: 600;
+`;
+export const AgreementCheckBox = styled.input`
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 3px 12px 3px 16px;
+  background: ${(props) =>
+    props.checked
+      ? `url(${process.env.PUBLIC_URL}/icon/check_black.svg) no-repeat center / cover`
+      : `url(${process.env.PUBLIC_URL}/icon/check_white.svg) no-repeat center / cover`};
 `;
 
 export const AgreementBox = styled.div`
