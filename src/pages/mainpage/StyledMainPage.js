@@ -36,7 +36,7 @@ export const MainInner = styled.div`
 
   & > h2 {
     color: white;
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 700;
   }
 `;
