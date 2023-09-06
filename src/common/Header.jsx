@@ -19,19 +19,16 @@ const Header = () => {
         alert("로그아웃에 실패하였습니다. 다시 시도해 주세요");
       });
   };
-
   return (
     // params에 국가가 있으면 관광명소/맛집/숙박 보이게 함...
     <HeaderContainer>
       <HomeLink to={"/"}></HomeLink>
-      {nation ? (
+      {nation && (
         <CategoryContainer>
           <Link to={`/${nation}/관광명소`}>관광명소</Link>
           <Link to={`/${nation}/맛집`}>맛집</Link>
           <Link to={`/${nation}/숙박`}>숙박</Link>
         </CategoryContainer>
-      ) : (
-        <></>
       )}
       {user ? (
         <LoginContainer>

@@ -10,6 +10,9 @@ import {
 } from "firebase/storage";
 import * as s from "./StyledEdit";
 
+const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
+
 const Edit = () => {
   const { id } = useParams();
   const [post, setpost] = useState(null);
@@ -30,9 +33,6 @@ const Edit = () => {
     const fileExtension = fileName.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension);
   }
-
-  const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
-  const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
 
   useEffect(() => {
     const fetchData = async () => {

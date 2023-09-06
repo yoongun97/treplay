@@ -10,6 +10,9 @@ import { db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import * as s from "./StyledImageUpload";
 
+const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
+
 function ImageUpload() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [post] = useAtom(postAtom);
@@ -26,9 +29,6 @@ function ImageUpload() {
     const fileExtension = fileName.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension);
   }
-
-  const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
-  const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
 
   // 이미지 파일 선택
   const handleFileSelect = (e) => {
