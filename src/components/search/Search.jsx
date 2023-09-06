@@ -11,11 +11,21 @@ const Search = ({ onSearch }) => {
   const handleSearchInputKeyDown = (e) => {
     if (e.key === 'Enter') {
       onSearch(search);
+      if (search.trim().length === 0) {
+        alert('한 글자 이상 입력해주세요');
+      } else {
+        onSearch(search);
+      }
     }
   };
 
   const handleSearch = () => {
     onSearch(search);
+    if (search.trim().length === 0) {
+      alert('한 글자 이상 입력해주세요');
+    } else {
+      onSearch(search);
+    }
   };
 
   return (

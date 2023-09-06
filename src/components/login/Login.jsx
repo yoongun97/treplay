@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +79,13 @@ function Login() {
         return "로그인에 실패하였습니다.";
     }
   };
+
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   return (
     <s.LoginContainer>

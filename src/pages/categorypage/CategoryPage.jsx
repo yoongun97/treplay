@@ -1,36 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import PageNation from "../../components/pageNation/PageNation";
-import CategoryLikes from "./CategoryLikes";
-import Search from "../../components/search/Search";
-import * as s from "./StyledCategoryPage";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import Search from '../../components/search/Search';
+import * as s from './StyledCategoryPage';
 
 function CategoryPage() {
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  // const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState("date");
 
   const queryClient = useQueryClient();
 
-  const handleLikesSort = () => {
-    setSortOption("likes");
 
-    // 캐시를 무효화하여 새로운 데이터를 가져옵니다.
-    queryClient.invalidateQueries(["posts", category, currentPage, "likes"]);
-  };
 
-  const handleDateSort = () => {
-    setSortOption("date");
-    queryClient.invalidateQueries(["posts", category]);
-  };
+  const handleLikesSort = useCallback(() => {
+    queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
+    setSortOption('likes');
+  }, [queryClient, category, currentPage]);
+
+  const handleDateSort = useCallback(() => {
+    queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
+    setSortOption('date');
+  }, [queryClient, category, currentPage]);
+
+  
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
@@ -125,6 +128,13 @@ function CategoryPage() {
     error,
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
+
+
+  useEffect(() => {
+    return () => {
+      window.scrollTo(0, 0);
+    };
+  });
 
   useEffect(() => {
     if (posts && posts.length > 0) {
