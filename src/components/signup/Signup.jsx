@@ -342,7 +342,7 @@ function Signup() {
 
       <form>
         <s.InputBox>
-          <s.InputTitle>아이디(이메일): </s.InputTitle>
+          <s.InputTitle>아이디(이메일) </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
               type="email"
