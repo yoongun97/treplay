@@ -9,14 +9,13 @@ import Edit from "./pages/edit/Edit";
 import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
-// import FindIDPW from "./components/findIDPW/FindIDPW";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
 function App() {
@@ -41,7 +40,8 @@ function App() {
     if (
       location.pathname !== "/login" &&
       location.pathname !== "/signup" &&
-      location.pathname !== "/suggest"
+      location.pathname !== "/suggest" &&
+      location.pathname !== "/edit/:id"
     ) {
       sessionStorage.setItem("url", location.pathname);
     }
