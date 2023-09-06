@@ -35,7 +35,7 @@ export const MiddleBannerPhrasesBox = styled.div`
   & > h3 {
     margin: 16px 0px 12px;
     color: #222;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 22px;
   }
 
