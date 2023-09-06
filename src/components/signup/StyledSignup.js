@@ -200,13 +200,12 @@ export const AgreementBox = styled.div`
 `;
 
 export const AgreementSubtitleBox = styled.div`
-  width: 210px;
   height: 26px;
   display: flex;
   margin-bottom: 8px;
 `;
 
-export const AgreementSubtitle = styled.p`
+export const AgreementSubtitle = styled.span`
   widht: 99px;
   height: 26px;
   font-weight: 500;
