@@ -77,13 +77,14 @@ export default function Likes() {
   // 또가요 버튼 함수 구현
   const likesButtonHandler = async (e, state) => {
     e.preventDefault();
-
+    // 추천/비추천 해 둔 상태일 때
     if (!!userOwnData === true) {
+      // 이미 누른 버튼을 또 누를 때
       if (userOwnData.state === state) {
         if (state === "dislike") {
-          setDislikes(false);
+          setDislikes(!dislikes);
         } else if (state === "like") {
-          setLikes(false);
+          setLikes(!likes);
         }
         const q = query(
           collection(db, "likes"),
@@ -125,7 +126,9 @@ export default function Likes() {
           return alert("안가요! 비추천 완료 :(");
         }
       }
-    } else if (!!userOwnData === false) {
+    }
+    // 아직 추천/비추천 하지 않았을 때
+    else if (!!userOwnData === false) {
       if (state === "dislike") {
         setDislikes(true);
       } else if (state === "like") {
