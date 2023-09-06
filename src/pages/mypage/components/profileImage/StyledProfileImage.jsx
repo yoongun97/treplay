@@ -11,7 +11,6 @@ export const ProfileImageContainer = styled.div`
   margin: 60px auto 20px;
   border-radius: 50%;
   border: 3px solid #0a58be;
-  background-color: #fff;
 
   & > img {
     width: 120px;
