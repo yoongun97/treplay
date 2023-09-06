@@ -1,10 +1,11 @@
-import { useAtom } from "jotai";
-import React from "react";
-import { userAtom } from "../../../../store/userAtom";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { auth, storage } from "../../../../firebaseConfig";
-import { updateProfile } from "firebase/auth";
-import * as s from "./StyledProfileImage";
+import { useAtom } from 'jotai';
+import React from 'react';
+import { userAtom } from '../../../../store/userAtom';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { auth, storage } from '../../../../firebaseConfig';
+import { updateProfile } from 'firebase/auth';
+import * as s from './StyledProfileImage';
+import Swal from 'sweetalert2';
 
 const ProfileImage = ({ fetchData }) => {
   const [user] = useAtom(userAtom);
@@ -20,7 +21,7 @@ const ProfileImage = ({ fetchData }) => {
             photoURL: url,
           });
           fetchData();
-          alert("프로필 수정 완료!");
+          Swal.fire({ title: '프로필 수정 완료!', icon: 'success' });
         });
       });
     } catch (error) {
