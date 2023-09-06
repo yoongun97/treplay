@@ -7,6 +7,8 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 function FacebookLogin() {
   const navigate = useNavigate();
   const timestamp = serverTimestamp();
+  const url = sessionStorage.getItem("url");
+
   const handleFacebookLogin = async () => {
     try {
       const provider = new FacebookAuthProvider();
@@ -25,7 +27,7 @@ function FacebookLogin() {
         // 기타 필요한 사용자 정보를 여기에 추가할 수 있습니다.
       });
 
-      navigate(-1);
+      navigate(`${url}`);
     } catch (error) {
       console.log(error);
     }
