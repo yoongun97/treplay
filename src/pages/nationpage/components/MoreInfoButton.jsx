@@ -26,7 +26,7 @@ const StyledButton = styled(Link)`
   background-color: #fff;
   color: #0a58be;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 500;
   transition: 0.3s;
 
   &:hover {

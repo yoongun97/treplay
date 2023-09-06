@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import * as s from "./StyledFindIDPW";
 
@@ -15,7 +14,9 @@ function FindIDPW() {
           onClick={() => {
             setIsFindID(true);
             setIsChecked(false);
+            console.log("안녕");
           }}
+          selected={isFindID}
         >
           아이디찾기
         </s.IdBtn>
@@ -25,6 +26,7 @@ function FindIDPW() {
             setIsFindID(false);
             setIsChecked(false);
           }}
+          selected={!isFindID}
         >
           비밀번호 찾기
         </s.PWBtn>

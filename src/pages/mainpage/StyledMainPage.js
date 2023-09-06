@@ -37,7 +37,7 @@ export const MainInner = styled.div`
   & > h2 {
     color: white;
     font-size: 52px;
-    font-weight: 600;
+    font-weight: 700;
   }
 `;
 
@@ -122,7 +122,7 @@ export const StyledButton = styled(Link)`
   & > span {
     display: none;
     font-size: 32px;
-    font-weight: 500;
+    font-weight: 600;
     color: #fff;
     z-index: 30;
     transition: 0.3s;

@@ -35,14 +35,14 @@ export const MiddleBannerPhrasesBox = styled.div`
   & > h3 {
     margin: 16px 0px 12px;
     color: #222;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 22px;
   }
 
   & > div {
     margin-bottom: 16px;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5;
     color: #878d94;
 
@@ -70,7 +70,7 @@ export const MoreInfoButton = styled.a`
   background-color: #fff;
   color: #0a58be;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 500;
   transition: 0.3s;
 
   &:hover {
