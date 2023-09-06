@@ -11,7 +11,7 @@ export const DetailContainerInner = styled.div`
     color: #222;
     text-align: center;
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 700;
   }
 `;
 export const InfoContainer = styled.div`
@@ -51,7 +51,7 @@ export const EditButtonContainer = styled.div`
     height: 28px;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   & > button:first-child {

@@ -5,7 +5,7 @@ export const MiddleBannerContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 140px 0;
-  background-color: #f2f8ff;
+  background-color: #fff;
 `;
 export const ImageBox = styled.div`
   width: 400px;
@@ -42,7 +42,7 @@ export const MiddleBannerPhrasesBox = styled.div`
   & > div {
     margin-bottom: 16px;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5;
     color: #878d94;
 
@@ -70,7 +70,7 @@ export const MoreInfoButton = styled.a`
   background-color: #fff;
   color: #0a58be;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 500;
   transition: 0.3s;
 
   &:hover {

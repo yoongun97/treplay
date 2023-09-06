@@ -9,7 +9,7 @@ export const NickNameContainer = styled.div`
     margin-top: 16px;
     color: #777;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
   }
 `;
 export const NickNameContainerInner = styled.div`
@@ -28,7 +28,7 @@ export const NickNameContainerInner = styled.div`
     outline: none;
     background-color: #fff;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 22px;
   }
 `;

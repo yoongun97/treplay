@@ -1,3 +1,4 @@
+
 import React, { useEffect, useContext, useCallback } from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import { useAtom } from "jotai";
@@ -5,6 +6,7 @@ import { postAtom } from "../../store/postAtom";
 import PlaceSearch from "../../components/place/PlaceSearch";
 import ImageUpload from "../../components/imageUpload/ImageUpload";
 import * as s from "./StyledCreate";
+
 // import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
 
 // export function useBlocker(blocker, when = true) {

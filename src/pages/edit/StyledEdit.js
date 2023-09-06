@@ -21,7 +21,7 @@ export const StyledTextarea = styled.textarea`
   margin-top: 40px;
   padding: 16px;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 20px;
   border: 1px solid #e5e5e5;
   outline: 1px solid #999;
@@ -32,7 +32,7 @@ export const StyledInput = styled.input`
   margin: 20px auto;
   padding: 20px 16px;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   border: 1px solid #e5e5e5;
   outline: 1px solid #999;
 `;
@@ -47,13 +47,13 @@ export const TextContainer = styled.div`
   text-align: left;
   & > h4 {
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 20px;
   }
 
   & > p {
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 20px;
     color: #bfbfbf;
   }
@@ -69,7 +69,7 @@ export const StyledLabel = styled.label`
   background-color: #0a58be;
   color: #fff;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   cursor: pointer;
   & > span:first-child {
     width: 20px;

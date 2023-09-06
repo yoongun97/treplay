@@ -14,7 +14,7 @@ export const StyledTextarea = styled.textarea`
   margin-top: 40px;
   padding: 16px;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 20px;
   border: 1px solid #e5e5e5;
   outline: 1px solid #999;
@@ -25,7 +25,7 @@ export const StyledInput = styled.input`
   margin: 20px auto;
   padding: 20px 16px;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   border: 1px solid #e5e5e5;
   outline: 1px solid #999;
 

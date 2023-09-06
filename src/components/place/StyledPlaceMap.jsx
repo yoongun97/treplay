@@ -34,7 +34,7 @@ export const AddressBox = styled.div`
     background-color: #0a58be;
     color: #fff;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 500;
   }
 `;
 
