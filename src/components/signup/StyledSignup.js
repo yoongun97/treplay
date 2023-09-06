@@ -38,7 +38,7 @@ export const ProfileImgBox = styled.div`
   margin: 60px auto;
   border-radius: 50%;
   border: 3px solid #0a58be;
-  background-color: white;
+  background-color: transparent;
 `;
 
 export const ProfileImg = styled.img`
@@ -124,6 +124,9 @@ export const InfoInput = styled.input`
   border: none;
   outline: none;
   background-color: transparent;
+  &::placeholder {
+    color: #bfbfbf;
+  }
 `;
 
 export const CheckBtn = styled.button`

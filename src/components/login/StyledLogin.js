@@ -47,6 +47,9 @@ export const InfoInput = styled.input`
   border: none;
   outline: none;
   background-color: transparent;
+  &::placeholder {
+    color: #bfbfbf;
+  }
 `;
 
 export const ErrorBox = styled.div`
