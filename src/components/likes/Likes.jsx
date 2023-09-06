@@ -58,7 +58,7 @@ export default function Likes() {
     setLikes(false);
     setDislikes(false);
     fetchData();
-  }, []);
+  }, [user]);
 
   // likes/dislikes의 변화가 있을 때 데이터를 다시 불러오게 해서 추천/비추천 중복으로 누르지 못하도록 함
   useEffect(() => {
