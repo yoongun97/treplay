@@ -20,6 +20,9 @@ import EmailModal from "../modal/EmailModal";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 
 function Signup() {
+  const navigate = useNavigate();
+  const url = sessionStorage.getItem("url");
+
   // 사진 넣기
   const [profileImage, setProfileImage] = useState(
     `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
@@ -33,7 +36,6 @@ function Signup() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [checkNumber, setCheckNumber] = useState("");
 
   // 모달 여닫기
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,8 +82,6 @@ function Signup() {
   // 가입된 userData
   const [userData, setUserData] = useState([]);
 
-  const navigate = useNavigate();
-
   // 회원가입 함수
   const signupHandler = async (e) => {
     e.preventDefault();
@@ -94,16 +94,24 @@ function Signup() {
     );
 
     const querySnapshot = await getDocs(q);
-    const userData = querySnapshot.docs.map((doc) => doc.data());
-    setUserData(userData); // userData 상태 업데이트
+    const userInfo = querySnapshot.docs.map((doc) => doc.data());
+    setUserData(userInfo); // userData 상태 업데이트
 
     const timestamp = serverTimestamp();
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     try {
       if (!email) {
         setIsUsedEmail("duplicate");
         setErrorBox("email");
         setErrorMsg("이메일을 입력해 주세요.");
+        emailInputRef.current.focus();
+        return;
+      }
+      if (!emailRegex.test(email)) {
+        setIsUsedEmail("duplicate");
+        setErrorBox("email");
+        setErrorMsg(getErrorMessage("auth/invalid-email"));
         emailInputRef.current.focus();
         return;
       }
@@ -119,13 +127,18 @@ function Signup() {
         passwordInputRef.current.focus();
         return;
       }
+      if (password.length < 6) {
+        setErrorBox("password");
+        setErrorMsg(getErrorMessage("auth/weak-password"));
+        passwordInputRef.current.focus();
+        return;
+      }
       if (password !== confirmPassword) {
         setErrorBox("confirmPassword");
         setErrorMsg(getErrorMessage("auth/wrong-password"));
         confirmpwInputRef.current.focus();
         return;
       }
-
       if (!nickname) {
         setIsUsedNickname(true);
         setErrorBox("nickname");
@@ -139,6 +152,7 @@ function Signup() {
         phonenumberInputRef.current.focus();
         return;
       }
+
       if (phoneNumber.length < 10) {
         setErrorBox("phoneNumber");
         setErrorMsg("전화번호는 10자 이상이어야 합니다.");
@@ -151,12 +165,6 @@ function Signup() {
         phonenumberInputRef.current.focus();
         return;
       }
-      // if (!checkNumber) {
-      //   setErrorBox("checkNumber");
-      //   setErrorMsg("인증번호를 입력해주세요.");
-      //   checknumberInputRef.current.focus();
-      //   return;
-      // }
       if (userData.length > 1) {
         alert("이미 생성된 계정이 있습니다.");
         return;
@@ -203,20 +211,13 @@ function Signup() {
         const collectionRef = collection(db, "users");
         await addDoc(collectionRef, newUser);
         alert("회원가입에 성공하셨습니다.");
-        navigate(-1);
+        navigate(`${url}`);
       }
     } catch (error) {
-      if (
-        error.code === "auth/invalid-email" ||
-        error.code === "auth/email-already-in-use"
-      ) {
+      if (error.code === "auth/email-already-in-use") {
         setErrorBox("email");
         setErrorMsg("중복확인을 해주세요");
         emailInputRef.current.focus();
-      } else if (error.code === "auth/weak-password") {
-        setErrorBox("password");
-        setErrorMsg(getErrorMessage(error.code));
-        passwordInputRef.current.focus();
       } else {
         alert(getErrorMessage(error.code));
       }
@@ -317,8 +318,8 @@ function Signup() {
   }, []);
 
   return (
-    <s.SignupContainer isModalOpen={isModalOpen}>
-      {isModalOpen && <s.Overlay isModalOpen={isModalOpen} />}
+    <s.SignupContainer>
+      {isModalOpen && <s.Overlay ismodalopen={isModalOpen} />}
       <s.SignupTitle>회원가입</s.SignupTitle>
       <s.ProfileImgBox>
         <input

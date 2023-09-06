@@ -11,7 +11,6 @@ import Search from '../../components/search/Search';
 import * as s from './StyledCategoryPage';
 
 function CategoryPage() {
-  const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
@@ -21,6 +20,7 @@ function CategoryPage() {
   const [sortOption, setSortOption] = useState("date");
 
   const queryClient = useQueryClient();
+
 
 
   const handleLikesSort = useCallback(() => {
@@ -129,6 +129,7 @@ function CategoryPage() {
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
+
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -199,17 +200,14 @@ function CategoryPage() {
             </s.OffButton>
           )}
         </s.FilterContainer>
-        {!!user ? (
-          <s.WriteButton to={`/create`}>
-            <img
-              src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
-              alt="writing_icon"
-            ></img>
-            <span>글쓰기</span>
-          </s.WriteButton>
-        ) : (
-          <></>
-        )}
+
+        <s.WriteButton to={"/create"}>
+          <img
+            src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
+            alt="writing_icon"
+          ></img>
+          <span>글쓰기</span>
+        </s.WriteButton>
       </s.MiddleContainer>
       {/* //수정 */}
       <s.PostsContainer>

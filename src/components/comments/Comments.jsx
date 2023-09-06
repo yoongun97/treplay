@@ -11,13 +11,21 @@ import {
   query,
   where,
   updateDoc,
-} from 'firebase/firestore';
-import * as s from './StyledComments';
+} from "firebase/firestore";
+import * as s from "./StyledComments";
+import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
 
-  const [comment, setComment] = useState('');
+  const [user] = useAtom(userAtom);
+  const navigate = useNavigate();
+
+  const [comment, setComment] = useState("");
+
 
   const [, setComments] = useState([]);
   const currentUser = auth.currentUser;
@@ -64,6 +72,11 @@ function Comments({ id }) {
     return <div>{error.message}</div>;
   }
 
+  //댓글 등록
+  const commentChange = (e) => {
+    setComment(e.target.value);
+  };
+
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
     return text.split('\n').map((line, index) => (
@@ -81,8 +94,14 @@ function Comments({ id }) {
 
   const commentSubmit = async (e) => {
     e.preventDefault();
+
     if (comment.trim() === '') {
       return alert('댓글을 입력해주세요');
+    }
+
+    if (!user) {
+      navigate("/suggest"); // 로그인 페이지 경로로 변경
+      return;
     }
 
     try {

@@ -10,6 +10,7 @@ import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/userAtom";
 import { onAuthStateChanged } from "firebase/auth";
@@ -20,6 +21,7 @@ import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
 function App() {
   const [user, setUser] = useAtom(userAtom); // userAtom 사용
+  const location = useLocation(); // 현재 경로 정보를 가져옴
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
@@ -33,18 +35,27 @@ function App() {
     // setUser 함수가 업데이트될 때만 이펙트가 실행됨
   }, [setUser]);
 
+  useEffect(() => {
+    // sessionstorage에 내가 들어온 url 저장
+    // url이 login, signup page 는 저장하지 않도록
+    if (
+      location.pathname !== "/login" &&
+      location.pathname !== "/signup" &&
+      location.pathname !== "/suggest"
+    ) {
+      sessionStorage.setItem("url", location.pathname);
+    }
+  }, [location]);
+
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route element={<Layout />}>
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
-        {/* 비로그인 시 회원가입 유도 페이지로 이동 */}
-        <Route
-          path="/detail/:id"
-          element={user ? <DetailPage /> : <SuggestLogin />}
-        />
-        <Route path="/create" element={<Create />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/create" element={user ? <Create /> : <SuggestLogin />} />
+        <Route path="/suggest" element={<SuggestLogin />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
         <Route path="/idpw/inquiry" element={<DownFindIDPW />} />

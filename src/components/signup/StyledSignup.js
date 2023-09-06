@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 export const Overlay = styled.div`
-  ${({ isModalOpen }) =>
-    isModalOpen &&
+  ${({ ismodalopen }) =>
+    ismodalopen &&
     `
     position: fixed;
     top: 0;
