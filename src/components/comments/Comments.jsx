@@ -190,7 +190,7 @@ function Comments({ id }) {
               </>
             ) : (
               <>
-                <img src={comment.photoURL}></img>
+                <img src={comment.photoURL} alt="프로필 이미지"></img>
                 <s.TextContainer>
                   <p>{comment.author}</p>
                   {/* 줄 바꿈 함수 추가 */}

@@ -55,11 +55,10 @@ function PlaceMap({ postAddress, postPlace }) {
           center: location,
         });
         // 변환된 좌표에 마커를 추가하여 해당 위치를 표시
-        const marker = new window.google.maps.Marker({
+        new window.google.maps.Marker({
           position: location,
           map,
         });
-        console.log(marker);
 
         // 변환된 주소를 setAddress를 통해 상태에 업데이트
         setAddress(results[0].formatted_address);
