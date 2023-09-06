@@ -21,7 +21,7 @@ function ImageUpload() {
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
-  const [selectedFileNames, setSelectedFileNames] = useState([]);
+  const [, setSelectedFileNames] = useState([]);
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
@@ -60,14 +60,6 @@ function ImageUpload() {
       prevNames.filter((_, i) => i !== index)
     );
     setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-  };
-
-  // 선택한 이미지 파일 삭제
-
-  const handleDelete = (fileName) => {
-    const updatedFiles = selectedFiles.filter((file) => file.name !== fileName);
-    setSelectedFiles(updatedFiles);
-    document.getElementById("file-input").value = ""; // 파일 선택 초기화
   };
 
   // 이미지 파일 업로드 함수

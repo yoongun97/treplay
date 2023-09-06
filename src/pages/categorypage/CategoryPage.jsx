@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery, useQueryClient } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import Search from '../../components/search/Search';
-import * as s from './StyledCategoryPage';
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import Search from "../../components/search/Search";
+import * as s from "./StyledCategoryPage";
 
 function CategoryPage() {
   const { nation, category } = useParams();
@@ -21,19 +19,15 @@ function CategoryPage() {
 
   const queryClient = useQueryClient();
 
-
-
   const handleLikesSort = useCallback(() => {
-    queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
-    setSortOption('likes');
+    queryClient.invalidateQueries(["posts", category, currentPage, "likes"]);
+    setSortOption("likes");
   }, [queryClient, category, currentPage]);
 
   const handleDateSort = useCallback(() => {
-    queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
-    setSortOption('date');
+    queryClient.invalidateQueries(["posts", category, currentPage, "date"]);
+    setSortOption("date");
   }, [queryClient, category, currentPage]);
-
-  
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
@@ -128,7 +122,6 @@ function CategoryPage() {
     error,
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
-
 
   useEffect(() => {
     return () => {
