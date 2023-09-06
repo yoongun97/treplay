@@ -81,11 +81,6 @@ export default function Likes() {
     if (!!userOwnData === true) {
       // 이미 누른 버튼을 또 누를 때
       if (userOwnData.state === state) {
-        if (state === "dislike") {
-          setDislikes(!dislikes);
-        } else if (state === "like") {
-          setLikes(!likes);
-        }
         const q = query(
           collection(db, "likes"),
           where("postId", "==", id),
@@ -97,6 +92,13 @@ export default function Likes() {
         if (showLike) {
           await deleteDoc(showLike.ref);
         }
+
+        if (state === "dislike") {
+          setDislikes(!dislikes);
+        } else if (state === "like") {
+          setLikes(!likes);
+        }
+
         if (state === "like") {
           return alert("또가요 취소 완료!");
         } else if (state === "dislike") {
