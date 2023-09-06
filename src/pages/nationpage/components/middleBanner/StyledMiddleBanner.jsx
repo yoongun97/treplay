@@ -4,8 +4,7 @@ export const MiddleBannerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 140px 0;
-  background-color: #f2f8ff;
+  background-color: #fff;
 `;
 export const ImageBox = styled.div`
   width: 400px;

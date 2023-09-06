@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const PreviewContainer = styled.div`
-  margin: 140px auto;
+  padding: 140px 0;
   text-align: center;
+  background-color: #f2f8ff;
 `;
 
 export const CategoryButtonContainer = styled.div`
