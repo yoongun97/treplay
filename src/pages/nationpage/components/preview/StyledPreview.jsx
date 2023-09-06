@@ -22,7 +22,7 @@ export const CategoryButton = styled.div`
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
   color: ${(props) => (props.selected ? "#fff" : "#878d94")};
   font-size: 20px;
-  font-weight: 400;
+  font-weight: ${(props) => (props.selected ? "400" : "300")};
   line-height: 54px;
   text-align: center;
   transition: 0.3s;
