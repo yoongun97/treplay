@@ -1,4 +1,3 @@
-
 import {
   addDoc,
   collection,
@@ -6,15 +5,15 @@ import {
   query,
   where,
   deleteDoc,
-} from '@firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { db } from '../../firebaseConfig';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import * as s from './StyledLikes';
-import { StyleSheetManager } from 'styled-components';
-import isPropValid from '@emotion/is-prop-valid';
+} from "@firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { db } from "../../firebaseConfig";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import * as s from "./StyledLikes";
+import { StyleSheetManager } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 import { useNavigate } from "react-router-dom";
 
 export default function Likes() {
@@ -39,13 +38,13 @@ export default function Likes() {
 
   // 처음 랜더링될 때 user의 uid와 동일한 uid를 가진 likes의 정보가 있으면 likes/dislikes를 true 처리해서 버튼 누르지 못하도록 함
   const fetchData = async () => {
-    const q = query(collection(db, 'likes'), where('postId', '==', id));
+    const q = query(collection(db, "likes"), where("postId", "==", id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
 
     // likes, dislikes 의 누적 개수를 저장하기 위한 부분
-    const likedData = data?.filter((doc) => doc.state === 'like');
-    const dislikedData = data?.filter((doc) => doc.state === 'dislike');
+    const likedData = data?.filter((doc) => doc.state === "like");
+    const dislikedData = data?.filter((doc) => doc.state === "dislike");
     setLikesCount(likedData.length);
     setDislikesCount(dislikedData.length);
 
@@ -53,11 +52,11 @@ export default function Likes() {
       // 현재 user의 uid와 동일한 uid를 가진 likes데이터가 있는지 찾고 있을 경우 likes/dislikes여부에 따라 이를 true로 처리하여 버튼을 누르지 못하도록 함.
       const userOwnData = data?.find((doc) => doc.uid === user.uid);
 
-
-    if (userOwnData?.state === 'like') {
-      return setLikes(true);
-    } else if (userOwnData?.state === 'dislike') {
-      return setDislikes(true);
+      if (userOwnData?.state === "like") {
+        return setLikes(true);
+      } else if (userOwnData?.state === "dislike") {
+        return setDislikes(true);
+      }
     }
   };
 
@@ -80,10 +79,10 @@ export default function Likes() {
     if (likes === true) {
       // 눌렀던 사람만 누를수 있도록 한다.
       const q = query(
-        collection(db, 'likes'),
-        where('postId', '==', id),
-        where('uid', '==', user.uid),
-        where('state', '==', 'like')
+        collection(db, "likes"),
+        where("postId", "==", id),
+        where("uid", "==", user.uid),
+        where("state", "==", "like")
       );
       const querySnapshot = await getDocs(q);
       const showLike = querySnapshot.docs[0];
@@ -93,17 +92,17 @@ export default function Likes() {
       }
 
       setLikes(false);
-      return alert('또가요 취소 완료! :(');
+      return alert("또가요 취소 완료! :(");
     } else {
       // 아직 좋아요를 하지 않은 경우
-      const newLike = { postId: id, state: 'like', uid: user.uid };
-      await addDoc(collection(db, 'likes'), newLike);
+      const newLike = { postId: id, state: "like", uid: user.uid };
+      await addDoc(collection(db, "likes"), newLike);
 
       setLikes(true);
       if (dislikes) {
         setDislikes(false);
       }
-      return alert('또가요! 추천 완료! :)');
+      return alert("또가요! 추천 완료! :)");
     }
   };
 
@@ -114,10 +113,10 @@ export default function Likes() {
     if (dislikes === true) {
       // 눌렀던 사람만 누를수 있도록 한다.
       const q = query(
-        collection(db, 'likes'),
-        where('postId', '==', id),
-        where('uid', '==', user.uid),
-        where('state', '==', 'dislike')
+        collection(db, "likes"),
+        where("postId", "==", id),
+        where("uid", "==", user.uid),
+        where("state", "==", "dislike")
       );
       const querySnapshot = await getDocs(q);
       const showDislike = querySnapshot.docs[0];
@@ -127,17 +126,17 @@ export default function Likes() {
       }
 
       setDislikes(false);
-      return alert('안가요 취소 완료! :)');
+      return alert("안가요 취소 완료! :)");
     } else {
       // 아직 싫어요를 하지 않은 경우
-      const newDislike = { postId: id, state: 'dislike', uid: user.uid };
-      await addDoc(collection(db, 'likes'), newDislike);
+      const newDislike = { postId: id, state: "dislike", uid: user.uid };
+      await addDoc(collection(db, "likes"), newDislike);
 
       setDislikes(true);
       if (likes) {
         setLikes(false);
       }
-      return alert('안가요... 비추천 완료! :(');
+      return alert("안가요... 비추천 완료! :(");
     }
   };
 
@@ -200,12 +199,11 @@ export default function Likes() {
               if (!user) {
                 navigate("/suggest");
               } else {
-                dislikeButtonHandler(e, 'dislike');
+                dislikeButtonHandler(e, "dislike");
               }
             }}
             disabled={dislikes}
           >
-
             <div>
               <span></span>
               <span>안가요</span>
