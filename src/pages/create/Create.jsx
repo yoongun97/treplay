@@ -10,20 +10,18 @@ function Create() {
   const [post, setPost] = useAtom(postAtom);
   const isUnmounted = useRef(false); // useRef로 페이지 상태 관리
 
-  // // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   // useEffect(() => {
   //   const unmountAlert = () => {
-  //     console.log(post.nation);
+  //     console.log(post);
   //     if (
   //       isUnmounted.current &&
-  //       post.nation !== ""
-  //       // &&
-  //       // (post.nation !== "" ||
-  //       //   post.category !== "" ||
-  //       //   post.placeName !== "" ||
-  //       //   post.postContent !== "" ||
-  //       //   post.postOneLineContent !== "" ||
-  //       //   post.postImgs.length !== 0)
+  //       (post.nation !== "" ||
+  //         post.category !== "" ||
+  //         post.placeName !== "" ||
+  //         post.postContent !== "" ||
+  //         post.postOneLineContent !== "" ||
+  //         post.postImgs.length !== 0)
   //     ) {
   //       // 페이지가 언마운트되지 않은 경우에만 alert 띄우기
   //       alert("페이지를 나가시겠습니까?");
@@ -34,13 +32,21 @@ function Create() {
 
   //   // 페이지가 언마운트 될 때만 alert 띄우기
   //   return unmountAlert;
-  // }, [post]);
+  // }, []);
 
   // 컴포넌트가 언마운트 될 때 페이지 상태를 업데이트
   useEffect(() => {
     return () => {
-      // isUnmounted.current = true;
-      // window.scrollTo(0, 0);
+      isUnmounted.current = true;
+      setPost({
+        nation: "",
+        category: "",
+        placeName: "",
+        postContent: "",
+        postOneLineContent: "",
+        postImgs: [],
+      });
+      window.scrollTo(0, 0);
     };
   }, []);
 
@@ -49,7 +55,6 @@ function Create() {
       <s.SelectBoxContainer>
         <SelectBox />
       </s.SelectBoxContainer>
-      {/* <PlaceAddress /> */}
       <PlaceSearch />
       <div className="TextContainer">
         <s.StyledTextarea
