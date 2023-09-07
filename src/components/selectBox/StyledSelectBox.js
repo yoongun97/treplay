@@ -31,7 +31,7 @@ export const DropdownItem = styled.div`
   padding: 0 12px;
   text-align: left;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 34px;
   cursor: pointer;
   &:hover {

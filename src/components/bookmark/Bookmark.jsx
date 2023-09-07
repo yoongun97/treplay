@@ -7,12 +7,12 @@ import {
   where,
 } from '@firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebaseConfig';
 import { useParams } from 'react-router';
 import { userAtom } from '../../store/userAtom';
 import { useAtom } from 'jotai';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const Bookmark = () => {
   const { id } = useParams();
@@ -63,6 +63,7 @@ const Bookmark = () => {
         return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
       } else if (isSaved === true) {
         const q = query(collection(db, 'saved'), where('uid', '==', user.uid));
+
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot);
         querySnapshot.forEach(async (doc) => {

@@ -11,7 +11,7 @@ export const FindContainer = styled.div`
 export const FindTitle = styled.h2`
   color: black;
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 30px;
 `;
 
@@ -25,6 +25,7 @@ export const BtnBox = styled.div`
 export const IdBtn = styled.button`
   width: 280px;
   height: 44px;
+  font-weight: ${(props) => (props.selected ? "500" : "400")};
   border: none;
   border-top-left-radius: 60px;
   border-bottom-left-radius: 60px;
@@ -36,6 +37,7 @@ export const IdBtn = styled.button`
 export const PWBtn = styled.button`
   width: 280px;
   height: 44px;
+  font-weight: ${(props) => (props.selected ? "500" : "400")};
   border: none;
   border-top-right-radius: 60px;
   border-bottom-right-radius: 60px;
@@ -56,7 +58,7 @@ export const InputTitle = styled.p`
   height: 22px;
   margin-left: 16px;
   margin-bottom: 12px;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 export const InputCheck = styled.div`
@@ -102,7 +104,7 @@ export const FindBtn = styled.button`
   background-color: #0a58be;
   color: white;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
 `;
 export const FindedTitle = styled.div`
   height: 22px;
@@ -111,12 +113,12 @@ export const FindedTitle = styled.div`
 
 export const FindedName = styled.span`
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 export const FindedMent = styled.span`
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 export const FindedIDs = styled.p`
@@ -151,14 +153,14 @@ export const FindedIdBox = styled.div`
 export const FindedID = styled.p`
   text-align: center;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   margin: auto 12px 12px 12px;
 `;
 
 export const FindedDate = styled.p`
   margin-bottom: auto;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
 `;
 
 export const FindedBtnBox = styled.div`
@@ -175,7 +177,7 @@ export const FindedBtn = styled.button`
   background-color: #0a58be;
   color: white;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 export const ErrorBox = styled.div`

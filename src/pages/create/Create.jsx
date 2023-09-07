@@ -1,20 +1,91 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useCallback } from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
 import PlaceSearch from "../../components/place/PlaceSearch";
 import ImageUpload from "../../components/imageUpload/ImageUpload";
 import * as s from "./StyledCreate";
+// import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
+
+// export function useBlocker(blocker, when = true) {
+//   const { navigator } = useContext(NavigationContext);
+
+//   useEffect(() => {
+//     if (!when) return;
+
+//     const unblock = navigator.block((tx) => {
+//       const autoUnblockingTx = {
+//         ...tx,
+//         retry() {
+//           unblock();
+//           tx.retry();
+//         },
+//       };
+//       blocker(autoUnblockingTx);
+//     });
+//     return unblock;
+//   }, [navigator, blocker, when]);
+// }
+
+// export function usePrompt(message, when = true) {
+//   const blocker = useCallback(
+//     (tx) => {
+//       //   eslint-disable-next-line no-alert
+//       if (window.confirm(message)) tx.retry();
+//     },
+//     [message]
+//   );
+
+//   useBlocker(blocker, when);
+// }
+
+// import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
+
+// export function useBlocker(blocker, when = true) {
+//   const { navigator } = useContext(NavigationContext);
+
+//   useEffect(() => {
+//     if (!when) return;
+
+//     const unblock = navigator.block((tx) => {
+//       const autoUnblockingTx = {
+//         ...tx,
+//         retry() {
+//           unblock();
+//           tx.retry();
+//         },
+//       };
+//       blocker(autoUnblockingTx);
+//     });
+//     return unblock;
+//   }, [navigator, blocker, when]);
+// }
+
+// export function usePrompt(message, when = true) {
+//   const blocker = useCallback(
+//     (tx) => {
+//       //   eslint-disable-next-line no-alert
+//       if (window.confirm(message)) tx.retry();
+//     },
+//     [message]
+//   );
+
+//   useBlocker(blocker, when);
+// }
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
-  const [isLeavingPage, setIsLeavingPage] = useState(false);
   // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   useEffect(() => {
+    // console.log("mount");
     return () => {
+      // console.log("cleanup");
       window.scrollTo(0, 0);
     };
-  }, [isLeavingPage, post]);
+  }, [post]);
+
+  // usePrompt("현재 페이지를 벗어나시겠습니까?", true);
+
   return (
     <s.CreateContainer>
       <s.SelectBoxContainer>

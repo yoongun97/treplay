@@ -43,7 +43,7 @@ export const PhrasesBox = styled.div`
     margin-bottom: 12px;
     color: #222;
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 36px;
   }
 
@@ -51,7 +51,7 @@ export const PhrasesBox = styled.div`
     flex-grow: 1;
     color: #777777;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5;
 
     & > span {

@@ -370,7 +370,7 @@ function Signup() {
 
       <form>
         <s.InputBox>
-          <s.InputTitle>아이디(이메일): </s.InputTitle>
+          <s.InputTitle>아이디(이메일) </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
               type="email"
@@ -604,7 +604,12 @@ function Signup() {
                   checkboxHandler(1);
                 }}
               />
-              <s.AgreementSubtitle>이용약관(필수)</s.AgreementSubtitle>
+              <s.AgreementSubtitle>이용약관</s.AgreementSubtitle>
+              <s.AgreementSubtitle
+                style={{ color: "#E02918", marginLeft: "5px" }}
+              >
+                (필수)
+              </s.AgreementSubtitle>
             </s.AgreementSubtitleBox>
             <s.AgreementContentBox>
               <s.AgreementContent readOnly>
@@ -649,8 +654,11 @@ function Signup() {
                   checkboxHandler(2);
                 }}
               />
-              <s.AgreementSubtitle>
-                개인정보 수집 이용(필수)
+              <s.AgreementSubtitle>개인정보 수집 이용</s.AgreementSubtitle>
+              <s.AgreementSubtitle
+                style={{ color: "#E02918", marginLeft: "5px" }}
+              >
+                (필수)
               </s.AgreementSubtitle>
             </s.AgreementSubtitleBox>
             <s.AgreementContentBox>

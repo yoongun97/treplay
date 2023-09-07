@@ -31,12 +31,12 @@ export const EventBannerBox = styled.div`
   & > h4 {
     color: #fcd71e;
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 700;
   }
   & > p {
     color: #fff;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5;
   }
 `;
@@ -53,7 +53,7 @@ export const LinkBox = styled(Link)`
   border-radius: 30px;
   color: #fff;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   text-align: center;
   transition: 0.3s;
 

@@ -4,7 +4,7 @@ import MiddleBanner from './components/middleBanner/MiddleBanner';
 import Preview from './components/preview/Preview';
 import EventBanner from './components/eventBanner/EventBanner';
 import BestPlace from './components/bestPlace/BestPlace';
-import MainCarousel from '../../components/imageslide/nationpageSlide/MainCarousel';
+import NationCarousel from '../../components/imageslide/nationpageSlide/NationCarousel';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { useQuery } from 'react-query';
@@ -21,16 +21,28 @@ function NationPage() {
 
   const fetchData = async () => {
     const postsQ = query(collection(db, 'posts'));
-    const postsQuerySnapshot = await getDocs(postsQ);
-    const postsData = postsQuerySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
     const likedQ = query(collection(db, 'likes'));
-    const likedQuerySnapshot = await getDocs(likedQ);
-    const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
-    return { posts: postsData, allLikedData: likedData };
+
+    try {
+      const [postsQuerySnapshot, likedQuerySnapshot] = await Promise.all([
+        getDocs(postsQ),
+        getDocs(likedQ),
+      ]);
+
+      const postsData = postsQuerySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
+
+      return { posts: postsData, allLikedData: likedData };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
   };
+
   // 리액트 쿼리로 로딩/에러 처리
   const { data, isLoading, iserror, error } = useQuery('userData', fetchData);
 
@@ -47,7 +59,7 @@ function NationPage() {
 
   return (
     <div className="Container">
-      <MainCarousel />
+      <NationCarousel />
       <Category />
       <Preview
         posts={posts}

@@ -14,13 +14,13 @@ export const PhrasesContainer = styled.div`
 
   & > h2 {
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   & > h3 {
     margin: 20px 0 60px;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     color: #222;
   }
 `;
@@ -45,7 +45,7 @@ export const FilterContainer = styled.div`
     height: 34px;
     border-radius: 30px;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
   }
 `;
 export const OnButton = styled.button`
@@ -101,7 +101,7 @@ export const PostBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -111,7 +111,7 @@ export const PostBox = styled(Link)`
   & > p {
     padding-bottom: 8px;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 26px;
     color: #777;
   }

@@ -15,7 +15,7 @@ export const SearchBox = styled(Link)`
     outline: none;
     border: none;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     color: #222;
     width: 480px;
     height: 100%;
