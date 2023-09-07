@@ -21,8 +21,7 @@ const Edit = () => {
   const [editOneLineContent, setEditOneLineContent] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
-  //이미지 선택 이름,미리보기
-  const [, setSelectedFileNames] = useState([]);
+  //이미지 선택 미리보기
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   //장소와 카테고리 받기
   const [, setNation] = useState("");
@@ -75,16 +74,13 @@ const Edit = () => {
     setEditImage(files);
 
     const selectedImages = Array.from(e.target.files);
-    //이미지 선택 이름,미리보기
-    const fileNames = selectedImages.map((image) => image.name);
-    setSelectedFileNames(fileNames);
+    //이미지 선택 미리보기
 
     const previews = selectedImages.map((image) => URL.createObjectURL(image));
     setSelectedFilePreviews(previews);
   };
 
   const handleImageDelete = async (imageUrl) => {
-    console.log("Deleting image:", imageUrl);
     try {
       // 이미지 Storage에서 삭제
       const imageDelete = ref(storage, imageUrl);
@@ -100,6 +96,8 @@ const Edit = () => {
       // 컴포넌트의 상태 업데이트
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
+      // 추후 수정 필요
+      alert(error.code);
       console.error("이미지 삭제 오류:", error);
     }
   };
@@ -107,9 +105,6 @@ const Edit = () => {
   const handleImageDeletePreview = (index) => {
     setSelectedFilePreviews((prevPreviews) =>
       prevPreviews.filter((_, i) => i !== index)
-    );
-    setSelectedFileNames((prevNames) =>
-      prevNames.filter((_, i) => i !== index)
     );
     setEditImage((prevImages) => prevImages.filter((_, i) => i !== index));
   };
