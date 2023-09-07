@@ -663,7 +663,7 @@ function Signup() {
             </s.AgreementSubtitleBox>
             <s.AgreementContentBox>
               <s.AgreementContent readOnly>
-                김용택 / 달이 떴다고 전화를 주시다니요
+                김용택 / 달이 떴다고 전화를 주시다니요.
                 <br />
                 달이 떴다고 전화를 주시다니요
                 <br />

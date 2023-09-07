@@ -45,18 +45,19 @@ export const FilterContainer = styled.div`
     height: 34px;
     border-radius: 30px;
     font-size: 16px;
-    font-weight: 500;
   }
 `;
 export const OnButton = styled.button`
   border: 1px solid #0a58be;
   background-color: #0a58be;
   color: #fff;
+  font-weight: 500;
 `;
 export const OffButton = styled.button`
   border: 1px solid #e5e5e5;
   background-color: #fff;
   color: #bfbfbf;
+  font-weight: 400;
 `;
 export const WriteButton = styled(Link)`
   align-self: flex-end;

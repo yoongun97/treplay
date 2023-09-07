@@ -61,31 +61,31 @@ function CategoryPage() {
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   //또가요 , 북마크 , 최신순 정렬하기
-  const [sortOption, setSortOption] = useState('date');
+  const [sortOption, setSortOption] = useState("date");
 
   const queryClient = useQueryClient();
 
   const handleLikesSort = useCallback(() => {
-    queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
-    setSortOption('likes');
+    queryClient.invalidateQueries(["posts", category, currentPage, "likes"]);
+    setSortOption("likes");
   }, [queryClient, category, currentPage]);
 
   const handleDateSort = useCallback(() => {
-    queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
-    setSortOption('date');
+    queryClient.invalidateQueries(["posts", category, currentPage, "date"]);
+    setSortOption("date");
   }, [queryClient, category, currentPage]);
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
-      const totalSearchData = searchData.toLowerCase().replace(' ', '');
+      const totalSearchData = searchData.toLowerCase().replace(" ", "");
 
       const placeNameMatch = post.placeName
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
       const placeLocationMatch = post.placeLocation
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
@@ -115,7 +115,7 @@ function CategoryPage() {
 
         // likes의 정보 비동기로 가져오기
         const likesQuerySnapshot = await getDocs(
-          query(collection(db, 'likes'), where('postId', '==', post.id))
+          query(collection(db, "likes"), where("postId", "==", post.id))
         );
 
         post.likes = likesQuerySnapshot.size;
@@ -156,9 +156,9 @@ function CategoryPage() {
   };
 
   const sortPosts = (posts, sortOption) => {
-    if (sortOption === 'likes') {
+    if (sortOption === "likes") {
       return sortPostsByLikes(posts);
-    } else if (sortOption === 'date') {
+    } else if (sortOption === "date") {
       return sortPostsByDate(posts);
     }
     return posts;
@@ -168,7 +168,7 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(['posts', category, currentPage, sortOption], fetchPosts);
+  } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
   // 1. posts에 바로 데이터가 들어오나?
   // => No -> null
@@ -191,7 +191,7 @@ function CategoryPage() {
   }, [posts, sortOption, currentPage]);
 
   if (error) {
-    return Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' });
+    return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
 
   // if (isLoading) {
@@ -207,8 +207,8 @@ function CategoryPage() {
       </s.PhrasesContainer>
       <s.MiddleContainer>
         <s.FilterContainer>
-          {sortOption === 'date' ? (
-            <s.OnButton onClick={() => handleDateSort('date')}>
+          {sortOption === "date" ? (
+            <s.OnButton onClick={() => handleDateSort("date")} selected={true}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -216,7 +216,10 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton onClick={() => handleDateSort('date')}>
+            <s.OffButton
+              onClick={() => handleDateSort("date")}
+              selected={false}
+            >
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
@@ -224,8 +227,11 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OffButton>
           )}
-          {sortOption === 'likes' ? (
-            <s.OnButton onClick={() => handleLikesSort('likes')}>
+          {sortOption === "likes" ? (
+            <s.OnButton
+              onClick={() => handleLikesSort("likes")}
+              selected={true}
+            >
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -233,7 +239,10 @@ function CategoryPage() {
               <span>인기순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton onClick={() => handleLikesSort('likes')}>
+            <s.OffButton
+              onClick={() => handleLikesSort("likes")}
+              selected={false}
+            >
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
@@ -243,7 +252,7 @@ function CategoryPage() {
           )}
         </s.FilterContainer>
 
-        <s.WriteButton to={'/create'}>
+        <s.WriteButton to={"/create"}>
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
             alt="writing_icon"
