@@ -29,7 +29,7 @@ const Edit = () => {
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
-    const allowedExtensions = ["jpg", "png", "gif"];
+    const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
     const fileExtension = fileName.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension);
   }
@@ -62,7 +62,7 @@ const Edit = () => {
     const files = Array.from(e.target.files);
     for (const file of files) {
       if (!isImageFile(file.name)) {
-        alert("파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!");
+        alert("파일은 jpg, png, gif, jpeg 형식의 파일만 업로드 가능합니다!");
         return;
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
