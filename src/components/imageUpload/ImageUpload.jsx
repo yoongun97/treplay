@@ -21,7 +21,7 @@ function ImageUpload() {
   const date = new Date();
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
-  const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
+  const [selectedFilePreviews, setSelectedFilePreviews] = useState();
   const [, setSelectedFileNames] = useState([]);
 
   // 이미지 파일 확장자를 확인하는 함수
@@ -148,12 +148,37 @@ function ImageUpload() {
       </s.FileContainer>
       <s.PreviewImagesContainer>
         {/* edit페이지와 같은 로직 */}
-        {selectedFilePreviews.map((preview, index) => (
-          <s.ImageBox key={index}>
-            <img src={preview} alt={`미리보기${index + 1}`} />
-            <button onClick={() => handleImageDeletePreview(index)}>x</button>
-          </s.ImageBox>
-        ))}
+        {!!selectedFilePreviews ? (
+          selectedFilePreviews.map((preview, index) => (
+            <s.ImageBox key={index}>
+              <img src={preview} alt={`미리보기${index + 1}`} />
+              <button onClick={() => handleImageDeletePreview(index)}>x</button>
+            </s.ImageBox>
+          ))
+        ) : (
+          <>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+          </>
+        )}
       </s.PreviewImagesContainer>
       <s.SubmitButton onClick={handleUpload}>저장</s.SubmitButton>
     </>
