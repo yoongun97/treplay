@@ -120,5 +120,6 @@ export const PostBox = styled(Link)`
 export const ImageBox = styled.img`
   width: 380px;
   height: 380px;
+  border-radius: 30px;
   object-fit: cover;
 `;

@@ -5,7 +5,7 @@ export const MiddleBannerContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 140px 0;
-  background-color: #f2f8ff;
+  background-color: #fff;
 `;
 export const ImageBox = styled.div`
   width: 400px;
@@ -35,7 +35,7 @@ export const MiddleBannerPhrasesBox = styled.div`
   & > h3 {
     margin: 16px 0px 12px;
     color: #222;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 22px;
   }
 

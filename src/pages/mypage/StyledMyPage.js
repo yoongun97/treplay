@@ -36,8 +36,8 @@ export const ChangeButton = styled.div`
   /* selected가 현재 선택한 카테고리를 뜻함. 이게 true이면 파랗게 만듦 */
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
   color: ${(props) => (props.selected ? "#fff" : "#878d94")};
-  font-size: 24px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: ${(props) => (props.selected ? "400" : "300")};
   line-height: 54px;
   text-align: center;
   transition: 0.3s;

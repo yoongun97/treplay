@@ -49,13 +49,14 @@ function NationPage() {
     <div className="Container">
       <MainCarousel />
       <Category />
-      <MiddleBanner />
       <Preview
         posts={posts}
         allLikedData={allLikedData}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
+      <MiddleBanner />
+
       <EventBanner />
       <BestPlace posts={posts} allLikedData={allLikedData} />
     </div>
