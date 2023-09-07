@@ -20,8 +20,9 @@ function NationPage() {
   }, []);
 
   const fetchData = async () => {
-    const postsQ = query(collection(db, 'posts'));
-    const likedQ = query(collection(db, 'likes'));
+
+    const postsQ = query(collection(db, "posts"));
+    const likedQ = query(collection(db, "likes"));
 
     try {
       const [postsQuerySnapshot, likedQuerySnapshot] = await Promise.all([
@@ -39,6 +40,7 @@ function NationPage() {
       return { posts: postsData, allLikedData: likedData };
     } catch (error) {
       console.error('Error fetching data:', error);
+
       throw error;
     }
   };
