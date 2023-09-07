@@ -18,6 +18,8 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../../store/userAtom';
 import Swal from 'sweetalert2';
 
+const profileImage = `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`;
+
 function Comments({ id }) {
   const queryClient = useQueryClient();
 
@@ -27,6 +29,7 @@ function Comments({ id }) {
 
   const [, setComments] = useState([]);
   const currentUser = auth.currentUser;
+  console.log({ currentUser });
 
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedComment, setEditedComment] = useState('');
@@ -96,13 +99,15 @@ function Comments({ id }) {
         postId: id,
         userId: currentUser.uid,
         author: currentUser.displayName,
-        photoURL: currentUser.photoURL,
+        photoURL: currentUser.photoURL || null,
         createdAt: Timestamp.now(),
       };
+
       const docRef = await addDoc(collection(db, 'comments'), newComment);
       setComments([...post.comments, { id: docRef.id, ...newComment }]);
       setComment('');
       queryClient.invalidateQueries('post');
+      console.log({ newComment });
     } catch (error) {
       Swal.fire({ title: '댓글이 추가되지 않았습니다', icon: 'warning' });
     }
@@ -200,7 +205,11 @@ function Comments({ id }) {
                 </>
               ) : (
                 <>
-                  <img src={comment.photoURL} alt="프로필 이미지"></img>
+                  {comment.photoURL ? (
+                    <img src={comment.photoURL} alt="프로필 이미지" />
+                  ) : (
+                    <img src={profileImage} alt="기본 이미지" />
+                  )}
                   <s.TextContainer>
                     <p>{comment.author}</p>
                     {/* 줄 바꿈 함수 추가 */}
