@@ -31,8 +31,10 @@ function SelectBox() {
   };
   return (
     <StBox>
-      <DropdownWrapper>
+      <DropdownWrapper selected={selectedNation}>
         <DropdownHeader
+          selected={selectedNation}
+          isactive={isActive}
           onClick={() => {
             setIsActive(!isActive);
           }}
@@ -58,8 +60,10 @@ function SelectBox() {
           </DropdownList>
         )}
       </DropdownWrapper>
-      <DropdownWrapper>
+      <DropdownWrapper selected={selectedCategory}>
         <DropdownHeader
+          isactive={isActive1}
+          selected={selectedCategory}
           onClick={() => {
             setIsActive1(!isActive1);
           }}

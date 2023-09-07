@@ -23,7 +23,7 @@ function DetailPage() {
     isLoading,
     isError,
     error,
-  } = useQuery("post", async () => {
+  } = useQuery(["post", id], async () => {
     const postRef = doc(db, "posts", id);
     const docSnapshot = await getDoc(postRef);
 
