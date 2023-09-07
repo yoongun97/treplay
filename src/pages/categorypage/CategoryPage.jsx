@@ -64,35 +64,32 @@ function CategoryPage() {
       collection(db, 'posts'),
       where('nation', '==', nation),
       where('category', '==', category),
-      orderBy('date', 'desc'),
-      // startAfter(lastVisibleDoc),
-      limit(25)
+      orderBy('date', 'desc') //orderby를 위한 index생성했지만 오류
     );
-    console.log(lastVisibleDoc);
-    let postsData = [];
+    console.log(postsCollection);
     const querySnapshot = await getDocs(postsCollection);
-    console.log(querySnapshot);
-    if (querySnapshot.docs.length > 0) {
-      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-      setLastVisibleDoc(lastVisible);
 
-      postsData = await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          const post = {
-            ...doc.data(),
-            id: doc.id,
-          };
+    // 비동기 작업을 병렬로 처리하기 위해 Promise.all 사용
+    const postsData = await Promise.all(
+      querySnapshot.docs.map(async (doc) => {
+        const post = {
+          ...doc.data(),
+          id: doc.id,
+        };
 
-          const likesQuerySnapshot = await getDocs(
-            query(collection(db, 'likes'), where('postId', '==', post.id))
-          );
+        // likes의 정보 비동기로 가져오기
+        const likesQuerySnapshot = await getDocs(
+          query(collection(db, 'likes'), where('postId', '==', post.id))
+        );
 
-          post.likes = likesQuerySnapshot.size;
-          return post;
-        })
-      );
-    }
-    return postsData;
+        post.likes = likesQuerySnapshot.size;
+        return post;
+      })
+    );
+
+    const sortedPosts = sortPosts(postsData, sortOption);
+
+    return sortedPosts;
   };
 
   //최신순,인기순 모든데이터를 가져와서 sort 리패치
