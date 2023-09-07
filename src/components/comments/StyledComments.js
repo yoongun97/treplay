@@ -78,14 +78,14 @@ export const CommentBox = styled.div`
 export const TextContainer = styled.div`
   & > p:first-of-type {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 12px;
     color: #222;
   }
   & > p:last-of-type {
     color: #878d94;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 24px;
   }
 `;
@@ -96,7 +96,7 @@ export const EditTextArea = styled.textarea`
   border: 1px solid #e5e5e5;
   overflow: auto;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 20px;
   color: #222;
 `;
@@ -109,7 +109,7 @@ export const StartEditButtonContainer = styled.div`
     height: 28px;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
   }
   & > button:first-child {
     margin-right: 10px;
@@ -132,7 +132,7 @@ export const FinishEditButtonContainer = styled.div`
     height: 28px;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
   }
   & > button:first-child {
     margin-right: 10px;

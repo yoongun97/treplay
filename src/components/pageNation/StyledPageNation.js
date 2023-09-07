@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { styled } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ export const PageNumberButton = styled.div`
   width: 22px;
   height: 22px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: pointer;
 
   &.active {

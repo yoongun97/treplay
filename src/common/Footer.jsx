@@ -91,7 +91,7 @@ const LegacyBox = styled.div`
   & > a {
     padding: 0 10px;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     color: #777;
   }
 
@@ -132,7 +132,7 @@ const FooterMain = styled.div`
   & > h3 {
     padding: 10px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   & > div {
@@ -140,7 +140,7 @@ const FooterMain = styled.div`
     align-items: center;
     padding: 8px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
   }
 
   & > div > span {

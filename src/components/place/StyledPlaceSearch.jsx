@@ -18,7 +18,7 @@ export const SearchBox = styled.div`
     outline: none;
     border: none;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     color: #222;
     width: 480px;
     height: 100%;
@@ -70,13 +70,13 @@ export const ResultBox = styled.div`
   & > div > p:first-child {
     color: #222;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 24px;
   }
   & > div > p:last-child {
     color: #777;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 24px;
   }
 
@@ -114,13 +114,13 @@ export const SelectedResultBox = styled.div`
   & > div > p:first-child {
     color: #222;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 24px;
   }
   & > div > p:last-child {
     color: #777;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 24px;
   }
 `;

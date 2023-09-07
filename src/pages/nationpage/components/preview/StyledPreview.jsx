@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const PreviewContainer = styled.div`
-  margin: 140px auto;
+  padding: 140px 0;
   text-align: center;
+  background-color: #f2f8ff;
 `;
 
 export const CategoryButtonContainer = styled.div`
@@ -15,13 +16,13 @@ export const CategoryButtonContainer = styled.div`
 export const CategoryButton = styled.div`
   width: 130px;
   height: 54px;
-  margin: 60px 0 80px;
+  margin: 30px 0 80px;
 
   /* selected가 현재 선택한 카테고리를 뜻함. 이게 true이면 파랗게 만듦 */
   background-color: ${(props) => (props.selected ? "#0A58BE" : "#e4e8e9")};
   color: ${(props) => (props.selected ? "#fff" : "#878d94")};
   font-size: 20px;
-  font-weight: 400;
+  font-weight: ${(props) => (props.selected ? "500" : "400")};
   line-height: 54px;
   text-align: center;
   transition: 0.3s;
@@ -74,7 +75,7 @@ export const PreviewListBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,7 +85,7 @@ export const PreviewListBox = styled(Link)`
   & > p {
     padding-bottom: 8px;
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 26px;
     color: #777;
   }
@@ -110,7 +111,7 @@ export const LikesContainer = styled.div`
     display: flex;
     align-items: center;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   & > div > img {
@@ -131,7 +132,7 @@ export const LikesBox = styled.div`
     right: 0;
     width: 1px;
     height: 16px;
-    background-color: #222;
+    background-color: #777;
   }
 `;
 export const DislikesBox = styled.div`

@@ -11,9 +11,9 @@ import {
   query,
   where,
   updateDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import * as s from './StyledComments';
-import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../store/userAtom';
 import Swal from 'sweetalert2';
@@ -22,7 +22,6 @@ function Comments({ id }) {
   const queryClient = useQueryClient();
 
   const [user] = useAtom(userAtom);
-  const navigate = useNavigate();
 
   const [comment, setComment] = useState('');
 
@@ -98,6 +97,7 @@ function Comments({ id }) {
         userId: currentUser.uid,
         author: currentUser.displayName,
         photoURL: currentUser.photoURL,
+        createdAt: Timestamp.now(),
       };
       const docRef = await addDoc(collection(db, 'comments'), newComment);
       setComments([...post.comments, { id: docRef.id, ...newComment }]);
@@ -178,47 +178,52 @@ function Comments({ id }) {
         <input type="submit" value="등록" />
       </s.CommentInputForm>
       <s.CommentsContainer>
-        {post.comments?.map((comment) => (
-          <s.CommentBox key={comment.id}>
-            {editingCommentId === comment.id ? (
-              <>
-                <s.EditTextArea
-                  value={editedComment}
-                  onChange={updateEditedComment}
-                />
-                <s.FinishEditButtonContainer>
-                  <button onClick={() => saveEditedComment(comment.id)}>
-                    저장
-                  </button>
-                  <button onClick={cancelEditComment}>취소</button>
-                </s.FinishEditButtonContainer>
-              </>
-            ) : (
-              <>
-                <img src={comment.photoURL} alt="프로필 이미지"></img>
-                <s.TextContainer>
-                  <p>{comment.author}</p>
-                  {/* 줄 바꿈 함수 추가 */}
-                  <p>{lineChangeText(comment.comment)}</p>
-                  {currentUser && comment.userId === currentUser.uid && (
-                    <s.StartEditButtonContainer>
-                      <button
-                        onClick={() =>
-                          startEditComment(comment.id, comment.comment)
-                        }
-                      >
-                        수정
-                      </button>
-                      <button onClick={() => handleDeleteComment(comment.id)}>
-                        삭제
-                      </button>
-                    </s.StartEditButtonContainer>
-                  )}
-                </s.TextContainer>
-              </>
-            )}
-          </s.CommentBox>
-        ))}
+        {post.comments
+          ?.filter((comment) => comment.createdAt)
+          ?.sort((a, b) => {
+            return b.createdAt.toMillis() - a.createdAt.toMillis();
+          })
+          .map((comment) => (
+            <s.CommentBox key={comment.id}>
+              {editingCommentId === comment.id ? (
+                <>
+                  <s.EditTextArea
+                    value={editedComment}
+                    onChange={updateEditedComment}
+                  />
+                  <s.FinishEditButtonContainer>
+                    <button onClick={() => saveEditedComment(comment.id)}>
+                      저장
+                    </button>
+                    <button onClick={cancelEditComment}>취소</button>
+                  </s.FinishEditButtonContainer>
+                </>
+              ) : (
+                <>
+                  <img src={comment.photoURL} alt="프로필 이미지"></img>
+                  <s.TextContainer>
+                    <p>{comment.author}</p>
+                    {/* 줄 바꿈 함수 추가 */}
+                    <p>{lineChangeText(comment.comment)}</p>
+                    {currentUser && comment.userId === currentUser.uid && (
+                      <s.StartEditButtonContainer>
+                        <button
+                          onClick={() =>
+                            startEditComment(comment.id, comment.comment)
+                          }
+                        >
+                          수정
+                        </button>
+                        <button onClick={() => handleDeleteComment(comment.id)}>
+                          삭제
+                        </button>
+                      </s.StartEditButtonContainer>
+                    )}
+                  </s.TextContainer>
+                </>
+              )}
+            </s.CommentBox>
+          ))}
       </s.CommentsContainer>
     </s.Container>
   );

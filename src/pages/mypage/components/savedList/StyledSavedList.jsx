@@ -18,7 +18,7 @@ export const ListBox = styled(Link)`
   & > h4 {
     margin-top: 20px;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 26px;
     color: #222;
     overflow: hidden;
@@ -30,7 +30,7 @@ export const ListBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,7 +40,7 @@ export const ListBox = styled(Link)`
   & > p {
     padding-bottom: 8px;
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 26px;
     color: #777;
   }
@@ -61,12 +61,12 @@ export const LikesContainer = styled.div`
   height: 38px;
   padding: 0px 20px;
   border-radius: 10px;
-  border: 1px solid #222;
+  border: 1px solid #777;
   & > div {
     display: flex;
     align-items: center;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   & > div > img {
