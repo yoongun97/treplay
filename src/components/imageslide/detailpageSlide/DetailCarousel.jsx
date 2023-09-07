@@ -27,7 +27,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-function ImageCarousel({ postImgs }) {
+function DetailCarousel({ postImgs }) {
   const settings = {
     dots: true,
     infinite: true,
@@ -51,7 +51,7 @@ function ImageCarousel({ postImgs }) {
   );
 }
 
-export default ImageCarousel;
+export default DetailCarousel;
 
 const SliderContainer = styled.div`
   margin-bottom: 40px;
