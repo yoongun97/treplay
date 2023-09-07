@@ -14,7 +14,7 @@ function SampleArrow(props) {
   );
 }
 
-function MainCarousel() {
+function NationCarousel() {
   const settings = {
     dots: true,
     infinite: true,
@@ -62,7 +62,7 @@ function MainCarousel() {
   );
 }
 
-export default MainCarousel;
+export default NationCarousel;
 
 const StyledSlider = styled(Slider)`
   position: relative;
@@ -70,7 +70,7 @@ const StyledSlider = styled(Slider)`
   justify-content: center;
   & > div {
     width: 100%;
-    height: 100%;
+    height: 700px;
   }
 
   & > ul {

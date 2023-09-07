@@ -5,15 +5,14 @@ import {
   getDocs,
   query,
   where,
-
-} from "@firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { db } from "../../firebaseConfig";
-import { useParams } from "react-router";
-import { userAtom } from "../../store/userAtom";
-import { useAtom } from "jotai";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+} from '@firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../firebaseConfig';
+import { useParams } from 'react-router';
+import { userAtom } from '../../store/userAtom';
+import { useAtom } from 'jotai';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const Bookmark = () => {
   const { id } = useParams();
@@ -22,7 +21,7 @@ const Bookmark = () => {
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    const q = query(collection(db, "saved"), where("postId", "==", id));
+    const q = query(collection(db, 'saved'), where('postId', '==', id));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
 
@@ -61,10 +60,10 @@ const Bookmark = () => {
 
         setIsSaved(true);
 
-
-        return Swal.fire({ title: "북마크 저장 완료!", icon: "success" });
+        return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
       } else if (isSaved === true) {
-        const q = query(collection(db, "saved"), where("uid", "==", user.uid));
+        const q = query(collection(db, 'saved'), where('uid', '==', user.uid));
+
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot);
         querySnapshot.forEach(async (doc) => {
@@ -78,7 +77,6 @@ const Bookmark = () => {
 
         setIsSaved(false);
         return Swal.fire({ title: '북마크 취소 완료!', icon: 'success' });
-
       }
     }
 

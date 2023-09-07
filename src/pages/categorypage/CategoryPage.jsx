@@ -1,16 +1,59 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import PageNation from "../../components/pageNation/PageNation";
-import CategoryLikes from "./CategoryLikes";
-import Search from "../../components/search/Search";
-import * as s from "./StyledCategoryPage";
-import Swal from "sweetalert2";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from 'react-query';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import PageNation from '../../components/pageNation/PageNation';
+import CategoryLikes from './CategoryLikes';
+import Search from '../../components/search/Search';
+import * as s from './StyledCategoryPage';
+import Swal from 'sweetalert2';
+
+// 데이터베이스
+/**
+ * 1. 명동
+ * 2. 홍대
+ * 3. 서울대학교
+ * 4. 롯데월드
+ * 5. 연남동
+ * 6. 망원동
+ * 7. ddp
+ * 8. 롯데월드몰
+ * ...
+ * 1000000000000. 코엑스
+ */
+
+// 프론트엔드에서 요청한 데이터
+/**
+ * 1. 명동
+ * 2. 홍대
+ * 3. 서울대학교
+ * 4. 롯데월드
+ */
+
+// 지금 검색기능
+/**
+ * 명동
+ * -> 명동
+ *
+ * 홍대
+ * -> 홍대
+ *
+ * 롯데
+ * -> 검색 X
+ */
 
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
+
+/**
+ * 1. 검색어를 입력하고 검색 버튼을 누르면 검색 결과에 맞는 데이터를 가져온다
+ * 2. 최신순을 누르면 orderBy가 date
+ * 3. 인기순을 누르면 orderBy가 likes
+ * 4. 1페이지 -> limit(1, 3)
+ * 5. 2페이지 -> limit(4, 6)
+ * 6. startsAfter
+ */
 
 function CategoryPage() {
   const { nation, category } = useParams();
@@ -54,11 +97,12 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, "posts"),
-      where("nation", "==", nation),
-      where("category", "==", category)
+      collection(db, 'posts'),
+      where('nation', '==', nation),
+      where('category', '==', category),
+      orderBy('date', 'desc') //orderby를 위한 index생성했지만 오류
     );
-
+    console.log(postsCollection);
     const querySnapshot = await getDocs(postsCollection);
 
     // 비동기 작업을 병렬로 처리하기 위해 Promise.all 사용
@@ -85,7 +129,6 @@ function CategoryPage() {
   };
 
   //최신순,인기순 모든데이터를 가져와서 sort 리패치
-
   //또가요 , 북마크 , 최신순 정렬하기
   const sortPostsByLikes = (posts) => {
     // Likes 내림차순 정렬
@@ -127,6 +170,10 @@ function CategoryPage() {
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
+  // 1. posts에 바로 데이터가 들어오나?
+  // => No -> null
+  // 2. isLoading을 처음에 true로 만들어줌
+  // -> posts가 가져와지면 posts에 데이터가 들어가진다.
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -147,9 +194,9 @@ function CategoryPage() {
     return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
 
-  if (isLoading) {
-    return "정보를 가져오고 있습니다.";
-  }
+  // if (isLoading) {
+  //   return '정보를 가져오고 있습니다.';
+  // }
 
   return (
     <s.CategoryPageContainer>
@@ -215,11 +262,17 @@ function CategoryPage() {
       </s.MiddleContainer>
       <s.PostsContainer>
         {/* 아래에 처리 가능하다 위에 있는 에러등.. */}
-        {/* 이즈로딩 */}
-        {filteredPosts.length > 0 ? (
-          filteredPosts
-            .slice(0, 3) // 빈 문자열 조회시 갯수 상관없이 보여줘서 3개로 우선 자르기
-            .map((post) => (
+        {/* 이즈로딩 - 적용시 페이지네이션 부분 오류*/}
+        {isLoading ? <>로딩중입니다</> : null}
+        {error ? <>에러입니다</> : null}
+        {/* {error ? (
+          Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' })
+        ) : isLoading ? (
+          '정보를 가져오고 있습니다.'
+        ) : ( */}
+        <>
+          {filteredPosts.length > 0 ? (
+            filteredPosts.slice(0, 3).map((post) => (
               <div key={post.id}>
                 <s.PostBox to={`/detail/${post.id}`}>
                   <s.ImageBox alt="PostImgs" src={post.postImgs} />
@@ -233,13 +286,15 @@ function CategoryPage() {
                 </s.PostBox>
               </div>
             ))
-        ) : (
-          <div>결과가 없습니다.</div>
-        )}
+          ) : (
+            <div>결과가 없습니다.</div>
+          )}
+        </>
+        {/* )} */}
       </s.PostsContainer>
       <PageNation
         postsViewPage={POSTS_VIEW_PAGE}
-        totalPosts={posts.length}
+        totalPosts={posts ? posts.length : 0}
         currentPage={currentPage}
         pagenate={setCurrentPage} // 현재 페이지 업데이트 함수 전달
       />

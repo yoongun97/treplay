@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import * as s from './StyledSearch';
-import Swal from 'sweetalert2';
+import React, { useState } from "react";
+import * as s from "./StyledSearch";
+import Swal from "sweetalert2";
 
 const Search = ({ onSearch }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   const handleSearchInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onSearch(search);
       if (search.trim().length === 0) {
-        Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
+        Swal.fire({ title: "한 글자 이상 입력해주세요", icon: "warning" });
       } else {
         onSearch(search);
       }
@@ -23,7 +23,7 @@ const Search = ({ onSearch }) => {
   const handleSearch = () => {
     onSearch(search);
     if (search.trim().length === 0) {
-      Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
+      Swal.fire({ title: "한 글자 이상 입력해주세요", icon: "warning" });
     } else {
       onSearch(search);
     }
@@ -33,7 +33,7 @@ const Search = ({ onSearch }) => {
     <>
       <s.SearchBox>
         <input
-          placeholder="찾으시는 장소를 검색해주세요"
+          placeholder="찾으시는 장소명이나 주소를 검색해주세요"
           value={search}
           onChange={handleSearchInputChange}
           onKeyDown={handleSearchInputKeyDown}

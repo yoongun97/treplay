@@ -23,31 +23,33 @@ const PageNation = ({ postsViewPage, totalPosts, currentPage, pagenate }) => {
 
   return (
     <>
-      <s.Container>
-        {currentPage !== 1 ? (
-          <s.PrevButton onClick={prevPage}></s.PrevButton>
-        ) : (
-          <s.DummyButton></s.DummyButton>
-        )}
-        {totalPages > 0 ? (
-          <s.PageNumberContianer>
-            {pageNumber.map((number) => (
-              <s.PageNumberButton
-                key={number}
-                onClick={() => pagenate(number)}
-                className={currentPage === number ? 'active' : ''}
-              >
-                {number}
-              </s.PageNumberButton>
-            ))}
-          </s.PageNumberContianer>
-        ) : null}
-        {currentPage !== totalPages ? (
-          <s.NextButton onClick={nextPage}></s.NextButton>
-        ) : (
-          <s.DummyButton></s.DummyButton>
-        )}
-      </s.Container>
+      {totalPosts > 0 && (
+        <s.Container>
+          {currentPage !== 1 ? (
+            <s.PrevButton onClick={prevPage}></s.PrevButton>
+          ) : (
+            <s.DummyButton></s.DummyButton>
+          )}
+          {totalPages > 0 ? (
+            <s.PageNumberContianer>
+              {pageNumber.map((number) => (
+                <s.PageNumberButton
+                  key={number}
+                  onClick={() => pagenate(number)}
+                  className={currentPage === number ? 'active' : ''}
+                >
+                  {number}
+                </s.PageNumberButton>
+              ))}
+            </s.PageNumberContianer>
+          ) : null}
+          {currentPage !== totalPages ? (
+            <s.NextButton onClick={nextPage}></s.NextButton>
+          ) : (
+            <s.DummyButton></s.DummyButton>
+          )}
+        </s.Container>
+      )}
       {totalPages > 0 && (
         <s.PageInfo>
           <span>{`총 ${totalPages}페이지 중 ${currentPage}페이지 입니다.`}</span>
