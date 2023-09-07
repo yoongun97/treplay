@@ -222,6 +222,7 @@ export const AgreementContentBox = styled.div`
   width: 500px;
   height: 110px;
   padding: 16px;
+  padding-right: 5px;
   border: 1px solid #e5e5e5;
 `;
 
@@ -230,12 +231,14 @@ export const AgreementContent = styled.p`
   width: 100%;
   font-size: 12px;
   color: #777777;
-  overflow: auto;
+  overflow-y: scroll;
+  padding-right: 15px;
   &::-webkit-scrollbar {
-    width: 3px; /* 스크롤바의 너비 */
+    width: 2px; /* 스크롤바의 너비 */
   }
   &::-webkit-scrollbar-thumb {
     background-color: #d9d9d9; /* 스크롤바의 색상 */
+    border-radius: 30px;
   }
 `;
 

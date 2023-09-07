@@ -20,6 +20,9 @@ export const SearchBox = styled(Link)`
     width: 480px;
     height: 100%;
     background: transparent;
+    &::placeholder {
+      color: #bfbfbf;
+    }
   }
 
   & > div {

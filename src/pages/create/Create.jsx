@@ -1,90 +1,48 @@
-import React, { useEffect, useContext, useCallback } from "react";
+import React, { useEffect, useRef } from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
 import PlaceSearch from "../../components/place/PlaceSearch";
 import ImageUpload from "../../components/imageUpload/ImageUpload";
 import * as s from "./StyledCreate";
-// import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
-
-// export function useBlocker(blocker, when = true) {
-//   const { navigator } = useContext(NavigationContext);
-
-//   useEffect(() => {
-//     if (!when) return;
-
-//     const unblock = navigator.block((tx) => {
-//       const autoUnblockingTx = {
-//         ...tx,
-//         retry() {
-//           unblock();
-//           tx.retry();
-//         },
-//       };
-//       blocker(autoUnblockingTx);
-//     });
-//     return unblock;
-//   }, [navigator, blocker, when]);
-// }
-
-// export function usePrompt(message, when = true) {
-//   const blocker = useCallback(
-//     (tx) => {
-//       //   eslint-disable-next-line no-alert
-//       if (window.confirm(message)) tx.retry();
-//     },
-//     [message]
-//   );
-
-//   useBlocker(blocker, when);
-// }
-
-// import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
-
-// export function useBlocker(blocker, when = true) {
-//   const { navigator } = useContext(NavigationContext);
-
-//   useEffect(() => {
-//     if (!when) return;
-
-//     const unblock = navigator.block((tx) => {
-//       const autoUnblockingTx = {
-//         ...tx,
-//         retry() {
-//           unblock();
-//           tx.retry();
-//         },
-//       };
-//       blocker(autoUnblockingTx);
-//     });
-//     return unblock;
-//   }, [navigator, blocker, when]);
-// }
-
-// export function usePrompt(message, when = true) {
-//   const blocker = useCallback(
-//     (tx) => {
-//       //   eslint-disable-next-line no-alert
-//       if (window.confirm(message)) tx.retry();
-//     },
-//     [message]
-//   );
-
-//   useBlocker(blocker, when);
-// }
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
-  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
-  useEffect(() => {
-    // console.log("mount");
-    return () => {
-      // console.log("cleanup");
-      window.scrollTo(0, 0);
-    };
-  }, [post]);
+  const isUnmounted = useRef(false); // useRef로 페이지 상태 관리
 
-  // usePrompt("현재 페이지를 벗어나시겠습니까?", true);
+  // // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
+  // useEffect(() => {
+  //   const unmountAlert = () => {
+  //     console.log(post.nation);
+  //     if (
+  //       isUnmounted.current &&
+  //       post.nation !== ""
+  //       // &&
+  //       // (post.nation !== "" ||
+  //       //   post.category !== "" ||
+  //       //   post.placeName !== "" ||
+  //       //   post.postContent !== "" ||
+  //       //   post.postOneLineContent !== "" ||
+  //       //   post.postImgs.length !== 0)
+  //     ) {
+  //       // 페이지가 언마운트되지 않은 경우에만 alert 띄우기
+  //       alert("페이지를 나가시겠습니까?");
+  //       // confirm으로 바꾸고
+  //       // 나가면 post의 내용들 초기화
+  //     }
+  //   };
+
+  //   // 페이지가 언마운트 될 때만 alert 띄우기
+  //   return unmountAlert;
+  // }, [post]);
+
+  // 컴포넌트가 언마운트 될 때 페이지 상태를 업데이트
+  useEffect(() => {
+    return () => {
+      // isUnmounted.current = true;
+      // window.scrollTo(0, 0);
+    };
+  }, []);
 
   return (
     <s.CreateContainer>
