@@ -31,7 +31,7 @@ function SelectBox() {
   };
   return (
     <StBox>
-      <DropdownWrapper selected={selectedNation}>
+      <DropdownWrapper selected={selectedNation} isactive={isActive.toString()}>
         <DropdownHeader
           selected={selectedNation}
           isactive={isActive.toString()}
@@ -60,7 +60,10 @@ function SelectBox() {
           </DropdownList>
         )}
       </DropdownWrapper>
-      <DropdownWrapper selected={selectedCategory}>
+      <DropdownWrapper
+        selected={selectedCategory}
+        isactive={isActive1.toString()}
+      >
         <DropdownHeader
           isactive={isActive1.toString()}
           selected={selectedCategory}
