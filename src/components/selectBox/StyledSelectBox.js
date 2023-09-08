@@ -9,7 +9,8 @@ export const StBox = styled.div`
 `;
 export const DropdownWrapper = styled.div`
   width: 220px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid
+    ${(props) => (props.isactive === "true" ? "#e5e5e5" : "transparent")};
   border-top: none;
 `;
 export const DropdownHeader = styled.div`
