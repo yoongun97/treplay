@@ -10,7 +10,7 @@ import {
 } from "./StyledSelectBox";
 
 function SelectBox() {
-  const nations = ["미국", "일본", "한국"];
+  const nations = ["미국", "일본", "한국", "호주", "태국", "대만"];
   const category = ["맛집", "관광명소", "숙박"];
   const [isActive, setIsActive] = useState(false);
   const [isActive1, setIsActive1] = useState(false);

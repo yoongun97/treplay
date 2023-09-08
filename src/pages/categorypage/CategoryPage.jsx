@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  limit,
+} from "firebase/firestore";
+
 import { db } from "../../firebaseConfig";
 import PageNation from "../../components/pageNation/PageNation";
 import CategoryLikes from "./CategoryLikes";
 import Search from "../../components/search/Search";
 import * as s from "./StyledCategoryPage";
 import Swal from "sweetalert2";
-
+//콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
 function CategoryPage() {
@@ -16,6 +24,7 @@ function CategoryPage() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
+  const [lastVisibleDoc, setLastVisibleDoc] = useState(null);
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState("date");
 
@@ -142,16 +151,16 @@ function CategoryPage() {
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
       const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
+      if (currentPosts.length > 0) {
+        const lastPost = currentPosts[currentPosts.length - 1];
+        setLastVisibleDoc(lastPost);
+      }
     }
   }, [posts, sortOption, currentPage]);
 
   if (error) {
     return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
-
-  // if (isLoading) {
-  //   return '정보를 가져오고 있습니다.';
-  // }
 
   return (
     <s.CategoryPageContainer>
@@ -220,11 +229,6 @@ function CategoryPage() {
         {/* 이즈로딩 - 적용시 페이지네이션 부분 오류*/}
         {isLoading ? <>로딩중입니다</> : null}
         {error ? <>에러입니다</> : null}
-        {/* {error ? (
-          Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' })
-        ) : isLoading ? (
-          '정보를 가져오고 있습니다.'
-        ) : ( */}
         <>
           {filteredPosts.length > 0 ? (
             filteredPosts.slice(0, 3).map((post) => (
