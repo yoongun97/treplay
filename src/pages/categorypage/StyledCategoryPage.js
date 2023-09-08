@@ -90,7 +90,7 @@ export const PostBox = styled(Link)`
   & > h4 {
     margin-top: 20px;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 26px;
     color: #222;
     overflow: hidden;
@@ -102,7 +102,7 @@ export const PostBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;
