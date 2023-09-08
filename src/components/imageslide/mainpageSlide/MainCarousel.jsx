@@ -32,14 +32,14 @@ export default function MainCarousel() {
           <StyledButton3 to={"/미국"}>
             <span>미국</span>
           </StyledButton3>
-          <StyledButton4 to={"/한국"}>
-            <span>한국2</span>
+          <StyledButton4 to={"/호주"}>
+            <span>호주</span>
           </StyledButton4>
-          <StyledButton5 to={"/일본"}>
-            <span>일본2</span>
+          <StyledButton5 to={"/태국"}>
+            <span>태국</span>
           </StyledButton5>
-          <StyledButton6 to={"/미국"}>
-            <span>미국2</span>
+          <StyledButton6 to={"/대만"}>
+            <span>대만</span>
           </StyledButton6>
         </StyledSlider>
       </NationContainer>
@@ -124,15 +124,15 @@ const StyledButton3 = styled(Link)`
   background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
 `;
 const StyledButton4 = styled(Link)`
-  background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
+  background-image: url(${process.env.PUBLIC_URL}/image/australia.jpg);
 `;
 
 const StyledButton5 = styled(Link)`
-  background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
+  background-image: url(${process.env.PUBLIC_URL}/image/thailand.jpg);
 `;
 
 const StyledButton6 = styled(Link)`
-  background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
+  background-image: url(${process.env.PUBLIC_URL}/image/taiwan.jpg);
 `;
 
 const PrevButton = styled.div`
