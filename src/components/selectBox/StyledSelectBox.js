@@ -20,7 +20,8 @@ export const DropdownHeader = styled.div`
   padding: 6px 12px;
   line-height: 46px;
   border: 1px solid
-    ${(props) => (props.selected || props.isactive ? "#0A58BE" : "#e5e5e5")};
+    ${(props) =>
+      props.selected || props.isactive === "true" ? "#0A58BE" : "#e5e5e5"};
   color: ${(props) => (props.selected ? "#0a58be" : "#bfbfbf")};
 `;
 export const DropdownList = styled.div`

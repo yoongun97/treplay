@@ -34,7 +34,7 @@ function SelectBox() {
       <DropdownWrapper selected={selectedNation}>
         <DropdownHeader
           selected={selectedNation}
-          isactive={isActive}
+          isactive={isActive.toString()}
           onClick={() => {
             setIsActive(!isActive);
           }}
@@ -62,7 +62,7 @@ function SelectBox() {
       </DropdownWrapper>
       <DropdownWrapper selected={selectedCategory}>
         <DropdownHeader
-          isactive={isActive1}
+          isactive={isActive1.toString()}
           selected={selectedCategory}
           onClick={() => {
             setIsActive1(!isActive1);

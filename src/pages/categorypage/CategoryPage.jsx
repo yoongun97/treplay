@@ -1,59 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery, useQueryClient } from 'react-query';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import PageNation from '../../components/pageNation/PageNation';
-import CategoryLikes from './CategoryLikes';
-import Search from '../../components/search/Search';
-import * as s from './StyledCategoryPage';
-import Swal from 'sweetalert2';
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import PageNation from "../../components/pageNation/PageNation";
+import CategoryLikes from "./CategoryLikes";
+import Search from "../../components/search/Search";
+import * as s from "./StyledCategoryPage";
+import Swal from "sweetalert2";
 
-// 데이터베이스
-/**
- * 1. 명동
- * 2. 홍대
- * 3. 서울대학교
- * 4. 롯데월드
- * 5. 연남동
- * 6. 망원동
- * 7. ddp
- * 8. 롯데월드몰
- * ...
- * 1000000000000. 코엑스
- */
-
-// 프론트엔드에서 요청한 데이터
-/**
- * 1. 명동
- * 2. 홍대
- * 3. 서울대학교
- * 4. 롯데월드
- */
-
-// 지금 검색기능
-/**
- * 명동
- * -> 명동
- *
- * 홍대
- * -> 홍대
- *
- * 롯데
- * -> 검색 X
- */
-
-//콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
-
-/**
- * 1. 검색어를 입력하고 검색 버튼을 누르면 검색 결과에 맞는 데이터를 가져온다
- * 2. 최신순을 누르면 orderBy가 date
- * 3. 인기순을 누르면 orderBy가 likes
- * 4. 1페이지 -> limit(1, 3)
- * 5. 2페이지 -> limit(4, 6)
- * 6. startsAfter
- */
 
 function CategoryPage() {
   const { nation, category } = useParams();
@@ -97,12 +53,11 @@ function CategoryPage() {
 
   const fetchPosts = async () => {
     const postsCollection = query(
-      collection(db, 'posts'),
-      where('nation', '==', nation),
-      where('category', '==', category),
-      orderBy('date', 'desc') //orderby를 위한 index생성했지만 오류
+      collection(db, "posts"),
+      where("nation", "==", nation),
+      where("category", "==", category),
+      orderBy("date", "desc") //orderby를 위한 index생성했지만 오류
     );
-    console.log(postsCollection);
     const querySnapshot = await getDocs(postsCollection);
 
     // 비동기 작업을 병렬로 처리하기 위해 Promise.all 사용
