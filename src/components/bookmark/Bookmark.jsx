@@ -63,7 +63,6 @@ const Bookmark = () => {
         return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
       } else if (isSaved === true) {
         const q = query(collection(db, 'saved'), where('uid', '==', user.uid));
-
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot);
         querySnapshot.forEach(async (doc) => {
@@ -79,27 +78,27 @@ const Bookmark = () => {
         return Swal.fire({ title: '북마크 취소 완료!', icon: 'success' });
       }
     }
-
-    return (
-      <button
-        onClick={(e) => {
-          bookmarkHandler(e);
-        }}
-      >
-        {isSaved ? (
-          <img
-            src={`${process.env.PUBLIC_URL}/icon/bookmark_icon_black.svg`}
-            alt="bookmark_icon"
-          ></img>
-        ) : (
-          <img
-            src={`${process.env.PUBLIC_URL}/icon/bookmark_icon.svg`}
-            alt="bookmark_icon"
-          ></img>
-        )}
-      </button>
-    );
   };
+
+  return (
+    <button
+      onClick={(e) => {
+        bookmarkHandler(e);
+      }}
+    >
+      {isSaved ? (
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/bookmark_icon_black.svg`}
+          alt="bookmark_icon"
+        ></img>
+      ) : (
+        <img
+          src={`${process.env.PUBLIC_URL}/icon/bookmark_icon.svg`}
+          alt="bookmark_icon"
+        ></img>
+      )}
+    </button>
+  );
 };
 
 export default Bookmark;
