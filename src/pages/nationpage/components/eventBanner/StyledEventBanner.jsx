@@ -32,6 +32,7 @@ export const EventBannerBox = styled.div`
     color: #fcd71e;
     font-size: 24px;
     font-weight: 700;
+    margin-bottom: -20px;
   }
   & > p {
     color: #fff;
