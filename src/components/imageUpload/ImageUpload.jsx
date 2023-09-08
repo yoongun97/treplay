@@ -1,15 +1,15 @@
-import { getDownloadURL, uploadBytes, ref } from 'firebase/storage';
-import { storage, auth } from '../../firebaseConfig';
-import React, { useState } from 'react';
-import { useAtom } from 'jotai';
-import { postAtom } from '../../store/postAtom';
-import { useMutation } from 'react-query';
-import { userAtom } from '../../store/userAtom';
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import { useNavigate } from 'react-router-dom';
-import * as s from './StyledImageUpload';
-import Swal from 'sweetalert2';
+import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { storage, auth } from "../../firebaseConfig";
+import React, { useState } from "react";
+import { useAtom } from "jotai";
+import { postAtom } from "../../store/postAtom";
+import { useMutation } from "react-query";
+import { userAtom } from "../../store/userAtom";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import * as s from "./StyledImageUpload";
+import Swal from "sweetalert2";
 
 const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
@@ -21,13 +21,13 @@ function ImageUpload() {
   const date = new Date();
   const navigate = useNavigate();
   //이미지 선택 이름,미리보기
-  const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
+  const [selectedFilePreviews, setSelectedFilePreviews] = useState();
   const [, setSelectedFileNames] = useState([]);
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
-    const allowedExtensions = ['jpg', 'png', 'gif'];
-    const fileExtension = fileName.split('.').pop().toLowerCase();
+    const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
+    const fileExtension = fileName.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension);
   }
 
@@ -36,7 +36,7 @@ function ImageUpload() {
     const files = Array.from(e.target.files);
     for (const file of files) {
       if (!isImageFile(file.name)) {
-        alert('파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!');
+        alert("파일은 jpg, png, jpeg, gif 형식의 파일만 업로드 가능합니다!");
         return;
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -67,18 +67,18 @@ function ImageUpload() {
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    if (post.nation === '') {
-      Swal.fire({ title: '나라를 선택해주세요.', icon: 'warning' });
-    } else if (post.category === '') {
-      Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
-    } else if (post.category === '') {
-      Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
-    } else if (post.placeName === '') {
-      Swal.fire({ title: '장소를 선택해주세요.', icon: 'warning' });
-    } else if (post.postContent === '') {
-      Swal.fire({ title: '내용을 입력해주세요.', icon: 'warning' });
+    if (post.nation === "") {
+      Swal.fire({ title: "나라를 선택해주세요.", icon: "warning" });
+    } else if (post.category === "") {
+      Swal.fire({ title: "카테고리를 선택해주세요.", icon: "warning" });
+    } else if (post.category === "") {
+      Swal.fire({ title: "카테고리를 선택해주세요.", icon: "warning" });
+    } else if (post.placeName === "") {
+      Swal.fire({ title: "장소를 선택해주세요.", icon: "warning" });
+    } else if (post.postContent === "") {
+      Swal.fire({ title: "내용을 입력해주세요.", icon: "warning" });
     } else if (selectedFiles.length === 0) {
-      Swal.fire({ title: '파일을 선택해주세요.', icon: 'warning' });
+      Swal.fire({ title: "파일을 선택해주세요.", icon: "warning" });
     } else {
       const newDownloadURLs = []; // 새로운 downloadURL 배열 생성
 
@@ -101,7 +101,7 @@ function ImageUpload() {
 
       // 업로드 후 선택한 파일 목록 초기화
       setSelectedFiles([]);
-      document.getElementById('file-input').value = ''; // 파일 선택 초기화
+      document.getElementById("file-input").value = ""; // 파일 선택 초기화
     }
   };
 
@@ -114,7 +114,7 @@ function ImageUpload() {
     };
 
     // Firestore에서 'posts' 컬렉션에 대한 참조 생성하기
-    const collectionRef = collection(db, 'posts');
+    const collectionRef = collection(db, "posts");
     // 'posts' 컬렉션에 newPost 문서를 추가합니다.
     const docRef = await addDoc(collectionRef, newPost);
 
@@ -148,12 +148,37 @@ function ImageUpload() {
       </s.FileContainer>
       <s.PreviewImagesContainer>
         {/* edit페이지와 같은 로직 */}
-        {selectedFilePreviews.map((preview, index) => (
-          <s.ImageBox key={index}>
-            <img src={preview} alt={`미리보기${index + 1}`} />
-            <button onClick={() => handleImageDeletePreview(index)}>x</button>
-          </s.ImageBox>
-        ))}
+        {!!selectedFilePreviews ? (
+          selectedFilePreviews.map((preview, index) => (
+            <s.ImageBox key={index}>
+              <img src={preview} alt={`미리보기${index + 1}`} />
+              <button onClick={() => handleImageDeletePreview(index)}>x</button>
+            </s.ImageBox>
+          ))
+        ) : (
+          <>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+            <s.NoImageBox>
+              이미지를
+              <br /> 첨부해주세요.
+            </s.NoImageBox>
+          </>
+        )}
       </s.PreviewImagesContainer>
       <s.SubmitButton onClick={handleUpload}>저장</s.SubmitButton>
     </>

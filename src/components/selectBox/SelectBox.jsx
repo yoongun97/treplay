@@ -10,7 +10,7 @@ import {
 } from "./StyledSelectBox";
 
 function SelectBox() {
-  const nations = ["미국", "일본", "한국"];
+  const nations = ["미국", "일본", "한국", "호주", "태국", "대만"];
   const category = ["맛집", "관광명소", "숙박"];
   const [isActive, setIsActive] = useState(false);
   const [isActive1, setIsActive1] = useState(false);
@@ -31,8 +31,10 @@ function SelectBox() {
   };
   return (
     <StBox>
-      <DropdownWrapper>
+      <DropdownWrapper selected={selectedNation} isactive={isActive.toString()}>
         <DropdownHeader
+          selected={selectedNation}
+          isactive={isActive.toString()}
           onClick={() => {
             setIsActive(!isActive);
           }}
@@ -58,8 +60,13 @@ function SelectBox() {
           </DropdownList>
         )}
       </DropdownWrapper>
-      <DropdownWrapper>
+      <DropdownWrapper
+        selected={selectedCategory}
+        isactive={isActive1.toString()}
+      >
         <DropdownHeader
+          isactive={isActive1.toString()}
+          selected={selectedCategory}
           onClick={() => {
             setIsActive1(!isActive1);
           }}
