@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import PlaceMap from "../../components/place/PlaceMap";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
-import Likes from "../../components/likes/Likes";
-import Bookmark from "../../components/bookmark/Bookmark";
-import Comments from "../../components/comments/Comments";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
-import DetailCarousel from "../../components/imageslide/detailpageSlide/DetailCarousel";
-import * as s from "./StyledDetailPage";
-import Swal from "sweetalert2";
+import React, { useEffect } from 'react';
+import PlaceMap from '../../components/place/PlaceMap';
+import { deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import Likes from '../../components/likes/Likes';
+import Bookmark from '../../components/bookmark/Bookmark';
+import Comments from '../../components/comments/Comments';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../store/userAtom';
+import DetailCarousel from '../../components/imageslide/detailpageSlide/DetailCarousel';
+import * as s from './StyledDetailPage';
+import Swal from 'sweetalert2';
 
 function DetailPage() {
   const { id } = useParams();
@@ -25,12 +25,13 @@ function DetailPage() {
     error,
   } = useQuery(["post", id], async () => {
     const postRef = doc(db, "posts", id);
-    const docSnapshot = await getDoc(postRef);
 
+    const docSnapshot = await getDoc(postRef);
+    console.log({ docSnapshot });
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() };
     } else {
-      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
+      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
     }
   });
 
@@ -38,12 +39,12 @@ function DetailPage() {
   const copyUrl = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      Swal.fire({ title: "링크가 복사되었습니다.", icon: "success" });
+      Swal.fire({ title: '링크가 복사되었습니다.', icon: 'success' });
     } catch (error) {
-      console.error("링크 복사 중 오류 발생:", error);
+      console.error('링크 복사 중 오류 발생:', error);
       Swal.fire({
-        title: "링크 복사 중 오류가 발생했습니다.",
-        icon: "warning",
+        title: '링크 복사 중 오류가 발생했습니다.',
+        icon: 'warning',
       });
     }
   };
@@ -51,18 +52,18 @@ function DetailPage() {
   // 게시물 삭제
   const deleteMutation = useMutation(async (post) => {
     const result = await Swal.fire({
-      title: "정말 삭제하시겠습니까?",
-      icon: "warning",
+      title: '정말 삭제하시겠습니까?',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: "예",
-      cancelButtonText: "아니오",
+      confirmButtonText: '예',
+      cancelButtonText: '아니오',
     });
 
     if (result.isConfirmed) {
-      const postRef = doc(db, "posts", post.id);
+      const postRef = doc(db, 'posts', post.id);
       await deleteDoc(postRef);
       navigate(-1);
-      return Swal.fire({ title: "글이 삭제되었습니다!", icon: "success" });
+      return Swal.fire({ title: '글이 삭제되었습니다!', icon: 'success' });
     } else {
       return;
     }
@@ -85,23 +86,23 @@ function DetailPage() {
 
   const date = post?.date.toDate();
   const dateOptions = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   };
 
   const timeOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   };
 
-  const postDate = date.toLocaleString("ja-KR", dateOptions);
-  const postTime = date.toLocaleString("en-KR", timeOptions);
+  const postDate = date.toLocaleString('ja-KR', dateOptions);
+  const postTime = date.toLocaleString('en-KR', timeOptions);
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
-    return text.split("\n").map((line, index) => (
+    return text.split('\n').map((line, index) => (
       <span key={index}>
         {line}
         <br />

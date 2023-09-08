@@ -22,15 +22,10 @@ const profileImage = `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`;
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
-
   const [user] = useAtom(userAtom);
-
   const [comment, setComment] = useState('');
-
-  const [, setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
-  console.log({ currentUser });
-
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedComment, setEditedComment] = useState('');
 
@@ -53,12 +48,14 @@ function Comments({ id }) {
       commentsSnapshot.forEach((doc) => {
         commentsData.push({ id: doc.id, ...doc.data() });
       });
+      setComments(commentsData);
 
       return {
         id: docSnapshot.id,
         ...docSnapshot.data(),
         comments: commentsData,
         //firebase 에서 댓글 불러오기
+        staleTIme: Infinity,
       };
     } else {
       throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
@@ -104,10 +101,10 @@ function Comments({ id }) {
       };
 
       const docRef = await addDoc(collection(db, 'comments'), newComment);
-      setComments([...post.comments, { id: docRef.id, ...newComment }]);
+      setComments([...comments, { id: docRef.id, ...newComment }]);
+      // setComments([...post.comments, { id: docRef.id, ...newComment }]);
       setComment('');
       queryClient.invalidateQueries('post');
-      console.log({ newComment });
     } catch (error) {
       Swal.fire({ title: '댓글이 추가되지 않았습니다', icon: 'warning' });
     }
@@ -125,9 +122,10 @@ function Comments({ id }) {
     if (result.isConfirmed) {
       try {
         await deleteDoc(doc(db, 'comments', commentId));
-        setComments(
-          post.comments.filter((comment) => comment.id !== commentId)
-        );
+        // setComments(
+        //   post.comments.filter((comment) => comment.id !== commentId)
+        // );
+        setComments(comments.filter((comment) => comment.id !== commentId));
         queryClient.invalidateQueries('post');
       } catch (error) {
         Swal.fire({ title: '댓글이 삭제되지 않았습니다', icon: 'warning' });
@@ -183,7 +181,8 @@ function Comments({ id }) {
         <input type="submit" value="등록" />
       </s.CommentInputForm>
       <s.CommentsContainer>
-        {post.comments
+        {/* {post.comments */}
+        {comments
           ?.filter((comment) => comment.createdAt)
           ?.sort((a, b) => {
             return b.createdAt.toMillis() - a.createdAt.toMillis();
