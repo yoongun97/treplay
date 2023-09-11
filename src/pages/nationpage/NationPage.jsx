@@ -7,8 +7,8 @@ import BestPlace from "./components/bestPlace/BestPlace";
 import NationCarousel from "../../components/imageslide/nationpageSlide/NationCarousel";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import { useQuery } from "react-query";
-import Swal from "sweetalert2";
+// import { useQuery } from "react-query";
+// import Swal from "sweetalert2";
 
 function NationPage() {
   const [selectedCategory, setSelectedCategory] = useState("숙박");
@@ -44,33 +44,38 @@ function NationPage() {
     }
   };
 
-  // 리액트 쿼리로 로딩/에러 처리
-  const { data, isLoading, iserror, error } = useQuery("userData", fetchData);
+  // // 리액트 쿼리로 로딩/에러 처리
+  // const { data, isLoading, iserror, error } = useQuery("userData", fetchData);
 
-  if (isLoading) {
-    return <div>로딩 중입니다...</div>;
-  }
-  if (iserror) {
-    return Swal.fire({
-      title: `에러 발생! Error Code: ${error.message}`,
-      icon: "error",
-    });
-  }
-  const { posts, allLikedData } = data;
+  // if (isLoading) {
+  //   return <div>로딩 중입니다...</div>;
+  // }
+  // if (iserror) {
+  //   return Swal.fire({
+  //     title: `에러 발생! Error Code: ${error.message}`,
+  //     icon: "error",
+  //   });
+  // }
+  // const { posts, allLikedData } = data;
 
   return (
     <div className="Container">
       <NationCarousel />
       <Category />
       <Preview
-        posts={posts}
-        allLikedData={allLikedData}
+        // posts={posts}
+        // allLikedData={allLikedData}
+        fetch={fetchData}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
       <MiddleBanner />
       <EventBanner />
-      <BestPlace posts={posts} allLikedData={allLikedData} />
+      <BestPlace
+        // posts={posts}
+        // allLikedData={allLikedData}
+        fetch={fetchData}
+      />
     </div>
   );
 }

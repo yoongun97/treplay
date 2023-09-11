@@ -1,6 +1,15 @@
-import { Link } from "react-router-dom";
-import { styled } from "styled-components";
-export const ListContainer = styled.div`
+import styled, { keyframes } from "styled-components";
+
+const loading = keyframes`
+   0% {
+    background-position: -460px 0;
+  }
+  100% {
+    background-position: 460px 0;
+  }
+`;
+
+export const PostsContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 70px;
@@ -8,7 +17,7 @@ export const ListContainer = styled.div`
   width: 1280px;
 `;
 
-export const ListBox = styled(Link)`
+export const PostBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -16,14 +25,18 @@ export const ListBox = styled(Link)`
   text-align: left;
 
   & > h4 {
+    width: 100%;
     margin-top: 20px;
     font-size: 20px;
     font-weight: 600;
     line-height: 26px;
-    color: #222;
+    color: transparent;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+    animation: ${loading} 2s infinite linear;
+    margin-bottom: 5px;
   }
 
   & > h5 {
@@ -35,14 +48,21 @@ export const ListBox = styled(Link)`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+    animation: ${loading} 2s infinite linear;
+    margin-bottom: 5px;
   }
 
   & > p {
+    width: 100%;
     padding-bottom: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 26px;
     color: #777;
+    background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+    animation: ${loading} 2s infinite linear;
+    margin-bottom: 5px;
   }
 `;
 
@@ -50,9 +70,10 @@ export const ImageBox = styled.div`
   width: 380px;
   height: 380px;
   border-radius: 30px;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  object-fit: cover;
+  background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+  animation: ${loading} 2s infinite linear;
+  margin-bottom: 5px;
 `;
 
 export const LikesContainer = styled.div`
@@ -61,12 +82,12 @@ export const LikesContainer = styled.div`
   height: 38px;
   padding: 0px 20px;
   border-radius: 10px;
-  border: 1px solid #777;
+  border: 1px solid #222;
   & > div {
     display: flex;
     align-items: center;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 300;
   }
 
   & > div > img {
@@ -87,7 +108,7 @@ export const LikesBox = styled.div`
     right: 0;
     width: 1px;
     height: 16px;
-    background-color: #222;
+    background-color: #777;
   }
 `;
 export const DislikesBox = styled.div`

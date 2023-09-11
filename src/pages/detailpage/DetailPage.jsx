@@ -12,6 +12,7 @@ import { userAtom } from "../../store/userAtom";
 import DetailCarousel from "../../components/imageslide/detailpageSlide/DetailCarousel";
 import * as s from "./StyledDetailPage";
 import Swal from "sweetalert2";
+import SkeletonDetail from "../../components/skeletonUI/skeletonDetail/SkeletonDetail";
 
 function DetailPage() {
   const { id } = useParams();
@@ -76,7 +77,7 @@ function DetailPage() {
   }, []);
 
   if (isLoading) {
-    return <div>데이터 가져오는 중...</div>;
+    return <SkeletonDetail />;
   }
 
   if (isError) {

@@ -41,13 +41,32 @@ function Create() {
   //   return unmountAlert;
   // }, [isDirty]);
 
-  // 컴포넌트가 언마운트 될 때 페이지 상태를 업데이트
+  // // 컴포넌트가 언마운트 될 때 페이지 상태를 업데이트
+  // useEffect(() => {
+  //   return () => {
+  //     isUnmounted.current = true;
+  //     window.scrollTo(0, 0);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    return () => {
-      isUnmounted.current = true;
-      window.scrollTo(0, 0);
+    const preventUnload = (event) => {
+      // 여기에 윤건님이 뒤로가기 막는 조건 넣어주면 될 것 같습니다.
+      if (isDirty) {
+        // NOTE: 최신 브라우저에선 이 로직이 필요없다고 함. 혹시 모르니 쓰는 것이 좋음
+        const message = "정말로 나가시겠습니까?";
+        event.preventDefault();
+        event.returnValue = message;
+      }
     };
-  }, []);
+
+    // unload 막아주는 이벤트 등록
+    window.addEventListener("beforeunload", preventUnload);
+    // unmount시 이벤트 막아주는 로직
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, [isDirty]);
 
   // post 객체가 변경될 때마다 isDirty를 설정
   useEffect(() => {

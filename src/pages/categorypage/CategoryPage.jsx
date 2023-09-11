@@ -16,6 +16,7 @@ import CategoryLikes from "./CategoryLikes";
 import Search from "../../components/search/Search";
 import * as s from "./StyledCategoryPage";
 import Swal from "sweetalert2";
+import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
@@ -225,31 +226,29 @@ function CategoryPage() {
         </s.WriteButton>
       </s.MiddleContainer>
       <s.PostsContainer>
-        {/* 아래에 처리 가능하다 위에 있는 에러등.. */}
-        {/* 이즈로딩 - 적용시 페이지네이션 부분 오류*/}
-        {isLoading ? <>로딩중입니다</> : null}
         {error ? <>에러입니다</> : null}
-        <>
-          {filteredPosts.length > 0 ? (
-            filteredPosts.slice(0, 3).map((post) => (
-              <div key={post.id}>
-                <s.PostBox to={`/detail/${post.id}`}>
-                  <s.ImageBox alt="PostImgs" src={post.postImgs} />
-                  <h4>{post.placeName}</h4>
-                  <h5>{post.placeLocation}</h5>
-                  <p>
-                    <span># </span>
-                    {post.postOneLineContent}
-                  </p>
-                  <CategoryLikes id={post.id} />
-                </s.PostBox>
-              </div>
-            ))
-          ) : (
-            <div>결과가 없습니다.</div>
-          )}
-        </>
-        {/* )} */}
+        {isLoading ? (
+          <SkeletonCard />
+        ) : (
+          <>
+            {filteredPosts.length > 0
+              ? filteredPosts.slice(0, 3).map((post) => (
+                  <div key={post.id}>
+                    <s.PostBox to={`/detail/${post.id}`}>
+                      <s.ImageBox alt="PostImgs" src={post.postImgs} />
+                      <h4>{post.placeName}</h4>
+                      <h5>{post.placeLocation}</h5>
+                      <p>
+                        <span># </span>
+                        {post.postOneLineContent}
+                      </p>
+                      <CategoryLikes id={post.id} />
+                    </s.PostBox>
+                  </div>
+                ))
+              : filteredPosts.length === 0 && <div>결과가 없습니다.</div>}
+          </>
+        )}
       </s.PostsContainer>
       <PageNation
         postsViewPage={POSTS_VIEW_PAGE}
