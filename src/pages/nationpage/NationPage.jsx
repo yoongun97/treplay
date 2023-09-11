@@ -55,6 +55,7 @@ function NationPage() {
       icon: 'error',
     });
   }
+  console.log({ data, error });
   const { posts, allLikedData } = data;
 
   return (

@@ -17,11 +17,13 @@ const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트
 
 const Edit = () => {
   const { id } = useParams();
+
   const [post, setpost] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [editOneLineContent, setEditOneLineContent] = useState('');
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
+
   //이미지 선택 이름,미리보기
   // const [, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
@@ -35,23 +37,7 @@ const Edit = () => {
     return allowedExtensions.includes(fileExtension);
   }
 
-  // const { data: docSnapshot } = useQuery(['posts', id], async () => {
-  //   const editPostData = doc(db, 'posts', id);
-  //   return await getDoc(editPostData);
-  // });
-
-  // useEffect(() => {
-  //   if (docSnapshot?.exists()) {
-  //     const data = docSnapshot.data();
-  //     setpost({ id: docSnapshot.id, ...data });
-  //     setEditContent(data.postContent);
-  //     setEditOneLineContent(data.postOneLineContent);
-
-  //   }
-  // }, [docSnapshot]);
-
   //사진을 올릴시에 수정한 글이 사라집니다. 방식이 잘못되었나요
-
   useEffect(() => {
     const fetchData = async () => {
       const editPostData = doc(db, 'posts', id);
