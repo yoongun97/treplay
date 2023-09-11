@@ -21,6 +21,8 @@ import * as s from "./StyledMyPage";
 import Swal from "sweetalert2";
 import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
 
+const POSTS_VIEW_PAGE = 3;
+
 function MyPage() {
   const [user] = useAtom(userAtom);
   const { uid } = useParams();
@@ -34,55 +36,54 @@ function MyPage() {
 
   // 페이지네이션 설정
   const [currentPage, setCurrentPage] = useState(1);
-  const postsViewPage = 3; // 한 페이지에 보여줄 게시물 수
 
+  //promise.all 로 관리하기
   const fetchData = async () => {
-    // 유저 데이터
     const userQ = query(collection(db, "users"));
-    const querySnapshot = await getDocs(userQ);
-    const data = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    setAllData(data);
-    setOwnData(data.find((item) => item.uid === uid));
-
-    // 또가요 데이터
     const likedQ = query(collection(db, "likes"));
-    const likedQuerySnapshot = await getDocs(likedQ);
-    const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
-
-    // 모든 좋아요 데이터 저장
-    setAllLikedData(likedData);
-
-    // 내 저장 데이터
     const savedQ = query(collection(db, "saved"), where("uid", "==", uid));
-    const savedQuerySnapshot = await getDocs(savedQ);
-    const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
-
-    // 모든 글 데이터
     const postsQ = query(collection(db, "posts"));
-    const postsQuerySnapshot = await getDocs(postsQ);
-    const postsData = postsQuerySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
 
-    // 내가 쓴 글 목록 저장
-    setMyPosts(postsData.filter((data) => data.uid === uid));
+    try {
+      const [
+        userQuerySnapshot,
+        likedQuerySnapshot,
+        savedQuerySnapshot,
+        postsQuerySnapshot,
+      ] = await Promise.all([
+        getDocs(userQ),
+        getDocs(likedQ),
+        getDocs(savedQ),
+        getDocs(postsQ),
+      ]);
+      const userDocData = userQuerySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data);
+      const savedData = savedQuerySnapshot.docs.map((doc) => doc.data);
+      const postsData = postsQuerySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
-    // 저장한 글 목록 저장
-    const filteredData = postsData.filter((post) => {
-      return savedData.some((data) => post.id === data.postId);
-    });
-    setSavedPosts(filteredData);
+      setAllData(userDocData);
+      setOwnData(postsData.find((item) => item.uid === uid));
+
+      setAllLikedData(likedData);
+      setMyPosts(postsData.filter((data) => data.uid === uid));
+
+      const filteredData = postsData.filter((post) =>
+        savedData.some((data) => post.id === data.postId)
+      );
+      setSavedPosts(filteredData);
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
   };
 
   // 처음 랜더링 될 때 likes / posts db에서 user의 uid와 동일한 uid 가 있는 것들만 정보 가져옴
-  useEffect(() => {
-    fetchData();
-  }, []);
-  //페이지 네이션
+
   useEffect(() => {
     if (!isMyListActived) {
       setMyPosts(savedPosts);
@@ -202,8 +203,8 @@ function MyPage() {
                 {isMyListActived ? (
                   <MyList
                     myPosts={myPosts.slice(
-                      (currentPage - 1) * postsViewPage,
-                      currentPage * postsViewPage
+                      (currentPage - 1) * POSTS_VIEW_PAGE,
+                      currentPage * POSTS_VIEW_PAGE
                     )}
                     setMyPosts={setMyPosts}
                     allLikedData={allLikedData}
@@ -211,8 +212,8 @@ function MyPage() {
                 ) : (
                   <SavedList
                     savedPosts={savedPosts.slice(
-                      (currentPage - 1) * postsViewPage,
-                      currentPage * postsViewPage
+                      (currentPage - 1) * POSTS_VIEW_PAGE,
+                      currentPage * POSTS_VIEW_PAGE
                     )}
                     allLikedData={allLikedData}
                   />
@@ -221,7 +222,7 @@ function MyPage() {
             )}
           </s.ListContainer>
           <PageNation
-            postsViewPage={postsViewPage}
+            postsViewPage={POSTS_VIEW_PAGE}
             totalPosts={isMyListActived ? myPosts.length : savedPosts.length}
             currentPage={currentPage}
             pagenate={handlePageChange}

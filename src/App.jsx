@@ -19,7 +19,7 @@ import SuggestLogin from "./components/login/SuggestLogin";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
 function App() {
-  const [user, setUser] = useAtom(userAtom); // userAtom 사용
+  const [, setUser] = useAtom(userAtom); // userAtom 사용
   const location = useLocation(); // 현재 경로 정보를 가져옴
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지

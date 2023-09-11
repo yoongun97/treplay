@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
+import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-
 import { db } from "../../firebaseConfig";
 import PageNation from "../../components/pageNation/PageNation";
 import CategoryLikes from "./CategoryLikes";
 import Search from "../../components/search/Search";
 import * as s from "./StyledCategoryPage";
 import Swal from "sweetalert2";
-import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
-import { useAtom } from "jotai";
-import { userAtom } from "../../store/userAtom";
+
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
@@ -21,21 +21,18 @@ function CategoryPage() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastVisibleDoc, setLastVisibleDoc] = useState(null);
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState("date");
-
   const queryClient = useQueryClient();
 
-  const handleLikesSort = useCallback(() => {
-    queryClient.invalidateQueries(["posts", category, currentPage, "likes"]);
-    setSortOption("likes");
-  }, [queryClient, category, currentPage]);
-
-  const handleDateSort = useCallback(() => {
-    queryClient.invalidateQueries(["posts", category, currentPage, "date"]);
-    setSortOption("date");
-  }, [queryClient, category, currentPage]);
+  const handleSort = useCallback(
+    (option) => {
+      const key = option === "likes" ? "likes" : "date";
+      setSortOption(key);
+      queryClient.invalidateQueries(["posts", category, currentPage, key]);
+    },
+    [queryClient, category, currentPage]
+  );
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
@@ -62,7 +59,7 @@ function CategoryPage() {
       collection(db, "posts"),
       where("nation", "==", nation),
       where("category", "==", category),
-      orderBy("date", "desc") //orderby를 위한 index생성했지만 오류
+      orderBy("date", "desc")
     );
     const querySnapshot = await getDocs(postsCollection);
 
@@ -103,8 +100,6 @@ function CategoryPage() {
   };
 
   // Date 객체로 변환 후 비교
-  // sort가 posts데이터도 바꿔버림
-  //const copy = [...posts] copy.sort() 기존의 데이터를 변경 되는것이 위험성이 있다.
   const sortPostsByDate = (posts) => {
     const copyPosts = [...posts];
     return copyPosts.sort((a, b) => {
@@ -131,10 +126,6 @@ function CategoryPage() {
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
-  // 1. posts에 바로 데이터가 들어오나?
-  // => No -> null
-  // 2. isLoading을 처음에 true로 만들어줌
-  // -> posts가 가져와지면 posts에 데이터가 들어가진다.
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -148,17 +139,17 @@ function CategoryPage() {
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
       const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
-      if (currentPosts.length > 0) {
-        const lastPost = currentPosts[currentPosts.length - 1];
-        setLastVisibleDoc(lastPost);
-      }
+
+      // if (currentPosts.length > 0) {
+      //   const lastPost = currentPosts[currentPosts.length - 1];
+      //   setLastVisibleDoc(lastPost);
+      // }
     }
   }, [posts, sortOption, currentPage]);
 
   if (error) {
     return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
-  console.log(user);
 
   return (
     <s.CategoryPageContainer>
@@ -170,7 +161,7 @@ function CategoryPage() {
       <s.MiddleContainer>
         <s.FilterContainer>
           {sortOption === "date" ? (
-            <s.OnButton onClick={() => handleDateSort("date")} selected={true}>
+            <s.OnButton onClick={() => handleSort("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -178,10 +169,7 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton
-              onClick={() => handleDateSort("date")}
-              selected={false}
-            >
+            <s.OffButton onClick={() => handleSort("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
@@ -189,11 +177,9 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OffButton>
           )}
+
           {sortOption === "likes" ? (
-            <s.OnButton
-              onClick={() => handleLikesSort("likes")}
-              selected={true}
-            >
+            <s.OnButton onClick={() => handleSort("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -201,10 +187,7 @@ function CategoryPage() {
               <span>인기순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton
-              onClick={() => handleLikesSort("likes")}
-              selected={false}
-            >
+            <s.OffButton onClick={() => handleSort("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"

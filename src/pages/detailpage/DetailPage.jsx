@@ -26,8 +26,9 @@ function DetailPage() {
     error,
   } = useQuery(["post", id], async () => {
     const postRef = doc(db, "posts", id);
-    const docSnapshot = await getDoc(postRef);
 
+    const docSnapshot = await getDoc(postRef);
+    console.log({ docSnapshot });
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() };
     } else {
@@ -84,21 +85,18 @@ function DetailPage() {
     return <div>{error.message}</div>;
   }
 
-  const date = post?.date.toDate();
-  const dateOptions = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
+  const DateTime = (date) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    };
 
-  const timeOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
+    return date.toLocaleString(["ja-KR", "en-KR"], options);
   };
-
-  const postDate = date.toLocaleString("ja-KR", dateOptions);
-  const postTime = date.toLocaleString("en-KR", timeOptions);
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
@@ -115,9 +113,7 @@ function DetailPage() {
         <h2>{post?.placeName}</h2>
         <s.InfoContainer>
           <s.DateContainer>
-            <span>{postDate}</span>
-            <span> | </span>
-            <span>{postTime}</span>
+            <span>{DateTime(post?.date.toDate())}</span>
           </s.DateContainer>
           <s.ButtonContainer>
             <s.ReactButtonContainer>

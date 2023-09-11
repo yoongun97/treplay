@@ -53,11 +53,11 @@ export const ResultBox = styled.div`
   align-items: center;
   padding: 12px;
   text-align: left;
-  background-color: #fff;
+  background-color: #f2f8ff;
 
-  /* &:nth-child(2n) {
-    background-color: #f2f8ff;
-  } */
+  &:nth-child(2n) {
+    background-color: #fff;
+  }
 
   & > span {
     display: inline-block;
