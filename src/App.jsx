@@ -54,7 +54,7 @@ function App() {
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
-        <Route path="/create" element={user ? <Create /> : <SuggestLogin />} />
+        <Route path="/create" element={<Create />} />
         <Route path="/suggest" element={<SuggestLogin />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />

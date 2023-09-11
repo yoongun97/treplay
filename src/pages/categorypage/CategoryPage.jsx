@@ -159,6 +159,7 @@ function CategoryPage() {
     return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
   console.log(user);
+
   return (
     <s.CategoryPageContainer>
       <s.PhrasesContainer>
@@ -212,7 +213,7 @@ function CategoryPage() {
             </s.OffButton>
           )}
         </s.FilterContainer>
-        <s.WriteButton href="/create">
+        <s.WriteButton href={user ? "/create" : "/suggest"}>
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
             alt="writing_icon"
