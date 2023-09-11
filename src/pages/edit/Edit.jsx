@@ -24,20 +24,20 @@ const Edit = () => {
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
 
-  //이미지 선택 이름,미리보기
-  // const [, setSelectedFileNames] = useState([]);
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   //장소와 카테고리 받기
   const queryClient = useQueryClient();
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
-    const allowedExtensions = ['jpg', 'png', 'gif'];
-    const fileExtension = fileName.split('.').pop().toLowerCase();
+
+
+    const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
+    const fileExtension = fileName.split(".").pop().toLowerCase();
+
     return allowedExtensions.includes(fileExtension);
   }
 
-  //사진을 올릴시에 수정한 글이 사라집니다. 방식이 잘못되었나요
   useEffect(() => {
     const fetchData = async () => {
       const editPostData = doc(db, 'posts', id);
@@ -64,7 +64,9 @@ const Edit = () => {
     const files = Array.from(e.target.files);
     for (const file of files) {
       if (!isImageFile(file.name)) {
-        alert('파일은 jpg, png, gif 형식의 파일만 업로드 가능합니다!');
+
+        alert("파일은 jpg, png, gif, jpeg 형식의 파일만 업로드 가능합니다!");
+
         return;
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -76,9 +78,7 @@ const Edit = () => {
     setEditImage(files);
 
     const selectedImages = Array.from(e.target.files);
-    //이미지 선택 이름,미리보기
-    // const fileNames = selectedImages.map((image) => image.name);
-    // setSelectedFileNames(fileNames);
+
 
     const previews = selectedImages.map((image) => URL.createObjectURL(image));
     setSelectedFilePreviews(previews);
@@ -101,6 +101,7 @@ const Edit = () => {
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
       Swal.fire({ title: '이미지 삭제 오류입니다', icon: 'error' });
+
     }
   };
   //미리보기 이미지 삭제
@@ -108,9 +109,6 @@ const Edit = () => {
     setSelectedFilePreviews((prevPreviews) =>
       prevPreviews.filter((_, i) => i !== index)
     );
-    // setSelectedFileNames((prevNames) =>
-    //   prevNames.filter((_, i) => i !== index)
-    // );
     setEditImage((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 

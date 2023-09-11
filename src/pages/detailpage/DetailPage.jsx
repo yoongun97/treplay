@@ -23,8 +23,9 @@ function DetailPage() {
     isLoading,
     isError,
     error,
-  } = useQuery('post', async () => {
-    const postRef = doc(db, 'posts', id);
+  } = useQuery(["post", id], async () => {
+    const postRef = doc(db, "posts", id);
+
     const docSnapshot = await getDoc(postRef);
     console.log({ docSnapshot });
     if (docSnapshot.exists()) {
@@ -138,7 +139,7 @@ function DetailPage() {
               <button onClick={copyUrl} value={post.id}>
                 <img
                   src={`${process.env.PUBLIC_URL}/icon/share_icon.svg`}
-                  alt="bookmark_icon"
+                  alt="share_icon"
                 ></img>
               </button>
             </s.ReactButtonContainer>

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery, useQueryClient } from 'react-query';
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
 import {
   collection,
   getDocs,
@@ -17,6 +17,7 @@ import CategoryLikes from './CategoryLikes';
 import Search from '../../components/search/Search';
 import * as s from './StyledCategoryPage';
 import Swal from 'sweetalert2';
+
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
@@ -25,20 +26,10 @@ function CategoryPage() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  // const [lastVisibleDoc, setLastVisibleDoc] = useState(null);
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState('date');
   const queryClient = useQueryClient();
 
-  // const handleLikesSort = useCallback(() => {
-  //   queryClient.invalidateQueries(['posts', category, currentPage, 'likes']);
-  //   setSortOption('likes');
-  // }, [queryClient, category, currentPage]);
-
-  // const handleDateSort = useCallback(() => {
-  //   queryClient.invalidateQueries(['posts', category, currentPage, 'date']);
-  //   setSortOption('date');
-  // }, [queryClient, category, currentPage]);
   const handleSort = useCallback(
     (option) => {
       const key = option === 'likes' ? 'likes' : 'date';
@@ -48,17 +39,18 @@ function CategoryPage() {
     [queryClient, category, currentPage]
   );
 
+
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
-      const totalSearchData = searchData.toLowerCase().replace(' ', '');
+      const totalSearchData = searchData.toLowerCase().replace(" ", "");
 
       const placeNameMatch = post.placeName
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
       const placeLocationMatch = post.placeLocation
-        .replace(' ', '')
+        .replace(" ", "")
         .toLowerCase()
         .includes(totalSearchData);
 
@@ -74,8 +66,8 @@ function CategoryPage() {
       where('nation', '==', nation),
       where('category', '==', category),
       orderBy('date', 'desc')
+
     );
-    console.log(postsCollection);
     const querySnapshot = await getDocs(postsCollection);
 
     // 비동기 작업을 병렬로 처리하기 위해 Promise.all 사용
@@ -88,7 +80,7 @@ function CategoryPage() {
 
         // likes의 정보 비동기로 가져오기
         const likesQuerySnapshot = await getDocs(
-          query(collection(db, 'likes'), where('postId', '==', post.id))
+          query(collection(db, "likes"), where("postId", "==", post.id))
         );
 
         post.likes = likesQuerySnapshot.size;
@@ -100,101 +92,6 @@ function CategoryPage() {
 
     return sortedPosts;
   };
-
-  /**
-   * 문제
-   * 1. date 정렬 시 정렬이 안됨
-   * 2. 페이지네이션이 잘 안됨
-   *
-   * 해결
-   * 1. date 정렬 안망가지게 해보기
-   * 2. page 숫자 바뀌면 적절한 데이터 가져오기
-   */
-
-  // const _fetchPosts = async () => {
-  //   // first
-  //   const postsCollection = query(
-  //     collection(db, 'posts'),
-  //     where('nation', '==', nation),
-  //     where('category', '==', category),
-  //     orderBy('date', 'desc'),
-  //     limit(2)
-  //   );
-
-  //   // 들어오는 데이터 넣는 용도??
-  //   // const postsData = [];
-  //   const querySnapshot = await getDocs(postsCollection);
-
-  //   const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-
-  //   const next = query(
-  //     collection(db, 'posts'),
-  //     where('nation', '==', nation),
-  //     where('category', '==', category),
-  //     orderBy('date', 'desc'),
-  //     startAfter(lastVisible),
-  //     limit(2)
-  //   );
-
-  //   const nextQuerySnapshot = await getDocs(next);
-
-  //   const postsData = querySnapshot.docs.map((doc) => {
-  //     const post = {
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     };
-  //     return post;
-  //   });
-  //   console.log({ postsData });
-  //   console.log(
-  //     'nextQuerySnapShot',
-  //     nextQuerySnapshot.docs.map((doc) => {
-  //       const post = {
-  //         ...doc.data(),
-  //         id: doc.id,
-  //       };
-  //       return post;
-  //     })
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   _fetchPosts();
-  // }, []);
-  // const fetchPosts = async () => {
-  //   const postsCollection = query(
-  //     collection(db, 'posts'),
-  //     where('nation', '==', nation),
-  //     where('category', '==', category),
-  //     orderBy('date', 'desc'),
-  //     // startAfter(lastVisibleDoc),
-  //     limit(25)
-  //   );
-  //   let postsData = [];
-  //   const querySnapshot = await getDocs(postsCollection);
-  //   console.log(querySnapshot);
-  //   if (querySnapshot.docs.length > 0) {
-  //     const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-  //     setLastVisibleDoc(lastVisible);
-
-  //     postsData = await Promise.all(
-  //       querySnapshot.docs.map(async (doc) => {
-  //         const post = {
-  //           ...doc.data(),
-  //           id: doc.id,
-  //         };
-
-  //         const likesQuerySnapshot = await getDocs(
-  //           query(collection(db, 'likes'), where('postId', '==', post.id))
-  //         );
-
-  //         post.likes = likesQuerySnapshot.size;
-  //         return post;
-  //       })
-  //     );
-  //   }
-  //   return postsData;
-  // };
 
   //최신순,인기순 모든데이터를 가져와서 sort 리패치
   //또가요 , 북마크 , 최신순 정렬하기
@@ -222,9 +119,9 @@ function CategoryPage() {
   };
 
   const sortPosts = (posts, sortOption) => {
-    if (sortOption === 'likes') {
+    if (sortOption === "likes") {
       return sortPostsByLikes(posts);
-    } else if (sortOption === 'date') {
+    } else if (sortOption === "date") {
       return sortPostsByDate(posts);
     }
     return posts;
@@ -234,7 +131,7 @@ function CategoryPage() {
     data: posts,
     error,
     isLoading,
-  } = useQuery(['posts', category, currentPage, sortOption], fetchPosts);
+  } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
   useEffect(() => {
     return () => {
@@ -249,15 +146,17 @@ function CategoryPage() {
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
       const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
+
       // if (currentPosts.length > 0) {
       //   const lastPost = currentPosts[currentPosts.length - 1];
       //   setLastVisibleDoc(lastPost);
       // }
+
     }
   }, [posts, sortOption, currentPage]);
 
   if (error) {
-    return Swal.fire({ title: '데이터를 가져올 수 없습니다', icon: 'warning' });
+    return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
 
   return (
@@ -269,8 +168,10 @@ function CategoryPage() {
       </s.PhrasesContainer>
       <s.MiddleContainer>
         <s.FilterContainer>
+
           {sortOption === 'date' ? (
             <s.OnButton onClick={() => handleSort('date')}>
+
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -286,8 +187,10 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OffButton>
           )}
+
           {sortOption === 'likes' ? (
             <s.OnButton onClick={() => handleSort('likes')}>
+
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -295,7 +198,9 @@ function CategoryPage() {
               <span>인기순</span>
             </s.OnButton>
           ) : (
+
             <s.OffButton onClick={() => handleSort('likes')}>
+
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
@@ -305,7 +210,7 @@ function CategoryPage() {
           )}
         </s.FilterContainer>
 
-        <s.WriteButton to={'/create'}>
+        <s.WriteButton to={"/create"}>
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
             alt="writing_icon"

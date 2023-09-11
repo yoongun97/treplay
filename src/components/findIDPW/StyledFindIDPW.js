@@ -177,7 +177,7 @@ export const FindedBtn = styled.button`
   background-color: #0a58be;
   color: white;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 export const ErrorBox = styled.div`

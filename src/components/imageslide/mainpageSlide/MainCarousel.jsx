@@ -21,9 +21,8 @@ export default function MainCarousel() {
   return (
     <ButtonContainer>
       <PrevButton onClick={previous} />
-
       <NationContainer>
-        <Slider {...settings} ref={slickRef}>
+        <StyledSlider {...settings} ref={slickRef}>
           <StyledButton1 to={"/한국"}>
             <span>한국</span>
           </StyledButton1>
@@ -33,16 +32,16 @@ export default function MainCarousel() {
           <StyledButton3 to={"/미국"}>
             <span>미국</span>
           </StyledButton3>
-          <StyledButton4 to={"/한국"}>
-            <span>한국2</span>
+          <StyledButton4 to={"/호주"}>
+            <span>호주</span>
           </StyledButton4>
-          <StyledButton5 to={"/일본"}>
-            <span>일본2</span>
+          <StyledButton5 to={"/태국"}>
+            <span>태국</span>
           </StyledButton5>
-          <StyledButton6 to={"/미국"}>
-            <span>미국2</span>
+          <StyledButton6 to={"/대만"}>
+            <span>대만</span>
           </StyledButton6>
-        </Slider>
+        </StyledSlider>
       </NationContainer>
       <NextButton onClick={next} />
     </ButtonContainer>
@@ -51,269 +50,89 @@ export default function MainCarousel() {
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 140px;
+
+  width: 1400px;
+  margin: 140px auto 0;
 `;
 
 const NationContainer = styled.div`
+  margin: 0 auto;
+`;
+
+const StyledSlider = styled(Slider)`
   width: 1280px;
-  margin: 0 30px;
-  align-items: center;
-  gap: 70px;
+  transform: translateX(20px);
+
+  & a {
+    position: relative;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 380px !important;
+    height: 380px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+
+    & > span {
+      display: none;
+      font-size: 32px;
+      font-weight: 500;
+      color: #fff;
+      z-index: 1000 !important;
+    }
+
+    &:hover > span {
+      display: inline-block;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: transparent;
+
+      transition: 0.3s;
+    }
+    &:hover {
+      &::before {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
 `;
 
 const StyledButton1 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
   background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
-  // 검정색 배경
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 50;
-    transition: 0.3s;
-  }
 `;
 
 const StyledButton2 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
   background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 30;
-    transition: 0.3s;
-  }
 `;
 
 const StyledButton3 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
   background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 30;
-    transition: 0.3s;
-  }
 `;
-
 const StyledButton4 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
-  background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 30;
-    transition: 0.3s;
-  }
+  background-image: url(${process.env.PUBLIC_URL}/image/australia.jpg);
 `;
 
 const StyledButton5 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
-  background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 30;
-    transition: 0.3s;
-  }
+  background-image: url(${process.env.PUBLIC_URL}/image/thailand.jpg);
 `;
 
 const StyledButton6 = styled(Link)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  cursor: pointer;
-  background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: transparent;
-
-    transition: 0.3s;
-  }
-  &:hover {
-    & > span {
-      display: inline-block;
-    }
-
-    &::after {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-  & > span {
-    display: none;
-    font-size: 32px;
-    font-weight: 500;
-    color: #fff;
-    z-index: 30;
-    transition: 0.3s;
-  }
+  background-image: url(${process.env.PUBLIC_URL}/image/taiwan.jpg);
 `;
 
 const PrevButton = styled.div`

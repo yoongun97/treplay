@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { styled } from "styled-components";
 
 export const MainContainer = styled.div`
   display: flex;
@@ -94,7 +94,7 @@ export const NaviBtn = styled.span`
     position: relative;
   }
   &:nth-child(2)::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     left: 0;
@@ -104,7 +104,7 @@ export const NaviBtn = styled.span`
     transform: translateY(-50%);
   }
   &:nth-child(2)::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     right: 0;
@@ -134,7 +134,7 @@ export const SnsLoginContainer = styled.div`
   width: 500px;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 11px;
     width: 100%;
@@ -164,6 +164,11 @@ export const SnsContainer = styled.div`
 `;
 
 export const SnsBtn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
   text-align: center;
   cursor: pointer;
 `;
