@@ -17,6 +17,7 @@ const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트
 
 const Edit = () => {
   const { id } = useParams();
+
   const [post, setpost] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [editOneLineContent, setEditOneLineContent] = useState('');
@@ -30,12 +31,12 @@ const Edit = () => {
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
 
+
     const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
     const fileExtension = fileName.split(".").pop().toLowerCase();
 
     return allowedExtensions.includes(fileExtension);
   }
-
 
   useEffect(() => {
     const fetchData = async () => {

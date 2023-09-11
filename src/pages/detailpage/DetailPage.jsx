@@ -84,21 +84,34 @@ function DetailPage() {
     return <div>{error.message}</div>;
   }
 
-  const date = post?.date.toDate();
-  const dateOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
+  const DateTime = (date) => {
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    };
+
+    return date.toLocaleString(['ja-KR', 'en-KR'], options);
   };
 
-  const timeOptions = {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  };
+  // const date = post?.date.toDate();
+  // const dateOptions = {
+  //   year: 'numeric',
+  //   month: '2-digit',
+  //   day: '2-digit',
+  // };
 
-  const postDate = date.toLocaleString('ja-KR', dateOptions);
-  const postTime = date.toLocaleString('en-KR', timeOptions);
+  // const timeOptions = {
+  //   hour: '2-digit',
+  //   minute: '2-digit',
+  //   hour12: false,
+  // };
+
+  // const postDate = date.toLocaleString('ja-KR', dateOptions);
+  // const postTime = date.toLocaleString('en-KR', timeOptions);
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
@@ -115,9 +128,10 @@ function DetailPage() {
         <h2>{post?.placeName}</h2>
         <s.InfoContainer>
           <s.DateContainer>
-            <span>{postDate}</span>
+            <span>{DateTime(post?.date.toDate())}</span>
+            {/* <span>{postDate}</span>
             <span> | </span>
-            <span>{postTime}</span>
+            <span>{postTime}</span> */}
           </s.DateContainer>
           <s.ButtonContainer>
             <s.ReactButtonContainer>

@@ -56,6 +56,7 @@ function NationPage() {
       icon: "error",
     });
   }
+  console.log({ data, error });
   const { posts, allLikedData } = data;
 
   return (
@@ -63,14 +64,19 @@ function NationPage() {
       <NationCarousel />
       <Category />
       <Preview
-        posts={posts}
+        // posts={posts}
+        posts={data?.posts ? data.posts : []}
         allLikedData={allLikedData}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
       <MiddleBanner />
       <EventBanner />
-      <BestPlace posts={posts} allLikedData={allLikedData} />
+      <BestPlace
+        //  posts={posts}
+        posts={data?.posts ? data.posts : []}
+        allLikedData={allLikedData}
+      />
     </div>
   );
 }
