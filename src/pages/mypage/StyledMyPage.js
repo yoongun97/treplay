@@ -24,6 +24,11 @@ export const ListContainer = styled.div`
   width: 1280px;
 `;
 
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const ChangeButtonContainer = styled.div`
   display: flex;
 `;
@@ -58,4 +63,15 @@ export const ChangeButton = styled.div`
     background-color: ${(props) => (props.selected ? "#0A58BE" : "#d5dadc")};
   }
 `;
+
+export const AllDeleteBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  width: 65px;
+  height: 26px;
+  font-size: 18px;
+  color: #777777;
+  margin-top: 168px;
+`;
+
 export const ListContainerInner = styled.div``;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { auth, db } from '../../firebaseConfig';
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { auth, db } from "../../firebaseConfig";
 import {
   addDoc,
   collection,
@@ -12,36 +12,28 @@ import {
   where,
   updateDoc,
   Timestamp,
-} from 'firebase/firestore';
-import * as s from './StyledComments';
-import { useAtom } from 'jotai';
-import { userAtom } from '../../store/userAtom';
-import Swal from 'sweetalert2';
+} from "firebase/firestore";
+import * as s from "./StyledComments";
+import Swal from "sweetalert2";
 
 const profileImage = `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`;
 
 function Comments({ id }) {
   const queryClient = useQueryClient();
-  const [user] = useAtom(userAtom);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const currentUser = auth.currentUser;
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editedComment, setEditedComment] = useState('');
+  const [editedComment, setEditedComment] = useState("");
 
-  const {
-    data: post,
-    isLoading,
-    isError,
-    error,
-  } = useQuery('post', async () => {
-    const postRef = doc(db, 'posts', id);
+  const { isLoading, isError, error } = useQuery("post", async () => {
+    const postRef = doc(db, "posts", id);
     const docSnapshot = await getDoc(postRef);
     //firebase 에서 댓글 불러오기
     if (docSnapshot.exists()) {
       const commentsRef = query(
-        collection(db, 'comments'),
-        where('postId', '==', id)
+        collection(db, "comments"),
+        where("postId", "==", id)
       );
       const commentsSnapshot = await getDocs(commentsRef);
       const commentsData = [];
@@ -58,7 +50,7 @@ function Comments({ id }) {
         staleTIme: Infinity,
       };
     } else {
-      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
+      throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
     }
   });
 
@@ -77,7 +69,7 @@ function Comments({ id }) {
 
   // 댓글 내용에 줄바꿈 처리를 추가
   const lineChangeText = (text) => {
-    return text.split('\n').map((line, index) => (
+    return text.split("\n").map((line, index) => (
       <span key={index}>
         {line}
         <br />
@@ -86,8 +78,8 @@ function Comments({ id }) {
   };
   const commentSubmit = async (e) => {
     e.preventDefault();
-    if (comment.trim() === '') {
-      return Swal.fire({ title: '댓글을 입력해주세요', icon: 'warning' });
+    if (comment.trim() === "") {
+      return Swal.fire({ title: "댓글을 입력해주세요", icon: "warning" });
     }
 
     try {
@@ -100,35 +92,35 @@ function Comments({ id }) {
         createdAt: Timestamp.now(),
       };
 
-      const docRef = await addDoc(collection(db, 'comments'), newComment);
+      const docRef = await addDoc(collection(db, "comments"), newComment);
       setComments([...comments, { id: docRef.id, ...newComment }]);
       // setComments([...post.comments, { id: docRef.id, ...newComment }]);
-      setComment('');
-      queryClient.invalidateQueries('post');
+      setComment("");
+      queryClient.invalidateQueries("post");
     } catch (error) {
-      Swal.fire({ title: '댓글이 추가되지 않았습니다', icon: 'warning' });
+      Swal.fire({ title: "댓글이 추가되지 않았습니다", icon: "warning" });
     }
   };
 
   //댓글삭제
   const handleDeleteComment = async (commentId) => {
     const result = await Swal.fire({
-      title: '댓글을 삭제하시겠습니까?',
+      title: "댓글을 삭제하시겠습니까?",
       showCancelButton: true, // 취소 버튼 표시
-      confirmButtonText: '삭제', // 확인 버튼 텍스트
+      confirmButtonText: "삭제", // 확인 버튼 텍스트
       showCloseButton: true, // 닫기 버튼 표시
     });
 
     if (result.isConfirmed) {
       try {
-        await deleteDoc(doc(db, 'comments', commentId));
+        await deleteDoc(doc(db, "comments", commentId));
         // setComments(
         //   post.comments.filter((comment) => comment.id !== commentId)
         // );
         setComments(comments.filter((comment) => comment.id !== commentId));
-        queryClient.invalidateQueries('post');
+        queryClient.invalidateQueries("post");
       } catch (error) {
-        Swal.fire({ title: '댓글이 삭제되지 않았습니다', icon: 'warning' });
+        Swal.fire({ title: "댓글이 삭제되지 않았습니다", icon: "warning" });
       }
     }
   };
@@ -140,31 +132,31 @@ function Comments({ id }) {
 
   const cancelEditComment = () => {
     setEditingCommentId(null);
-    setEditedComment('');
+    setEditedComment("");
   };
 
   const updateEditedComment = (e) => {
     setEditedComment(e.target.value);
     if (e.target.value.trim().length === 0) {
-      Swal.fire({ title: '한 글자 이상 입력해주세요', icon: 'warning' });
+      Swal.fire({ title: "한 글자 이상 입력해주세요", icon: "warning" });
     }
   };
 
   const saveEditedComment = async (commentId) => {
-    if (editedComment === '') {
+    if (editedComment === "") {
       return;
     }
 
     try {
-      await updateDoc(doc(db, 'comments', commentId), {
+      await updateDoc(doc(db, "comments", commentId), {
         comment: editedComment,
       });
 
       setEditingCommentId(null);
-      setEditedComment('');
-      queryClient.invalidateQueries('post');
+      setEditedComment("");
+      queryClient.invalidateQueries("post");
     } catch (error) {
-      console.error('댓글 수정 에러: ', error);
+      console.error("댓글 수정 에러: ", error);
     }
   };
 

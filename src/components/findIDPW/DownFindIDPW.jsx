@@ -108,6 +108,11 @@ function DownFindIDPW() {
   };
 
   const TimeStampToDate = (time) => {
+    if (!time) {
+      // time이 없을 경우 처리
+      return null; // 또는 다른 기본값 또는 오류 처리 로직을 추가할 수 있습니다.
+    }
+
     // Firebase timestamp를 JavaScript Date 객체로 변환합니다.
     const date = time.toDate();
 

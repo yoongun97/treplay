@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { db, storage } from '../../firebaseConfig';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { db, storage } from "../../firebaseConfig";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import {
   getDownloadURL,
   ref,
   uploadBytes,
   deleteObject,
-} from 'firebase/storage';
-import * as s from './StyledEdit';
-import Swal from 'sweetalert2';
-import { useQuery, useQueryClient } from 'react-query';
+} from "firebase/storage";
+import * as s from "./StyledEdit";
+import Swal from "sweetalert2";
+import { useQueryClient } from "react-query";
 
 const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
@@ -19,8 +19,8 @@ const Edit = () => {
   const { id } = useParams();
 
   const [post, setpost] = useState(null);
-  const [editContent, setEditContent] = useState('');
-  const [editOneLineContent, setEditOneLineContent] = useState('');
+  const [editContent, setEditContent] = useState("");
+  const [editOneLineContent, setEditOneLineContent] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
 
@@ -30,8 +30,6 @@ const Edit = () => {
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
-
-
     const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
     const fileExtension = fileName.split(".").pop().toLowerCase();
 
@@ -40,7 +38,7 @@ const Edit = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const editPostData = doc(db, 'posts', id);
+      const editPostData = doc(db, "posts", id);
       const docSnapshot = await getDoc(editPostData);
       //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
@@ -64,7 +62,6 @@ const Edit = () => {
     const files = Array.from(e.target.files);
     for (const file of files) {
       if (!isImageFile(file.name)) {
-
         alert("파일은 jpg, png, gif, jpeg 형식의 파일만 업로드 가능합니다!");
 
         return;
@@ -78,7 +75,6 @@ const Edit = () => {
     setEditImage(files);
 
     const selectedImages = Array.from(e.target.files);
-
 
     const previews = selectedImages.map((image) => URL.createObjectURL(image));
     setSelectedFilePreviews(previews);
@@ -94,14 +90,13 @@ const Edit = () => {
       const updatedImageUrls = post.postImgs.filter((url) => url !== imageUrl);
 
       // Firestore 데이터베이스 업데이트
-      const editData = doc(db, 'posts', id);
+      const editData = doc(db, "posts", id);
       await updateDoc(editData, { postImgs: updatedImageUrls });
 
       // 컴포넌트의 상태 업데이트
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
-      Swal.fire({ title: '이미지 삭제 오류입니다', icon: 'error' });
-
+      Swal.fire({ title: "이미지 삭제 오류입니다", icon: "error" });
     }
   };
   //미리보기 이미지 삭제
@@ -114,7 +109,7 @@ const Edit = () => {
 
   const handlePostSave = async () => {
     try {
-      const editData = doc(db, 'posts', id);
+      const editData = doc(db, "posts", id);
       // 업데이트할 필드와 값을 담을 빈 객체 생성
       const updateData = {};
 
@@ -143,9 +138,9 @@ const Edit = () => {
       await updateDoc(editData, updateData);
 
       navigate(`/detail/${id}`);
-      queryClient.invalidateQueries(['post', id]);
+      queryClient.invalidateQueries(["post", id]);
     } catch (error) {
-      Swal.fire({ title: '게시물 수정 오류', icon: 'warning' });
+      Swal.fire({ title: "게시물 수정 오류", icon: "warning" });
     }
   };
 

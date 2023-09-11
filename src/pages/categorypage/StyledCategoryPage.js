@@ -59,7 +59,7 @@ export const OffButton = styled.button`
   color: #bfbfbf;
   font-weight: 400;
 `;
-export const WriteButton = styled(Link)`
+export const WriteButton = styled.a`
   align-self: flex-end;
   display: flex;
   justify-content: center;

@@ -34,7 +34,7 @@ export const ListBox = styled(Link)`
     width: 100%;
     padding: 5px 0;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 26px;
     overflow: hidden;
     text-overflow: ellipsis;

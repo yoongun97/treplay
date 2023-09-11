@@ -9,7 +9,7 @@ import Edit from "./pages/edit/Edit";
 import MyPage from "./pages/mypage/MyPage";
 import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAtom } from "jotai";
 import { userAtom } from "./store/userAtom";
@@ -19,7 +19,7 @@ import SuggestLogin from "./components/login/SuggestLogin";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
 
 function App() {
-  const [user, setUser] = useAtom(userAtom); // userAtom 사용
+  const [, setUser] = useAtom(userAtom); // userAtom 사용
   const location = useLocation(); // 현재 경로 정보를 가져옴
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
@@ -54,7 +54,7 @@ function App() {
         <Route path="/:nation" element={<NationPage />} />
         <Route path="/:nation/:category" element={<CategoryPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
-        <Route path="/create" element={user ? <Create /> : <SuggestLogin />} />
+        <Route path="/create" element={<Create />} />
         <Route path="/suggest" element={<SuggestLogin />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/mypage/:uid" element={<MyPage />} />
