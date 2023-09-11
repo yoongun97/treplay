@@ -1,14 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  where,
-  limit,
-} from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
 import PageNation from "../../components/pageNation/PageNation";
@@ -17,10 +10,13 @@ import Search from "../../components/search/Search";
 import * as s from "./StyledCategoryPage";
 import Swal from "sweetalert2";
 import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
 function CategoryPage() {
+  const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
@@ -162,7 +158,7 @@ function CategoryPage() {
   if (error) {
     return Swal.fire({ title: "데이터를 가져올 수 없습니다", icon: "warning" });
   }
-
+  console.log(user);
   return (
     <s.CategoryPageContainer>
       <s.PhrasesContainer>
@@ -216,7 +212,6 @@ function CategoryPage() {
             </s.OffButton>
           )}
         </s.FilterContainer>
-
         <s.WriteButton href="/create">
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}

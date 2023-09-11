@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import SelectBox from "../../components/selectBox/SelectBox";
 import { useAtom } from "jotai";
 import { postAtom } from "../../store/postAtom";
@@ -30,7 +30,6 @@ function Create() {
       <div className="TextContainer">
         <s.StyledTextarea
           placeholder="내용을 작성하는 공간입니다."
-          // value={post.postContent}
           onChange={(e) => {
             setPost({ ...post, postContent: e.target.value });
           }}
@@ -39,7 +38,6 @@ function Create() {
           type="text"
           placeholder="10자 이내의 한줄평을 남겨 주세요"
           maxLength="10"
-          // value={post.postOneLineContent}
           onChange={(e) => {
             setPost({ ...post, postOneLineContent: e.target.value });
           }}
