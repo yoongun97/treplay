@@ -63,7 +63,8 @@ function NationPage() {
       <NationCarousel />
       <Category />
       <Preview
-        posts={posts}
+        // posts={posts}
+        posts={data?.posts ? data.posts : []}
         allLikedData={allLikedData}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -71,7 +72,11 @@ function NationPage() {
       <MiddleBanner />
 
       <EventBanner />
-      <BestPlace posts={posts} allLikedData={allLikedData} />
+      <BestPlace
+        //  posts={posts}
+        posts={data?.posts ? data.posts : []}
+        allLikedData={allLikedData}
+      />
     </div>
   );
 }
