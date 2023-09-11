@@ -17,8 +17,7 @@ import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard"
 
 function MyPage() {
   const [user] = useAtom(userAtom);
-  const userUidObject = useParams();
-  const userUid = userUidObject.uid;
+  const { uid } = useParams();
 
   const [allData, setAllData] = useState([]);
   const [ownData, setOwnData] = useState([]);
@@ -40,7 +39,7 @@ function MyPage() {
       id: doc.id,
     }));
     setAllData(data);
-    setOwnData(data.find((item) => item.uid === userUid));
+    setOwnData(data.find((item) => item.uid === uid));
 
     // 또가요 데이터
     const likedQ = query(collection(db, "likes"));
@@ -51,7 +50,7 @@ function MyPage() {
     setAllLikedData(likedData);
 
     // 내 저장 데이터
-    const savedQ = query(collection(db, "saved"), where("uid", "==", userUid));
+    const savedQ = query(collection(db, "saved"), where("uid", "==", uid));
     const savedQuerySnapshot = await getDocs(savedQ);
     const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
 
@@ -64,7 +63,7 @@ function MyPage() {
     }));
 
     // 내가 쓴 글 목록 저장
-    setMyPosts(postsData.filter((data) => data.uid === userUid));
+    setMyPosts(postsData.filter((data) => data.uid === uid));
 
     // 저장한 글 목록 저장
     const filteredData = postsData.filter((post) => {
@@ -99,7 +98,7 @@ function MyPage() {
 
   // 리액트 쿼리로 로딩/에러 처리
 
-  const { isLoading, isError, error } = useQuery("userData", fetchData);
+  const { isLoading, isError, error } = useQuery(["userData", uid], fetchData);
 
   if (isError) {
     return Swal.fire({

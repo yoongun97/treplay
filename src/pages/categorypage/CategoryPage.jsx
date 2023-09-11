@@ -217,7 +217,7 @@ function CategoryPage() {
           )}
         </s.FilterContainer>
 
-        <s.WriteButton to={"/create"}>
+        <s.WriteButton href="/create">
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
             alt="writing_icon"

@@ -129,7 +129,7 @@ function DetailPage() {
                 ></img>
               </button>
             </s.ReactButtonContainer>
-            {user && user.uid === post?.uid ? (
+            {user && user.uid === post?.uid && (
               <s.EditButtonContainer>
                 <button
                   onClick={() => {
@@ -146,8 +146,6 @@ function DetailPage() {
                   삭제
                 </button>
               </s.EditButtonContainer>
-            ) : (
-              <></>
             )}
           </s.ButtonContainer>
         </s.InfoContainer>
