@@ -26,9 +26,7 @@ function DetailPage() {
     error,
   } = useQuery(["post", id], async () => {
     const postRef = doc(db, "posts", id);
-
     const docSnapshot = await getDoc(postRef);
-    console.log({ docSnapshot });
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() };
     } else {
