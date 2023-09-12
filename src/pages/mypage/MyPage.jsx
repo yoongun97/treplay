@@ -78,6 +78,7 @@ function MyPage() {
       const filteredData = postsData.filter((post) =>
         savedData.some((data) => post.id === data.postId)
       );
+
       setSavedPosts(filteredData);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
