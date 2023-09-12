@@ -1,44 +1,38 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  where,
-  limit,
-} from "firebase/firestore";
-
+import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
+import { useAtom } from "jotai";
+import { userAtom } from "../../store/userAtom";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import PageNation from "../../components/pageNation/PageNation";
 import CategoryLikes from "./CategoryLikes";
 import Search from "../../components/search/Search";
 import * as s from "./StyledCategoryPage";
 import Swal from "sweetalert2";
+
 //콘솔 지우기
 const POSTS_VIEW_PAGE = 3;
 
 function CategoryPage() {
+  const [user] = useAtom(userAtom);
   const { nation, category } = useParams();
   const [filteredPosts, setFilteredPosts] = useState([]);
   //페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastVisibleDoc, setLastVisibleDoc] = useState(null);
   //또가요 , 북마크 , 최신순 정렬하기
   const [sortOption, setSortOption] = useState("date");
-
   const queryClient = useQueryClient();
 
-  const handleLikesSort = useCallback(() => {
-    queryClient.invalidateQueries(["posts", category, currentPage, "likes"]);
-    setSortOption("likes");
-  }, [queryClient, category, currentPage]);
-
-  const handleDateSort = useCallback(() => {
-    queryClient.invalidateQueries(["posts", category, currentPage, "date"]);
-    setSortOption("date");
-  }, [queryClient, category, currentPage]);
+  const handleSort = useCallback(
+    (option) => {
+      const key = option === "likes" ? "likes" : "date";
+      setSortOption(key);
+      queryClient.invalidateQueries(["posts", category, currentPage, key]);
+    },
+    [queryClient, category, currentPage]
+  );
 
   const handleSearch = (searchData) => {
     const searchResults = posts.filter((post) => {
@@ -65,7 +59,7 @@ function CategoryPage() {
       collection(db, "posts"),
       where("nation", "==", nation),
       where("category", "==", category),
-      orderBy("date", "desc") //orderby를 위한 index생성했지만 오류
+      orderBy("date", "desc")
     );
     const querySnapshot = await getDocs(postsCollection);
 
@@ -106,8 +100,6 @@ function CategoryPage() {
   };
 
   // Date 객체로 변환 후 비교
-  // sort가 posts데이터도 바꿔버림
-  //const copy = [...posts] copy.sort() 기존의 데이터를 변경 되는것이 위험성이 있다.
   const sortPostsByDate = (posts) => {
     const copyPosts = [...posts];
     return copyPosts.sort((a, b) => {
@@ -134,10 +126,6 @@ function CategoryPage() {
     isLoading,
   } = useQuery(["posts", category, currentPage, sortOption], fetchPosts);
 
-  // 1. posts에 바로 데이터가 들어오나?
-  // => No -> null
-  // 2. isLoading을 처음에 true로 만들어줌
-  // -> posts가 가져와지면 posts에 데이터가 들어가진다.
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -151,10 +139,11 @@ function CategoryPage() {
       const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
       const sortedPosts = sortPosts(currentPosts, sortOption);
       setFilteredPosts(sortedPosts);
-      if (currentPosts.length > 0) {
-        const lastPost = currentPosts[currentPosts.length - 1];
-        setLastVisibleDoc(lastPost);
-      }
+
+      // if (currentPosts.length > 0) {
+      //   const lastPost = currentPosts[currentPosts.length - 1];
+      //   setLastVisibleDoc(lastPost);
+      // }
     }
   }, [posts, sortOption, currentPage]);
 
@@ -172,7 +161,7 @@ function CategoryPage() {
       <s.MiddleContainer>
         <s.FilterContainer>
           {sortOption === "date" ? (
-            <s.OnButton onClick={() => handleDateSort("date")} selected={true}>
+            <s.OnButton onClick={() => handleSort("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_white.svg`}
                 alt="latest_Filter_Icon"
@@ -180,10 +169,7 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton
-              onClick={() => handleDateSort("date")}
-              selected={false}
-            >
+            <s.OffButton onClick={() => handleSort("date")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/latest_icon_gray.svg`}
                 alt="latest_Filter_Icon"
@@ -192,10 +178,7 @@ function CategoryPage() {
             </s.OffButton>
           )}
           {sortOption === "likes" ? (
-            <s.OnButton
-              onClick={() => handleLikesSort("likes")}
-              selected={true}
-            >
+            <s.OnButton onClick={() => handleSort("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_white.svg`}
                 alt="liked_Filter_Icon"
@@ -203,10 +186,7 @@ function CategoryPage() {
               <span>인기순</span>
             </s.OnButton>
           ) : (
-            <s.OffButton
-              onClick={() => handleLikesSort("likes")}
-              selected={false}
-            >
+            <s.OffButton onClick={() => handleSort("likes")}>
               <img
                 src={`${process.env.PUBLIC_URL}/icon/liked_icon_gray.svg`}
                 alt="liked_Filter_Icon"
@@ -215,8 +195,7 @@ function CategoryPage() {
             </s.OffButton>
           )}
         </s.FilterContainer>
-
-        <s.WriteButton to={"/create"}>
+        <s.WriteButton href={user ? "/create" : "/suggest"}>
           <img
             src={`${process.env.PUBLIC_URL}/icon/write_icon_white.svg`}
             alt="writing_icon"
@@ -225,31 +204,29 @@ function CategoryPage() {
         </s.WriteButton>
       </s.MiddleContainer>
       <s.PostsContainer>
-        {/* 아래에 처리 가능하다 위에 있는 에러등.. */}
-        {/* 이즈로딩 - 적용시 페이지네이션 부분 오류*/}
-        {isLoading ? <>로딩중입니다</> : null}
         {error ? <>에러입니다</> : null}
-        <>
-          {filteredPosts.length > 0 ? (
-            filteredPosts.slice(0, 3).map((post) => (
-              <div key={post.id}>
-                <s.PostBox to={`/detail/${post.id}`}>
-                  <s.ImageBox alt="PostImgs" src={post.postImgs} />
-                  <h4>{post.placeName}</h4>
-                  <h5>{post.placeLocation}</h5>
-                  <p>
-                    <span># </span>
-                    {post.postOneLineContent}
-                  </p>
-                  <CategoryLikes id={post.id} />
-                </s.PostBox>
-              </div>
-            ))
-          ) : (
-            <div>결과가 없습니다.</div>
-          )}
-        </>
-        {/* )} */}
+        {isLoading ? (
+          <SkeletonCard />
+        ) : (
+          <>
+            {filteredPosts.length > 0
+              ? filteredPosts.slice(0, 3).map((post) => (
+                  <div key={post.id}>
+                    <s.PostBox to={`/detail/${post.id}`}>
+                      <s.ImageBox alt="PostImgs" src={post.postImgs} />
+                      <h4>{post.placeName}</h4>
+                      <h5>{post.placeLocation}</h5>
+                      <p>
+                        <span># </span>
+                        {post.postOneLineContent}
+                      </p>
+                      <CategoryLikes id={post.id} />
+                    </s.PostBox>
+                  </div>
+                ))
+              : filteredPosts.length === 0 && <div>결과가 없습니다.</div>}
+          </>
+        )}
       </s.PostsContainer>
       <PageNation
         postsViewPage={POSTS_VIEW_PAGE}

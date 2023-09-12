@@ -10,27 +10,29 @@ import {
 } from "firebase/storage";
 import * as s from "./StyledEdit";
 import Swal from "sweetalert2";
+import { useQueryClient } from "react-query";
 
 const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
 
 const Edit = () => {
   const { id } = useParams();
+
   const [post, setpost] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [editOneLineContent, setEditOneLineContent] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
-  //이미지 선택 미리보기
+
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   //장소와 카테고리 받기
-  const [, setNation] = useState("");
-  const [, setCategory] = useState("");
+  const queryClient = useQueryClient();
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
     const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
     const fileExtension = fileName.split(".").pop().toLowerCase();
+
     return allowedExtensions.includes(fileExtension);
   }
 
@@ -43,8 +45,6 @@ const Edit = () => {
         setpost({ id: docSnapshot.id, ...docSnapshot.data() });
         setEditContent(docSnapshot.data().postContent);
         setEditOneLineContent(docSnapshot.data().postOneLineContent);
-        setNation(docSnapshot.data().nation);
-        setCategory(docSnapshot.data().category);
       }
     };
     fetchData();
@@ -63,6 +63,7 @@ const Edit = () => {
     for (const file of files) {
       if (!isImageFile(file.name)) {
         alert("파일은 jpg, png, gif, jpeg 형식의 파일만 업로드 가능합니다!");
+
         return;
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -74,7 +75,6 @@ const Edit = () => {
     setEditImage(files);
 
     const selectedImages = Array.from(e.target.files);
-    //이미지 선택 미리보기
 
     const previews = selectedImages.map((image) => URL.createObjectURL(image));
     setSelectedFilePreviews(previews);
@@ -96,9 +96,7 @@ const Edit = () => {
       // 컴포넌트의 상태 업데이트
       setpost((prevPost) => ({ ...prevPost, postImgs: updatedImageUrls }));
     } catch (error) {
-      // 추후 수정 필요
-      alert(error.code);
-      console.error("이미지 삭제 오류:", error);
+      Swal.fire({ title: "이미지 삭제 오류입니다", icon: "error" });
     }
   };
   //미리보기 이미지 삭제
@@ -140,6 +138,7 @@ const Edit = () => {
       await updateDoc(editData, updateData);
 
       navigate(`/detail/${id}`);
+      queryClient.invalidateQueries(["post", id]);
     } catch (error) {
       Swal.fire({ title: "게시물 수정 오류", icon: "warning" });
     }

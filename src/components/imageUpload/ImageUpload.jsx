@@ -160,22 +160,57 @@ function ImageUpload() {
             <s.NoImageBox>
               이미지를
               <br /> 첨부해주세요.
+              <s.FileInputBox
+                id="file-input"
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept=".gif, .jpg, .png, .jpeg"
+              />
             </s.NoImageBox>
             <s.NoImageBox>
               이미지를
               <br /> 첨부해주세요.
+              <s.FileInputBox
+                id="file-input"
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept=".gif, .jpg, .png, .jpeg"
+              />
             </s.NoImageBox>
             <s.NoImageBox>
               이미지를
               <br /> 첨부해주세요.
+              <s.FileInputBox
+                id="file-input"
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept=".gif, .jpg, .png, .jpeg"
+              />
             </s.NoImageBox>
             <s.NoImageBox>
               이미지를
               <br /> 첨부해주세요.
+              <s.FileInputBox
+                id="file-input"
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept=".gif, .jpg, .png, .jpeg"
+              />
             </s.NoImageBox>
             <s.NoImageBox>
               이미지를
               <br /> 첨부해주세요.
+              <s.FileInputBox
+                id="file-input"
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept=".gif, .jpg, .png, .jpeg"
+              />
             </s.NoImageBox>
           </>
         )}
