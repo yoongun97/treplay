@@ -20,7 +20,7 @@ import EmailModal from "../modal/EmailModal";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import Swal from "sweetalert2";
 
-const ERROR_NAMES = {
+const ERROR_BOXES = {
   NAME: "name",
   EMAIL: "email",
   PASSWORD: "password",
@@ -54,7 +54,7 @@ function Signup() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 체크박스
-  const [temrsOfUse, setTemrsOfUse] = useState(false);
+  const [termsOfUse, setTermsOfUse] = useState(false);
   const [personalInfo, setPersonalInfo] = useState(false);
 
   // error box 위치 상태
@@ -82,7 +82,7 @@ function Signup() {
 
   // 약관동의 체크박스 handler
   const bothCheckHandler = (isChecked) => {
-    setTemrsOfUse(isChecked);
+    setTermsOfUse(isChecked);
     setPersonalInfo(isChecked);
   };
 
@@ -114,64 +114,64 @@ function Signup() {
     try {
       if (!inputs.email) {
         setIsUsedEmail(true);
-        setErrorBox(ERROR_NAMES.EMAIL);
+        setErrorBox(ERROR_BOXES.EMAIL);
         setErrorMsg("이메일을 입력해 주세요.");
         emailInputRef.current.focus();
         return;
       }
       if (!emailRegex.test(inputs.email)) {
         setIsUsedEmail(true);
-        setErrorBox(ERROR_NAMES.EMAIL);
+        setErrorBox(ERROR_BOXES.EMAIL);
         setErrorMsg(getErrorMessage("auth/invalid-email"));
         emailInputRef.current.focus();
         return;
       }
       if (!inputs.name) {
-        setErrorBox(ERROR_NAMES.NAME);
+        setErrorBox(ERROR_BOXES.NAME);
         setErrorMsg("이름을 입력해 주세요.");
         nameInputRef.current.focus();
         return;
       }
       if (!inputs.password) {
-        setErrorBox(ERROR_NAMES.PASSWORD);
+        setErrorBox(ERROR_BOXES.PASSWORD);
         setErrorMsg("비밀번호를 입력해 주세요.");
         passwordInputRef.current.focus();
         return;
       }
       if (inputs.password.length < 6) {
-        setErrorBox(ERROR_NAMES.PASSWORD);
+        setErrorBox(ERROR_BOXES.PASSWORD);
         setErrorMsg(getErrorMessage("auth/weak-password"));
         passwordInputRef.current.focus();
         return;
       }
       if (inputs.password !== inputs.confirmPassword) {
-        setErrorBox(ERROR_NAMES.CONFIRM_PASSWORD);
+        setErrorBox(ERROR_BOXES.CONFIRM_PASSWORD);
         setErrorMsg(getErrorMessage("auth/wrong-password"));
         confirmpwInputRef.current.focus();
         return;
       }
       if (!inputs.nickname) {
         setIsUsedNickname(true);
-        setErrorBox(ERROR_NAMES.NICKNAME);
+        setErrorBox(ERROR_BOXES.NICKNAME);
         setErrorMsg("닉네임을 입력해 주세요.");
         nicknameInputRef.current.focus();
         return;
       }
       if (!inputs.phoneNumber) {
-        setErrorBox(ERROR_NAMES.PHONE_NUMBER);
+        setErrorBox(ERROR_BOXES.PHONE_NUMBER);
         setErrorMsg("전화번호를 입력해 주세요.");
         phonenumberInputRef.current.focus();
         return;
       }
 
       if (inputs.phoneNumber.length < 10) {
-        setErrorBox(ERROR_NAMES.PHONE_NUMBER);
+        setErrorBox(ERROR_BOXES.PHONE_NUMBER);
         setErrorMsg("전화번호는 10자 이상이어야 합니다.");
         phonenumberInputRef.current.focus();
         return;
       }
       if (isNaN(inputs.phoneNumber) === true) {
-        setErrorBox(ERROR_NAMES.PHONE_NUMBER);
+        setErrorBox(ERROR_BOXES.PHONE_NUMBER);
         setErrorMsg("번호는 '-'를 제외한 숫자만 입력해 주세요.");
         phonenumberInputRef.current.focus();
         return;
@@ -180,7 +180,7 @@ function Signup() {
         Swal.fire({ title: "이미 생성된 계정이 있습니다.", icon: "error" });
         return;
       }
-      if (temrsOfUse === false || personalInfo === false) {
+      if (termsOfUse === false || personalInfo === false) {
         setErrorBox("");
         Swal.fire({ title: "약관에 동의해 주세요.", icon: "warning" });
         checkboxInputRef.current.focus();
@@ -226,7 +226,7 @@ function Signup() {
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        setErrorBox(ERROR_NAMES.EMAIL);
+        setErrorBox(ERROR_BOXES.EMAIL);
         setErrorMsg("중복확인을 해주세요");
         emailInputRef.current.focus();
       } else {
@@ -266,13 +266,13 @@ function Signup() {
         setIsModalOpen(true);
       } else if (usedEmail.length === 0) {
         setIsUsedEmail(false);
-        setErrorBox(ERROR_NAMES.EMAIL);
+        setErrorBox(ERROR_BOXES.EMAIL);
         setErrorMsg("사용 가능한 이메일입니다.");
       }
     } catch (error) {
       console.log(error);
       setIsUsedEmail(true);
-      setErrorBox(ERROR_NAMES.EMAIL);
+      setErrorBox(ERROR_BOXES.EMAIL);
       setErrorMsg("유효하지 않은 이메일입니다.");
     }
   };
@@ -296,13 +296,13 @@ function Signup() {
         setIsModalOpen(true);
       } else if (usedNickname.length === 0) {
         setIsUsedNickname(false);
-        setErrorBox(ERROR_NAMES.NICKNAME);
+        setErrorBox(ERROR_BOXES.NICKNAME);
         setErrorMsg("사용 가능한 닉네임입니다.");
       }
     } catch (error) {
       console.log(error);
       setIsUsedNickname(true);
-      setErrorBox(ERROR_NAMES.NICKNAME);
+      setErrorBox(ERROR_BOXES.NICKNAME);
       setErrorMsg("유효하지 않은 닉네임입니다.");
     }
   };
@@ -542,7 +542,7 @@ function Signup() {
             <s.AgreementCheckBox
               style={{ marginTop: "14px", marginBottom: "14px" }}
               type="checkbox"
-              checked={temrsOfUse && personalInfo}
+              checked={termsOfUse && personalInfo}
               onChange={(e) => {
                 bothCheckHandler(e.target.checked);
               }}
@@ -554,9 +554,9 @@ function Signup() {
             <s.AgreementSubtitleBox>
               <s.AgreementCheckBox
                 type="checkbox"
-                checked={temrsOfUse}
+                checked={termsOfUse}
                 onChange={(e) => {
-                  setTemrsOfUse(e.target.checked);
+                  setTermsOfUse(e.target.checked);
                 }}
               />
               <s.AgreementSubtitle>이용약관</s.AgreementSubtitle>
