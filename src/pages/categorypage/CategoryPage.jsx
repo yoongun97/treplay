@@ -177,7 +177,6 @@ function CategoryPage() {
               <span>최신순</span>
             </s.OffButton>
           )}
-
           {sortOption === "likes" ? (
             <s.OnButton onClick={() => handleSort("likes")}>
               <img

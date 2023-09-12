@@ -1,31 +1,31 @@
-import { deleteDoc, doc } from 'firebase/firestore';
-import React from 'react';
-import { useMutation } from 'react-query';
-import { db } from '../../../../firebaseConfig';
-import * as s from './StyledMyList';
-import Swal from 'sweetalert2';
+import { deleteDoc, doc } from "firebase/firestore";
+import React from "react";
+import { useMutation } from "react-query";
+import { db } from "../../../../firebaseConfig";
+import * as s from "./StyledMyList";
+import Swal from "sweetalert2";
 
 function MyList({ myPosts, setMyPosts, allLikedData }) {
   // 게시물 삭제
   const deletePostHandler = async (post) => {
     const result = await Swal.fire({
-      title: '정말 삭제하시겠습니까?',
-      icon: 'warning',
+      title: "정말 삭제하시겠습니까?",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: '예',
-      cancelButtonText: '아니오',
+      confirmButtonText: "예",
+      cancelButtonText: "아니오",
     });
 
     if (result.isConfirmed) {
       deleteMutation.mutate(post);
-      return Swal.fire({ title: '글이 삭제되었습니다!', icon: 'success' });
+      return Swal.fire({ title: "글이 삭제되었습니다!", icon: "success" });
     } else {
       return;
     }
   };
   const deleteMutation = useMutation(
     async (post) => {
-      const postRef = doc(db, 'posts', post.id);
+      const postRef = doc(db, "posts", post.id);
       await deleteDoc(postRef);
     },
     {
@@ -41,10 +41,10 @@ function MyList({ myPosts, setMyPosts, allLikedData }) {
     <s.ListContainer>
       {myPosts?.map((post) => {
         const likedCount = allLikedData?.filter(
-          (data) => data.postId === post.id && data.state === 'like'
+          (data) => data.postId === post.id && data.state === "like"
         );
         const dislikedCount = allLikedData?.filter(
-          (data) => data.postId === post.id && data.state === 'dislike'
+          (data) => data.postId === post.id && data.state === "dislike"
         );
         const imageUrl = post.postImgs[0];
         const imageStyle = {

@@ -3,7 +3,8 @@ import * as m from "./StyledModal";
 
 function NicknameModal({
   nickname,
-  setNickname,
+  inputs,
+  setInputs,
   setIsModalOpen,
   isUsedNickname,
   nicknameCheckHandler,
@@ -67,7 +68,7 @@ function NicknameModal({
             </m.ModalErrorBox>
             <m.SuccessBtn
               onClick={() => {
-                setNickname(checkNickname);
+                setInputs({ ...inputs, nickname: checkNickname });
                 setIsModalOpen(false);
               }}
             >

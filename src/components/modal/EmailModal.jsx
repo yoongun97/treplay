@@ -3,7 +3,8 @@ import * as m from "./StyledModal";
 
 function EmailModal({
   email,
-  setEmail,
+  inputs,
+  setInputs,
   setIsModalOpen,
   isUsedEmail,
   emailCheckHandler,
@@ -48,7 +49,7 @@ function EmailModal({
 
       {showMsg && (
         <div>
-          {isUsedEmail === "duplicate" ? (
+          {isUsedEmail === true ? (
             <m.ModalErrorBox>
               <m.ModalErrorMark
                 src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -58,7 +59,7 @@ function EmailModal({
                 이미 사용중인 이메일 입니다.
               </m.ModalErrorMsg>
             </m.ModalErrorBox>
-          ) : isUsedEmail === "notduplicate" ? (
+          ) : isUsedEmail === false ? (
             <>
               <m.ModalErrorBox>
                 <m.ModalErrorMark
@@ -69,7 +70,7 @@ function EmailModal({
               </m.ModalErrorBox>
               <m.SuccessBtn
                 onClick={() => {
-                  setEmail(checkEmail);
+                  setInputs({ ...inputs, email: checkEmail });
                   setIsModalOpen(false);
                 }}
               >
