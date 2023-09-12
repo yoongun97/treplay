@@ -25,7 +25,6 @@ const POSTS_VIEW_PAGE = 3;
 function MyPage() {
   const [user] = useAtom(userAtom);
   const uid = user?.uid;
-  console.log(user);
 
   const [allData, setAllData] = useState([]);
   const [ownData, setOwnData] = useState([]);
@@ -79,6 +78,8 @@ function MyPage() {
       const filteredData = postsData.filter((post) =>
         savedData.some((data) => post.id === data.postId)
       );
+      // console.log(postsData);
+      // console.log(filteredData);
       setSavedPosts(filteredData);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
@@ -149,6 +150,8 @@ function MyPage() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  // console.log(savedPosts);
 
   return (
     <>
