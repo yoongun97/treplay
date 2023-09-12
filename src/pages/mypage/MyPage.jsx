@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { userAtom } from "../../store/userAtom";
 import {
   collection,
@@ -62,8 +62,8 @@ function MyPage() {
         ...doc.data(),
         id: doc.id,
       }));
-      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data);
-      const savedData = savedQuerySnapshot.docs.map((doc) => doc.data);
+      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
+      const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
       const postsData = postsQuerySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
@@ -78,8 +78,7 @@ function MyPage() {
       const filteredData = postsData.filter((post) =>
         savedData.some((data) => post.id === data.postId)
       );
-      // console.log(postsData);
-      // console.log(filteredData);
+
       setSavedPosts(filteredData);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
@@ -150,8 +149,6 @@ function MyPage() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  // console.log(savedPosts);
 
   return (
     <>
