@@ -57,7 +57,7 @@ function App() {
         <Route path="/create" element={<Create />} />
         <Route path="/suggest" element={<SuggestLogin />} />
         <Route path="/edit/:id" element={<Edit />} />
-        <Route path="/mypage/:uid" element={<MyPage />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/idpw/inquiry" element={<DownFindIDPW />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
