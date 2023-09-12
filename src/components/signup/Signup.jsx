@@ -298,44 +298,19 @@ function Signup() {
   };
 
   // 이미지 변경 처리 함수
-  // const handleImageChange = (e) => {
-  //   const selectedImage = e.target.files[0];
-  //   if (selectedImage) {
-  //     const reader = new FileReader();
-  //     reader.onload = (event) => {
-  //       setProfileImage(event.target.result);
-  //     };
-  //     reader.readAsDataURL(selectedImage);
-
-  //     setSelectedImage(selectedImage); // 선택한 이미지 저장
-  //   }
-  // };
-
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     if (selectedImage) {
-      try {
-        const storageRef = ref(
-          storage,
-          `profile_images/${auth.currentUser.uid}` // 사용자 UID를 기반으로 이미지 저장 경로 설정
-        );
-        const imageSnapshot = await uploadBytes(storageRef, selectedImage);
-        const imageUrl = await getDownloadURL(imageSnapshot.ref);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfileImage(event.target.result);
+      };
+      reader.readAsDataURL(selectedImage);
 
-        // 이미지 URL을 사용자 프로필에 저장 또는 업데이트합니다.
-        // 예를 들어, updateProfile 함수를 사용하여 Firebase Authentication에 저장할 수 있습니다.
-
-        // auth.currentUser가 현재 로그인한 사용자를 나타냅니다.
-        // 이 사용자의 프로필 정보를 업데이트하고 이미지 URL을 저장합니다.
-        await updateProfile(auth.currentUser, {
-          photoURL: imageUrl,
-        });
-
-        // 이미지 URL을 상태에 저장합니다.
-        setProfileImage(imageUrl);
-      } catch (error) {
-        console.error('이미지 업로드 에러:', error);
-      }
+      setSelectedImage(selectedImage); // 선택한 이미지 저장
+    } else {
+      setProfileImage(`${process.env.PUBLIC_URL}/image/baseprofile.jpeg`);
+      setSelectedImage(null);
     }
   };
 
@@ -606,7 +581,7 @@ function Signup() {
               />
               <s.AgreementSubtitle>이용약관</s.AgreementSubtitle>
               <s.AgreementSubtitle
-                style={{ color: "#E02918", marginLeft: "5px" }}
+                style={{ color: '#E02918', marginLeft: '5px' }}
               >
                 (필수)
               </s.AgreementSubtitle>
@@ -656,14 +631,14 @@ function Signup() {
               />
               <s.AgreementSubtitle>개인정보 수집 이용</s.AgreementSubtitle>
               <s.AgreementSubtitle
-                style={{ color: "#E02918", marginLeft: "5px" }}
+                style={{ color: '#E02918', marginLeft: '5px' }}
               >
                 (필수)
               </s.AgreementSubtitle>
             </s.AgreementSubtitleBox>
             <s.AgreementContentBox>
               <s.AgreementContent readOnly>
-                김용택 / 달이 떴다고 전화를 주시다니요.
+                김용택 / 달이 떴다고 전화를 주시다니요
                 <br />
                 달이 떴다고 전화를 주시다니요
                 <br />
