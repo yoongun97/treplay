@@ -9,7 +9,6 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
-import { useParams } from 'react-router-dom';
 import SavedList from './components/savedList/SavedList';
 import { useMutation, useQuery } from 'react-query';
 import ProfileImage from './components/profileImage/ProfileImage';
@@ -25,7 +24,8 @@ const POSTS_VIEW_PAGE = 3;
 
 function MyPage() {
   const [user] = useAtom(userAtom);
-  const { uid } = useParams();
+  const uid = user?.uid;
+  console.log(user);
 
   const [allData, setAllData] = useState([]);
   const [ownData, setOwnData] = useState([]);
@@ -39,6 +39,9 @@ function MyPage() {
 
   //promise.all 로 관리하기
   const fetchData = async () => {
+    if (!uid) {
+      return [];
+    }
     const userQ = query(collection(db, 'users'));
     const likedQ = query(collection(db, 'likes'));
     const savedQ = query(collection(db, 'saved'), where('uid', '==', uid));
@@ -68,7 +71,7 @@ function MyPage() {
       }));
 
       setAllData(userDocData);
-      setOwnData(postsData.find((item) => item.uid === uid));
+      setOwnData(userDocData.find((item) => item.uid === uid));
 
       setAllLikedData(likedData);
       setMyPosts(postsData.filter((data) => data.uid === uid));
@@ -81,6 +84,8 @@ function MyPage() {
       console.error('데이터 가져오기 오류:', error);
     }
   };
+
+  // 처음 랜더링 될 때 likes / posts db에서 user의 uid와 동일한 uid 가 있는 것들만 정보 가져옴
 
   // 버튼 클릭 시 리스트 전환 함수
   const activeSavedListHandler = () => {
