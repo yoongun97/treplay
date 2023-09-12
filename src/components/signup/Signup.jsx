@@ -222,7 +222,6 @@ function Signup() {
       } else {
         Swal.fire({ title: `${getErrorMessage(error.code)}`, icon: 'error' });
       }
-      console.log(error.message);
     }
   };
 
@@ -260,7 +259,6 @@ function Signup() {
         setErrorMsg('사용 가능한 이메일입니다.');
       }
     } catch (error) {
-      console.log(error);
       setIsUsedEmail('error');
       setErrorBox('email');
       setErrorMsg('유효하지 않은 이메일입니다.');

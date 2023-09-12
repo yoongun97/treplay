@@ -37,42 +37,6 @@ function MyPage() {
   // 페이지네이션 설정
   const [currentPage, setCurrentPage] = useState(1);
 
-  // const fetchData = async () => {
-  //   // 유저 데이터
-  //   const userQ = query(collection(db, 'users'));
-  //   const querySnapshot = await getDocs(userQ);
-  //   const data = querySnapshot.docs.map((doc) => ({
-  //     ...doc.data(),
-  //     id: doc.id,
-  //   }));
-  //   setAllData(data);
-  //   setOwnData(data.find((item) => item.uid === userUid));
-  //   // 또가요 데이터
-  //   const likedQ = query(collection(db, 'likes'));
-  //   const likedQuerySnapshot = await getDocs(likedQ);
-  //   const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
-  //   // 모든 좋아요 데이터 저장
-  //   setAllLikedData(likedData);
-  //   // 내 저장 데이터
-  //   const savedQ = query(collection(db, 'saved'), where('uid', '==', userUid));
-  //   const savedQuerySnapshot = await getDocs(savedQ);
-  //   const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
-  //   // 모든 글 데이터
-  //   const postsQ = query(collection(db, 'posts'));
-  //   const postsQuerySnapshot = await getDocs(postsQ);
-  //   const postsData = postsQuerySnapshot.docs.map((doc) => ({
-  //     ...doc.data(),
-  //     id: doc.id,
-  //   }));
-  //   // 내가 쓴 글 목록 저장
-  //   setMyPosts(postsData.filter((data) => data.uid === userUid));
-  //   // 저장한 글 목록 저장
-  //   const filteredData = postsData.filter((post) => {
-  //     return savedData.some((data) => post.id === data.postId);
-  //   });
-  //   setSavedPosts(filteredData);
-  // };
-
   //promise.all 로 관리하기
   const fetchData = async () => {
     const userQ = query(collection(db, 'users'));
@@ -118,17 +82,6 @@ function MyPage() {
     }
   };
 
-  // 처음 랜더링 될 때 likes / posts db에서 user의 uid와 동일한 uid 가 있는 것들만 정보 가져옴
-
-  useEffect(() => {
-    if (!isMyListActived) {
-      setMyPosts(savedPosts);
-      fetchData();
-    } else {
-      setMyPosts(myPosts);
-      fetchData();
-    }
-  }, [isMyListActived]);
   // 버튼 클릭 시 리스트 전환 함수
   const activeSavedListHandler = () => {
     setIsMyListActived(false);

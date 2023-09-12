@@ -1,21 +1,19 @@
-import React, { useEffect } from "react";
-import SelectBox from "../../components/selectBox/SelectBox";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
-import PlaceSearch from "../../components/place/PlaceSearch";
-import ImageUpload from "../../components/imageUpload/ImageUpload";
-import * as s from "./StyledCreate";
+import React, { useEffect } from 'react';
+import SelectBox from '../../components/selectBox/SelectBox';
+import { useAtom } from 'jotai';
+import { postAtom } from '../../store/postAtom';
+import PlaceSearch from '../../components/place/PlaceSearch';
+import ImageUpload from '../../components/imageUpload/ImageUpload';
+import * as s from './StyledCreate';
 
 function Create() {
   const [post, setPost] = useAtom(postAtom);
 
   useEffect(() => {
-    // Prompt confirmation when reload page is triggered
     window.onbeforeunload = () => {
-      return "";
+      return '';
     };
 
-    // Unmount the window.onbeforeunload event
     return () => {
       window.onbeforeunload = null;
     };
