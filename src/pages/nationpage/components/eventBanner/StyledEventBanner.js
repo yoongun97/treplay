@@ -42,7 +42,7 @@ export const EventBannerBox = styled.div`
   }
 `;
 
-export const LinkBox = styled(Link)`
+export const LinkBox = styled.a`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

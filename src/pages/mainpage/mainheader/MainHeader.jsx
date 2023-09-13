@@ -24,7 +24,6 @@ const MainHeader = () => {
   };
 
   return (
-    // params에 국가가 있으면 관광명소/맛집/숙박 보이게 함...
     <s.HeaderContainer>
       {!!user ? (
         <>

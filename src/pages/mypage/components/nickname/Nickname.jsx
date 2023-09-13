@@ -11,15 +11,12 @@ import Swal from "sweetalert2";
 const Nickname = ({ ownData, allData, fetchData }) => {
   const [user] = useAtom(userAtom);
   const [isEditorActived, setIsEditorActived] = useState(false);
-  // 입력 받는 새로운 닉네임
   const [newNickname, setNewNickname] = useState(user?.displayName);
 
-  // 닉네임 수정 버튼 클릭 핸들러
   const startEditNameHandler = () => {
     setIsEditorActived(true);
   };
 
-  // 닉네임 중복 검사 및 수정 완료 핸들러
   const endEditNameHandler = async () => {
     try {
       const usedNickname = allData.filter(
@@ -68,7 +65,6 @@ const Nickname = ({ ownData, allData, fetchData }) => {
         </s.NickNameContainer>
       ) : (
         <s.NickNameContainerInner>
-          {/* 닉네임 인풋 */}
           {isEditorActived ? (
             <s.AbledInput
               maxLength={10}
@@ -81,7 +77,6 @@ const Nickname = ({ ownData, allData, fetchData }) => {
           ) : (
             <s.DisabledInput type="text" value={user.displayName} disabled />
           )}
-          {/* 닉네임 수정 버튼 */}
           {isEditorActived ? (
             <s.EditButton
               onClick={() => {

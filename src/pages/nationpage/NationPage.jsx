@@ -42,9 +42,6 @@ function NationPage() {
     }
   };
 
-  // // 리액트 쿼리로 로딩/에러 처리
-  // const { data, isLoading, iserror, error } = useQuery("userData", fetchData);
-
   return (
     <div className="Container">
       <NationCarousel />

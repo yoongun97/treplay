@@ -9,12 +9,10 @@ const Preview = ({ selectedCategory, setSelectedCategory, fetch }) => {
   const { nation } = useParams();
   const [selectedPosts, setSelectedPosts] = useState([]);
 
-  // 리액트 쿼리로 로딩/에러 처리
   const { data, isLoading, iserror, error } = useQuery("userData", fetch);
 
   useEffect(() => {
     const fetchData = async () => {
-      // data가 로드되었는지 확인
       if (data) {
         const filteredPosts = await data.posts.filter(
           (post) => post.nation === nation && post.category === "숙박"
@@ -38,9 +36,6 @@ const Preview = ({ selectedCategory, setSelectedCategory, fetch }) => {
 
   const { posts, allLikedData } = data;
 
-  // 처음 컴포넌트 렌더링 될 때 숙박으로 카테고리 맞추고 리스트 불러오는 과정
-
-  // 버튼을 누르면 해당 nation, category 로 필터하여 데이터 가져옴
   const selectListHandler = async (category) => {
     const filteredPosts = await posts.filter(
       (post) => post.nation === nation && post.category === category
@@ -81,10 +76,8 @@ const Preview = ({ selectedCategory, setSelectedCategory, fetch }) => {
         </s.CategoryButton>
       </s.CategoryButtonContainer>
       <s.PreviewListContainer>
-        {/* 걸러진 데이터 중 3번째까지만 보여줌 */}
         {selectedPosts.map((post, index) => {
           if (index <= 2) {
-            // 이미지 중 1번째만 잡아서 백그라운드로 넣어줌
             const imageUrl = post.postImgs[0];
             const imageStyle = {
               backgroundImage: `url(${imageUrl})`,
@@ -104,7 +97,6 @@ const Preview = ({ selectedCategory, setSelectedCategory, fetch }) => {
                   <span># </span>
                   {post.postOneLineContent}
                 </p>
-                {/* 추천/비추천 개수 보여줌 */}
                 <s.LikesContainer>
                   <s.LikesBox>
                     <img

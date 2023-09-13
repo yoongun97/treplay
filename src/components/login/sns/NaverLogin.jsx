@@ -40,7 +40,6 @@ function NaverLogin() {
               password
             );
 
-            console.log(loginedUser);
             // 이미 존재하는 아이디 없으면 회원가입 진행
           } else if (usedEmail.length < 1) {
             const userCredential = await createUserWithEmailAndPassword(
@@ -93,6 +92,5 @@ const StyledBox = styled.div`
     height: 30px;
     border-radius: 50%;
     overflow: hidden;
-    /* opacity: 0%; */
   }
 `;

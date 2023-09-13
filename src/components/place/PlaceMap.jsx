@@ -31,7 +31,6 @@ function PlaceMap({ postAddress, postPlace }) {
     }
   }, [postAddress]);
 
-  // 주소 복사
   const copyAddress = () => {
     if (!document.queryCommandSupported("copy")) {
       return Swal.fire({
