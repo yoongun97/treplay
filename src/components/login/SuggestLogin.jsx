@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 const SuggestLogin = () => {
-  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);

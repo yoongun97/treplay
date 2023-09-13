@@ -10,7 +10,6 @@ function EmailModal({
   emailCheckHandler,
 }) {
   const [checkEmail, setCheckEmail] = useState(email);
-  // 메시지 보여주는 여부
   const [showMsg, setShowMsg] = useState(true);
 
   return (

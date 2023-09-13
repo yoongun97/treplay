@@ -72,7 +72,6 @@ function PlaceSearch() {
     setSearchResults([]); // 결과를 선택하면 검색 목록 숨기기
   };
 
-  // 엔터 키 이벤트 핸들러
   const handleEnterKey = (e) => {
     if (e.key === "Enter") {
       handleSearch();

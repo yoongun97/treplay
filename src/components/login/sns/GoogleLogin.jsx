@@ -14,17 +14,14 @@ function GoogleLogin() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
-      // userCredential에서 사용자 정보 추출
       const user = userCredential.user;
 
-      // 사용자 정보를 Firestore에 저장
       const userRef = doc(db, "users", user.uid);
       await setDoc(userRef, {
         nickname: user.displayName,
         email: user.email,
         uid: user.uid,
         createdAt: timestamp,
-        // 기타 필요한 사용자 정보를 여기에 추가할 수 있습니다.
       });
 
       navigate(`${url}`);

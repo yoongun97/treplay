@@ -8,7 +8,6 @@ function SkeletonBest() {
       <h2>베스트 또갈집</h2>
       <s.BestPlaceBox>
         <s.ImageBox />
-        {/* 경고문 발생한 거 해결 위해 $붙임 */}
         <s.PhrasesBox>
           <MoreInfoButton />
         </s.PhrasesBox>
