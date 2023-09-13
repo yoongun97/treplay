@@ -14,7 +14,6 @@ function Create() {
     window.onbeforeunload = () => {
       return "";
     };
-
     // Unmount the window.onbeforeunload event
     return () => {
       window.onbeforeunload = null;

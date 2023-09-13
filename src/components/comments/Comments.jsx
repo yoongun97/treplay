@@ -29,7 +29,7 @@ function Comments({ id }) {
   const { isLoading, isError, error } = useQuery("post", async () => {
     const postRef = doc(db, "posts", id);
     const docSnapshot = await getDoc(postRef);
-    //firebase 에서 댓글 불러오기
+
     if (docSnapshot.exists()) {
       const commentsRef = query(
         collection(db, "comments"),

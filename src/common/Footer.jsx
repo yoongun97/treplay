@@ -27,7 +27,7 @@ const Footer = () => {
             <span>•</span>
             <span>조윤건</span>
             <span>Developer (Front-end)</span>
-            <a href={"https://yoongeons.com"} target="blank"></a>
+            <a href={"https://github.com/yoongun97"} target="blank"></a>
           </div>
           <div>
             <span>•</span>
