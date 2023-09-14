@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const LikesContainer = styled.div`
   margin-bottom: 140px;
@@ -76,12 +76,12 @@ export const ButtonContainer = styled.div`
   }
 `;
 export const LikesButton = styled.button`
-  border: 1px solid ${(props) => (props.activated ? "#0a58be" : "#0a58be")};
-  color: ${(props) => (props.activated ? "#fff" : "#0a58be")};
-  background-color: ${(props) => (props.activated ? "#0a58be" : "#fff")};
+  border: 1px solid ${(props) => (props.activated ? '#0a58be' : '#0a58be')};
+  color: ${(props) => (props.activated ? '#fff' : '#0a58be')};
+  background-color: ${(props) => (props.activated ? '#0a58be' : '#fff')};
 
   & > p {
-    color: ${(props) => (props.activated ? "#fff" : "#222")};
+    color: ${(props) => (props.activated ? '#fff' : '#222')};
   }
 
   & > div > span:first-child {
@@ -92,9 +92,9 @@ export const LikesButton = styled.button`
   }
 `;
 export const DislikesButton = styled.button`
-  border: 1px solid ${(props) => (props.activated ? "#fcd71e" : "#fcd71e")};
-  color: ${(props) => (props.activated ? "#222" : "#fcd71e")};
-  background-color: ${(props) => (props.activated ? "#fcd71e" : "#fff")};
+  border: 1px solid ${(props) => (props.activated ? '#fcd71e' : '#fcd71e')};
+  color: ${(props) => (props.activated ? '#222' : '#fcd71e')};
+  background-color: ${(props) => (props.activated ? '#fcd71e' : '#fff')};
 
   & > p {
     color: #222;

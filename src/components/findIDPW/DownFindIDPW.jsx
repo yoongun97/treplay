@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
-import * as s from "./StyledFindIDPW";
-import { auth, db } from "../../firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { sendPasswordResetEmail } from "firebase/auth";
-import Swal from "sweetalert2";
+import React, { useRef, useState } from 'react';
+import * as s from './StyledFindIDPW';
+import { auth, db } from '../../firebaseConfig';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import Swal from 'sweetalert2';
 
 const ERROR_BOXES = {
-  NAME: "name",
-  EMAIL: "email",
-  PHONE_NUMBER: "phoneNumber",
+  NAME: 'name',
+  EMAIL: 'email',
+  PHONE_NUMBER: 'phoneNumber',
 };
 
 function DownFindIDPW() {
@@ -21,9 +21,9 @@ function DownFindIDPW() {
   const [isChecked, setIsChecked] = useState(false);
 
   // input 값
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
 
   // focus 줄 input 참조
   const nameInputRef = useRef();
@@ -31,10 +31,10 @@ function DownFindIDPW() {
   const emailInputRef = useRef();
 
   // error box 위치 상태
-  const [errorBox, setErrorBox] = useState("");
+  const [errorBox, setErrorBox] = useState('');
 
   // error msg 선택
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   // 찾기 결과 데이터
   const [userData, setUserData] = useState([]);
@@ -44,31 +44,31 @@ function DownFindIDPW() {
 
     if (!name) {
       setErrorBox(ERROR_BOXES.NAME);
-      setErrorMsg("이름을 입력해 주세요.");
+      setErrorMsg('이름을 입력해 주세요.');
       nameInputRef.current.focus();
       return;
     }
     if (!isFindID && !email) {
       setErrorBox(ERROR_BOXES.EMAIL);
-      setErrorMsg("아이디를 입력해주세요.");
+      setErrorMsg('아이디를 입력해주세요.');
       emailInputRef.current.focus();
       return;
     }
     if (!isFindID && !emailRegex.test(email)) {
       setErrorBox(ERROR_BOXES.EMAIL);
-      setErrorMsg("이메일 형식으로 입력해주세요.");
+      setErrorMsg('이메일 형식으로 입력해주세요.');
       emailInputRef.current.focus();
       return;
     }
     if (!phoneNumber) {
       setErrorBox(ERROR_BOXES.PHONE_NUMBER);
-      setErrorMsg("연락처를 입력해 주세요.");
+      setErrorMsg('연락처를 입력해 주세요.');
       phoneNumberInputRef.current.focus();
       return;
     }
     if (phoneNumber.length < 10) {
       setErrorBox(ERROR_BOXES.PHONE_NUMBER);
-      setErrorMsg("연락처를 확인해주세요.");
+      setErrorMsg('연락처를 확인해주세요.');
       phoneNumberInputRef.current.focus();
       return;
     }
@@ -77,9 +77,9 @@ function DownFindIDPW() {
 
     if (isFindID) {
       const q = query(
-        collection(db, "users"),
-        where("name", "==", name),
-        where("phoneNumber", "==", phoneNumber)
+        collection(db, 'users'),
+        where('name', '==', name),
+        where('phoneNumber', '==', phoneNumber)
       );
 
       const querySnapshot = await getDocs(q);
@@ -87,10 +87,10 @@ function DownFindIDPW() {
       setUserData(userData);
     } else {
       const q = query(
-        collection(db, "users"),
-        where("name", "==", name),
-        where("email", "==", email),
-        where("phoneNumber", "==", phoneNumber)
+        collection(db, 'users'),
+        where('name', '==', name),
+        where('email', '==', email),
+        where('phoneNumber', '==', phoneNumber)
       );
 
       const querySnapshot = await getDocs(q);
@@ -105,10 +105,8 @@ function DownFindIDPW() {
   const ResetBtnHandler = async () => {
     try {
       await sendPasswordResetEmail(auth, email);
-      console.log("비밀번호 reset 이메일 전송");
     } catch (error) {
-      console.log(error.code);
-      Swal.fire({ title: `${error.code}`, icon: "error" });
+      Swal.fire({ title: `${error.code}`, icon: 'error' });
     }
   };
 
@@ -121,8 +119,8 @@ function DownFindIDPW() {
     const date = time.toDate();
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}`;
 
@@ -139,14 +137,14 @@ function DownFindIDPW() {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                setErrorBox("");
+                setErrorBox('');
               }}
               ref={nameInputRef}
               placeholder="이름을 입력해주세요."
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorMsg && errorBox === "name" && (
+        {errorMsg && errorBox === 'name' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -162,14 +160,14 @@ function DownFindIDPW() {
               value={phoneNumber}
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
-                setErrorBox("");
+                setErrorBox('');
               }}
               placeholder="'-'없이 숫자만 입력해 주세요"
               ref={phoneNumberInputRef}
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorMsg && errorBox === "phoneNumber" && (
+        {errorMsg && errorBox === 'phoneNumber' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -193,14 +191,14 @@ function DownFindIDPW() {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                setErrorBox("");
+                setErrorBox('');
               }}
               ref={nameInputRef}
               placeholder="이름을 입력해주세요."
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorMsg && errorBox === "name" && (
+        {errorMsg && errorBox === 'name' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -216,14 +214,14 @@ function DownFindIDPW() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                setErrorBox("");
+                setErrorBox('');
               }}
               ref={emailInputRef}
               placeholder="아이디를 입력해주세요."
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorMsg && errorBox === "email" && (
+        {errorMsg && errorBox === 'email' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -239,14 +237,14 @@ function DownFindIDPW() {
               value={phoneNumber}
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
-                setErrorBox("");
+                setErrorBox('');
               }}
               ref={phoneNumberInputRef}
               placeholder="'-'없이 숫자만 입력해 주세요"
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorMsg && errorBox === "phoneNumber" && (
+        {errorMsg && errorBox === 'phoneNumber' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -282,25 +280,25 @@ function DownFindIDPW() {
         <s.FindedBtnBox>
           <s.FindedBtn
             onClick={() => {
-              navigate("/login");
+              navigate('/login');
             }}
           >
             로그인하러 가기
           </s.FindedBtn>
           <s.FindedBtn
             style={{
-              backgroundColor: " white",
-              color: "#0a58be",
-              border: "1px solid #0a58be",
-              marginLeft: "20px",
+              backgroundColor: ' white',
+              color: '#0a58be',
+              border: '1px solid #0a58be',
+              marginLeft: '20px',
             }}
             onClick={() => {
               setIsFindID(false);
               setIsChecked(false);
-              setName("");
-              setPhoneNumber("");
-              setEmail("");
-              setErrorBox("");
+              setName('');
+              setPhoneNumber('');
+              setEmail('');
+              setErrorBox('');
               setUserData([]);
             }}
           >
@@ -320,10 +318,10 @@ function DownFindIDPW() {
             onClick={() => {
               setIsFindID(true);
               setIsChecked(false);
-              setName("");
-              setPhoneNumber("");
-              setEmail("");
-              setErrorBox("");
+              setName('');
+              setPhoneNumber('');
+              setEmail('');
+              setErrorBox('');
               setUserData([]);
             }}
           >
@@ -331,18 +329,18 @@ function DownFindIDPW() {
           </s.FindedBtn>
           <s.FindedBtn
             style={{
-              backgroundColor: " white",
-              color: "#0a58be",
-              border: "1px solid #0a58be",
-              marginLeft: "20px",
+              backgroundColor: ' white',
+              color: '#0a58be',
+              border: '1px solid #0a58be',
+              marginLeft: '20px',
             }}
             onClick={() => {
               setIsFindID(false);
               setIsChecked(false);
-              setName("");
-              setPhoneNumber("");
-              setEmail("");
-              setErrorBox("");
+              setName('');
+              setPhoneNumber('');
+              setEmail('');
+              setErrorBox('');
               setUserData([]);
             }}
           >
@@ -370,9 +368,9 @@ function DownFindIDPW() {
         </s.FindedIDs>
         <s.FindBtn
           onClick={() => {
-            navigate("/login");
+            navigate('/login');
           }}
-          style={{ marginTop: "0" }}
+          style={{ marginTop: '0' }}
         >
           확인
         </s.FindBtn>
@@ -389,10 +387,10 @@ function DownFindIDPW() {
             onClick={() => {
               setIsFindID(false);
               setIsChecked(false);
-              setName("");
-              setPhoneNumber("");
-              setEmail("");
-              setErrorBox("");
+              setName('');
+              setPhoneNumber('');
+              setEmail('');
+              setErrorBox('');
               setUserData([]);
             }}
           >
@@ -400,18 +398,18 @@ function DownFindIDPW() {
           </s.FindedBtn>
           <s.FindedBtn
             style={{
-              backgroundColor: " white",
-              color: "#0a58be",
-              border: "1px solid #0a58be",
-              marginLeft: "20px",
+              backgroundColor: ' white',
+              color: '#0a58be',
+              border: '1px solid #0a58be',
+              marginLeft: '20px',
             }}
             onClick={() => {
               setIsFindID(true);
               setIsChecked(false);
-              setName("");
-              setPhoneNumber("");
-              setEmail("");
-              setErrorBox("");
+              setName('');
+              setPhoneNumber('');
+              setEmail('');
+              setErrorBox('');
               setUserData([]);
             }}
           >
@@ -431,9 +429,9 @@ function DownFindIDPW() {
           onClick={() => {
             setIsFindID(true);
             setIsChecked(false);
-            setName("");
-            setPhoneNumber("");
-            setErrorBox("");
+            setName('');
+            setPhoneNumber('');
+            setErrorBox('');
             setUserData([]);
           }}
           selected={isFindID}
@@ -445,10 +443,10 @@ function DownFindIDPW() {
           onClick={() => {
             setIsFindID(false);
             setIsChecked(false);
-            setName("");
-            setPhoneNumber("");
-            setEmail("");
-            setErrorBox("");
+            setName('');
+            setPhoneNumber('');
+            setEmail('');
+            setErrorBox('');
             setUserData([]);
           }}
           selected={!isFindID}

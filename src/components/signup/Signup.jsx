@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
   updateProfile,
-} from "firebase/auth";
-import { auth, db, storage } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
-import * as s from "./StyledSignup";
+} from 'firebase/auth';
+import { auth, db, storage } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+import * as s from './StyledSignup';
 import {
   addDoc,
   collection,
@@ -14,24 +14,24 @@ import {
   query,
   serverTimestamp,
   where,
-} from "firebase/firestore";
-import NicknameModal from "../modal/NicknameModal";
-import EmailModal from "../modal/EmailModal";
-import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
-import Swal from "sweetalert2";
+} from 'firebase/firestore';
+import NicknameModal from '../modal/NicknameModal';
+import EmailModal from '../modal/EmailModal';
+import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import Swal from 'sweetalert2';
 
 const ERROR_BOXES = {
-  NAME: "name",
-  EMAIL: "email",
-  PASSWORD: "password",
-  CONFIRM_PASSWORD: "confirmPassword",
-  NICKNAME: "nickname",
-  PHONE_NUMBER: "phoneNumber",
+  NAME: 'name',
+  EMAIL: 'email',
+  PASSWORD: 'password',
+  CONFIRM_PASSWORD: 'confirmPassword',
+  NICKNAME: 'nickname',
+  PHONE_NUMBER: 'phoneNumber',
 };
 
 function Signup() {
   const navigate = useNavigate();
-  const url = sessionStorage.getItem("url");
+  const url = sessionStorage.getItem('url');
 
   const [profileImage, setProfileImage] = useState(
     `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
@@ -40,12 +40,12 @@ function Signup() {
   const imageInputRef = useRef();
 
   const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-    nickname: "",
-    phoneNumber: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    nickname: '',
+    phoneNumber: '',
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,9 +55,9 @@ function Signup() {
   const [personalInfo, setPersonalInfo] = useState(false);
 
   // error box 위치 상태
-  const [errorBox, setErrorBox] = useState("");
+  const [errorBox, setErrorBox] = useState('');
   // error msg 선택
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   // focus 줄 input 참조
   const emailInputRef = useRef();
@@ -69,7 +69,7 @@ function Signup() {
   const checkboxInputRef = useRef();
 
   // 이메일/닉네임 중복 확인
-  const [toCheck, setToCheck] = useState("");
+  const [toCheck, setToCheck] = useState('');
 
   // 중복여부 확인
   const [isUsedEmail, setIsUsedEmail] = useState(true);
@@ -87,7 +87,7 @@ function Signup() {
       ...inputs,
       [name]: value,
     });
-    setErrorBox("");
+    setErrorBox('');
   };
 
   const signupHandler = async (e) => {
@@ -95,9 +95,9 @@ function Signup() {
 
     // 이름, 연락처로 회원 정보 여부 확인
     const q = query(
-      collection(db, "users"),
-      where("name", "==", inputs.name),
-      where("phoneNumber", "==", inputs.phoneNumber)
+      collection(db, 'users'),
+      where('name', '==', inputs.name),
+      where('phoneNumber', '==', inputs.phoneNumber)
     );
 
     const querySnapshot = await getDocs(q);
@@ -109,58 +109,58 @@ function Signup() {
       if (!inputs.email) {
         setIsUsedEmail(true);
         setErrorBox(ERROR_BOXES.EMAIL);
-        setErrorMsg("이메일을 입력해 주세요.");
+        setErrorMsg('이메일을 입력해 주세요.');
         emailInputRef.current.focus();
         return;
       }
       if (!emailRegex.test(inputs.email)) {
         setIsUsedEmail(true);
         setErrorBox(ERROR_BOXES.EMAIL);
-        setErrorMsg(getErrorMessage("auth/invalid-email"));
+        setErrorMsg(getErrorMessage('auth/invalid-email'));
         emailInputRef.current.focus();
         return;
       }
       if (!inputs.name) {
         setErrorBox(ERROR_BOXES.NAME);
-        setErrorMsg("이름을 입력해 주세요.");
+        setErrorMsg('이름을 입력해 주세요.');
         nameInputRef.current.focus();
         return;
       }
       if (!inputs.password) {
         setErrorBox(ERROR_BOXES.PASSWORD);
-        setErrorMsg("비밀번호를 입력해 주세요.");
+        setErrorMsg('비밀번호를 입력해 주세요.');
         passwordInputRef.current.focus();
         return;
       }
       if (inputs.password.length < 6) {
         setErrorBox(ERROR_BOXES.PASSWORD);
-        setErrorMsg(getErrorMessage("auth/weak-password"));
+        setErrorMsg(getErrorMessage('auth/weak-password'));
         passwordInputRef.current.focus();
         return;
       }
       if (inputs.password !== inputs.confirmPassword) {
         setErrorBox(ERROR_BOXES.CONFIRM_PASSWORD);
-        setErrorMsg(getErrorMessage("auth/wrong-password"));
+        setErrorMsg(getErrorMessage('auth/wrong-password'));
         confirmpwInputRef.current.focus();
         return;
       }
       if (!inputs.nickname) {
         setIsUsedNickname(true);
         setErrorBox(ERROR_BOXES.NICKNAME);
-        setErrorMsg("닉네임을 입력해 주세요.");
+        setErrorMsg('닉네임을 입력해 주세요.');
         nicknameInputRef.current.focus();
         return;
       }
       if (!inputs.phoneNumber) {
         setErrorBox(ERROR_BOXES.PHONE_NUMBER);
-        setErrorMsg("전화번호를 입력해 주세요.");
+        setErrorMsg('전화번호를 입력해 주세요.');
         phonenumberInputRef.current.focus();
         return;
       }
 
       if (inputs.phoneNumber.length < 10) {
         setErrorBox(ERROR_BOXES.PHONE_NUMBER);
-        setErrorMsg("전화번호는 10자 이상이어야 합니다.");
+        setErrorMsg('전화번호는 10자 이상이어야 합니다.');
         phonenumberInputRef.current.focus();
         return;
       }
@@ -171,12 +171,12 @@ function Signup() {
         return;
       }
       if (userData.length > 1) {
-        Swal.fire({ title: "이미 생성된 계정이 있습니다.", icon: "error" });
+        Swal.fire({ title: '이미 생성된 계정이 있습니다.', icon: 'error' });
         return;
       }
       if (termsOfUse === false || personalInfo === false) {
-        setErrorBox("");
-        Swal.fire({ title: "약관에 동의해 주세요.", icon: "warning" });
+        setErrorBox('');
+        Swal.fire({ title: '약관에 동의해 주세요.', icon: 'warning' });
         checkboxInputRef.current.focus();
         return;
       } else {
@@ -214,40 +214,39 @@ function Signup() {
           createdAt: timestamp,
         };
 
-        const collectionRef = collection(db, "users");
+        const collectionRef = collection(db, 'users');
         await addDoc(collectionRef, newUser);
-        Swal.fire({ title: "회원가입에 성공하셨습니다.", icon: "success" });
+        Swal.fire({ title: '회원가입에 성공하셨습니다.', icon: 'success' });
         navigate(`${url}`);
       }
     } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
+      if (error.code === 'auth/email-already-in-use') {
         setErrorBox(ERROR_BOXES.EMAIL);
-        setErrorMsg("중복확인을 해주세요");
+        setErrorMsg('중복확인을 해주세요');
         emailInputRef.current.focus();
       } else {
-        Swal.fire({ title: `${getErrorMessage(error.code)}`, icon: "error" });
+        Swal.fire({ title: `${getErrorMessage(error.code)}`, icon: 'error' });
       }
-      console.log(error.message);
     }
   };
 
   // 에러코드에 해당하는 오류메시지 return
   const getErrorMessage = (errorCode) => {
     switch (errorCode) {
-      case "auth/invalid-email":
-        return "잘못된 이메일 형식입니다.";
-      case "auth/email-already-in-use":
-        return "이미 사용 중인 이메일입니다.";
-      case "auth/weak-password":
-        return "비밀번호는 6글자 이상이어야 합니다.";
-      case "auth/wrong-password":
-        return "비밀번호가 일치하지 않습니다.";
-      case "auth/network-request-failed":
-        return "네트워크 연결에 실패 하였습니다.";
-      case "auth/internal-error":
-        return "잘못된 요청입니다.";
+      case 'auth/invalid-email':
+        return '잘못된 이메일 형식입니다.';
+      case 'auth/email-already-in-use':
+        return '이미 사용 중인 이메일입니다.';
+      case 'auth/weak-password':
+        return '비밀번호는 6글자 이상이어야 합니다.';
+      case 'auth/wrong-password':
+        return '비밀번호가 일치하지 않습니다.';
+      case 'auth/network-request-failed':
+        return '네트워크 연결에 실패 하였습니다.';
+      case 'auth/internal-error':
+        return '잘못된 요청입니다.';
       default:
-        return "회원가입에 실패하셨습니다.";
+        return '회원가입에 실패하셨습니다.';
     }
   };
 
@@ -256,24 +255,24 @@ function Signup() {
       const usedEmail = await fetchSignInMethodsForEmail(auth, email);
       if (usedEmail.length > 0) {
         setIsUsedEmail(true);
-        setToCheck("이메일");
+        setToCheck('이메일');
         setIsModalOpen(true);
       } else if (usedEmail.length === 0) {
         setIsUsedEmail(false);
         setErrorBox(ERROR_BOXES.EMAIL);
-        setErrorMsg("사용 가능한 이메일입니다.");
+        setErrorMsg('사용 가능한 이메일입니다.');
       }
     } catch (error) {
       console.log(error);
       setIsUsedEmail(true);
       setErrorBox(ERROR_BOXES.EMAIL);
-      setErrorMsg("유효하지 않은 이메일입니다.");
+      setErrorMsg('유효하지 않은 이메일입니다.');
     }
   };
 
   const nicknameCheckHandler = async (nickname) => {
     try {
-      const q = query(collection(db, "users"));
+      const q = query(collection(db, 'users'));
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -284,22 +283,22 @@ function Signup() {
 
       if (usedNickname.length > 0) {
         setIsUsedNickname(true);
-        setToCheck("닉네임");
+        setToCheck('닉네임');
         setIsModalOpen(true);
       } else if (usedNickname.length === 0) {
         setIsUsedNickname(false);
         setErrorBox(ERROR_BOXES.NICKNAME);
-        setErrorMsg("사용 가능한 닉네임입니다.");
+        setErrorMsg('사용 가능한 닉네임입니다.');
       }
     } catch (error) {
       console.log(error);
       setIsUsedNickname(true);
       setErrorBox(ERROR_BOXES.NICKNAME);
-      setErrorMsg("유효하지 않은 닉네임입니다.");
+      setErrorMsg('유효하지 않은 닉네임입니다.');
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const selectedImage = e.target.files[0];
     if (selectedImage) {
       const reader = new FileReader();
@@ -328,7 +327,7 @@ function Signup() {
         <input
           type="file"
           accept="image/*"
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           ref={imageInputRef}
           onChange={handleImageChange}
         />
@@ -368,7 +367,7 @@ function Signup() {
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
-        {!isModalOpen && errorBox === "email" && (
+        {!isModalOpen && errorBox === 'email' && (
           <s.ErrorBox>
             {isUsedEmail === false ? (
               <s.ErrorMark
@@ -381,7 +380,7 @@ function Signup() {
                 alt="경고이미지"
               />
             )}
-            <s.ErrorMsg error={isUsedEmail === false ? "false" : "true"}>
+            <s.ErrorMsg error={isUsedEmail === false ? 'false' : 'true'}>
               {errorMsg}
             </s.ErrorMsg>
           </s.ErrorBox>
@@ -401,7 +400,7 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "name" && (
+        {errorBox === 'name' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -414,7 +413,7 @@ function Signup() {
           <s.InputTitle>비밀번호 </s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
-              style={{ width: "95%" }}
+              style={{ width: '95%' }}
               name="password"
               type="password"
               value={inputs.password}
@@ -426,7 +425,7 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "password" && (
+        {errorBox === 'password' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -439,7 +438,7 @@ function Signup() {
           <s.InputTitle>비밀번호</s.InputTitle>
           <s.InputCheck>
             <s.InfoInput
-              style={{ width: "95%" }}
+              style={{ width: '95%' }}
               name="confirmPassword"
               type="password"
               value={inputs.confirmPassword}
@@ -451,7 +450,7 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "confirmPassword" && (
+        {errorBox === 'confirmPassword' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -485,7 +484,7 @@ function Signup() {
             </s.CheckBtn>
           </s.InputCheck>
         </s.InputBox>
-        {!isModalOpen && errorBox === "nickname" && (
+        {!isModalOpen && errorBox === 'nickname' && (
           <s.ErrorBox>
             {isUsedNickname === false ? (
               <s.ErrorMark
@@ -499,7 +498,7 @@ function Signup() {
               />
             )}
 
-            <s.ErrorMsg error={isUsedNickname === false ? "false" : "true"}>
+            <s.ErrorMsg error={isUsedNickname === false ? 'false' : 'true'}>
               {errorMsg}
             </s.ErrorMsg>
           </s.ErrorBox>
@@ -519,7 +518,7 @@ function Signup() {
             />
           </s.InputCheck>
         </s.InputBox>
-        {errorBox === "phoneNumber" && (
+        {errorBox === 'phoneNumber' && (
           <s.ErrorBox>
             <s.ErrorMark
               src="https://cdn-icons-png.flaticon.com/128/9503/9503179.png"
@@ -531,7 +530,7 @@ function Signup() {
         <s.AgreementContainer>
           <s.AgreementTitleBox>
             <s.AgreementCheckBox
-              style={{ marginTop: "14px", marginBottom: "14px" }}
+              style={{ marginTop: '14px', marginBottom: '14px' }}
               type="checkbox"
               checked={termsOfUse && personalInfo}
               onChange={(e) => {
@@ -552,7 +551,7 @@ function Signup() {
               />
               <s.AgreementSubtitle>이용약관</s.AgreementSubtitle>
               <s.AgreementSubtitle
-                style={{ color: "#E02918", marginLeft: "5px" }}
+                style={{ color: '#E02918', marginLeft: '5px' }}
               >
                 (필수)
               </s.AgreementSubtitle>
@@ -630,7 +629,7 @@ function Signup() {
               />
               <s.AgreementSubtitle>개인정보 수집 이용</s.AgreementSubtitle>
               <s.AgreementSubtitle
-                style={{ color: "#E02918", marginLeft: "5px" }}
+                style={{ color: '#E02918', marginLeft: '5px' }}
               >
                 (필수)
               </s.AgreementSubtitle>
@@ -689,7 +688,7 @@ function Signup() {
         </s.SignupBtn>
       </form>
       {isModalOpen &&
-        (toCheck === "이메일" ? (
+        (toCheck === '이메일' ? (
           <EmailModal
             email={inputs.email}
             inputs={inputs}

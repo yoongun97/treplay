@@ -1,24 +1,24 @@
-import { useAtom } from "jotai";
-import React, { useState } from "react";
-import { userAtom } from "../../store/userAtom";
+import { useAtom } from 'jotai';
+import React, { useState } from 'react';
+import { userAtom } from '../../store/userAtom';
 import {
   collection,
   deleteDoc,
   getDocs,
   query,
   where,
-} from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import SavedList from "./components/savedList/SavedList";
-import { useMutation, useQuery } from "react-query";
-import ProfileImage from "./components/profileImage/ProfileImage";
-import SuggestLogin from "../../components/login/SuggestLogin";
-import Nickname from "./components/nickname/Nickname";
-import PageNation from "../../components/pageNation/PageNation";
-import MyList from "./components/myList/MyList";
-import * as s from "./StyledMyPage";
-import Swal from "sweetalert2";
-import SkeletonCard from "../../components/skeletonUI/skeletonCard/SkeletonCard";
+} from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import SavedList from './components/savedList/SavedList';
+import { useMutation, useQuery } from 'react-query';
+import ProfileImage from './components/profileImage/ProfileImage';
+import SuggestLogin from '../../components/login/SuggestLogin';
+import Nickname from './components/nickname/Nickname';
+import PageNation from '../../components/pageNation/PageNation';
+import MyList from './components/myList/MyList';
+import * as s from './StyledMyPage';
+import Swal from 'sweetalert2';
+import SkeletonCard from '../../components/skeletonUI/skeletonCard/SkeletonCard';
 
 const POSTS_VIEW_PAGE = 3;
 
@@ -38,10 +38,10 @@ function MyPage() {
     if (!uid) {
       return [];
     }
-    const userQ = query(collection(db, "users"));
-    const likedQ = query(collection(db, "likes"));
-    const savedQ = query(collection(db, "saved"), where("uid", "==", uid));
-    const postsQ = query(collection(db, "posts"));
+    const userQ = query(collection(db, 'users'));
+    const likedQ = query(collection(db, 'likes'));
+    const savedQ = query(collection(db, 'saved'), where('uid', '==', uid));
+    const postsQ = query(collection(db, 'posts'));
 
     try {
       const [
@@ -78,7 +78,7 @@ function MyPage() {
 
       setSavedPosts(filteredData);
     } catch (error) {
-      console.error("데이터 가져오기 오류:", error);
+      console.error('데이터 가져오기 오류:', error);
     }
   };
 
@@ -93,16 +93,16 @@ function MyPage() {
 
   const deleteAllHandler = async () => {
     const result = await Swal.fire({
-      title: "작성한 모든 게시물을 삭제하시겠습니까?",
-      icon: "warning",
+      title: '작성한 모든 게시물을 삭제하시겠습니까?',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: "예",
-      cancelButtonText: "아니오",
+      confirmButtonText: '예',
+      cancelButtonText: '아니오',
     });
 
     if (result.isConfirmed) {
       deleteMutation.mutate(uid);
-      return Swal.fire({ title: "글이 삭제되었습니다!", icon: "success" });
+      return Swal.fire({ title: '글이 삭제되었습니다!', icon: 'success' });
     } else {
       return;
     }
@@ -110,8 +110,8 @@ function MyPage() {
 
   const deleteMutation = useMutation(
     async () => {
-      const postsCollection = collection(db, "posts");
-      const q = query(postsCollection, where("uid", "==", uid));
+      const postsCollection = collection(db, 'posts');
+      const q = query(postsCollection, where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach(async (doc) => {
@@ -126,12 +126,12 @@ function MyPage() {
     }
   );
 
-  const { isLoading, isError, error } = useQuery(["userData", uid], fetchData);
+  const { isLoading, isError, error } = useQuery(['userData', uid], fetchData);
 
   if (isError) {
     return Swal.fire({
       title: `에러 발생! Error Code: ${error.message}`,
-      icon: "error",
+      icon: 'error',
     });
   }
 
