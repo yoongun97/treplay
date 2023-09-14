@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 const SuggestLogin = () => {
-  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -16,7 +15,7 @@ const SuggestLogin = () => {
         <h2>
           <span>로그인</span>하시고
           <br />
-          <span>최고의 또갈집</span>을 확인해보세요
+          <span>최고의 또갈집</span>을 공유해 주세요
         </h2>
         <ImageBox></ImageBox>
         <BubbleBox>

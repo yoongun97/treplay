@@ -17,6 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
+import ErrorPage from "./pages/errorpage/ErrorPage";
 
 function App() {
   const [, setUser] = useAtom(userAtom); // userAtom 사용
@@ -24,19 +25,17 @@ function App() {
 
   // 옵저버 : 새로고침 하더라도 로그인 상태 유지
   useEffect(() => {
-    // onAuthStateChanged 함수를 사용하여 인증 상태 변화 감지
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
 
     // 컴포넌트가 언마운트될 때 옵저버 해제
     return () => unsubscribe();
-    // setUser 함수가 업데이트될 때만 이펙트가 실행됨
   }, [setUser]);
 
   useEffect(() => {
     // sessionstorage에 내가 들어온 url 저장
-    // url이 login, signup page 는 저장하지 않도록
+    // url이 login, signup, suggest, edit 페이지는 저장하지 않도록
     if (
       location.pathname !== "/login" &&
       location.pathname !== "/signup" &&
@@ -62,15 +61,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
-      <Route
-        path="*"
-        element={
-          <>
-            <div>없는 페이지입니다.</div>
-            <Link to="/">홈으로 이동</Link>
-          </>
-        }
-      />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }

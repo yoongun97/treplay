@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { userAtom } from '../../store/userAtom';
 import {
   collection,
@@ -25,7 +25,6 @@ const POSTS_VIEW_PAGE = 3;
 function MyPage() {
   const [user] = useAtom(userAtom);
   const uid = user?.uid;
-  console.log(user);
 
   const [allData, setAllData] = useState([]);
   const [ownData, setOwnData] = useState([]);
@@ -33,11 +32,8 @@ function MyPage() {
   const [myPosts, setMyPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [isMyListActived, setIsMyListActived] = useState(true);
-
-  // 페이지네이션 설정
   const [currentPage, setCurrentPage] = useState(1);
 
-  //promise.all 로 관리하기
   const fetchData = async () => {
     if (!uid) {
       return [];
@@ -79,12 +75,13 @@ function MyPage() {
       const filteredData = postsData.filter((post) =>
         savedData.some((data) => post.id === data.postId)
       );
+
       setSavedPosts(filteredData);
     } catch (error) {
       console.error('데이터 가져오기 오류:', error);
     }
   };
-  // 버튼 클릭 시 리스트 전환 함수
+
   const activeSavedListHandler = () => {
     setIsMyListActived(false);
     setCurrentPage(1);
@@ -94,7 +91,6 @@ function MyPage() {
     setCurrentPage(1);
   };
 
-  // 게시물 전체삭제
   const deleteAllHandler = async () => {
     const result = await Swal.fire({
       title: '작성한 모든 게시물을 삭제하시겠습니까?',
@@ -118,21 +114,18 @@ function MyPage() {
       const q = query(postsCollection, where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
 
-      // 현재 URL에서 받은 uid와 일치하는 게시물 삭제
       querySnapshot.forEach(async (doc) => {
         await deleteDoc(doc.ref);
       });
     },
     {
       onMutate: () => {
-        // 삭제 전 게시물을 myPosts에서 제거하여 새로운 배열 생성
         const updatedPosts = myPosts.filter((p) => p.uid !== uid);
         setMyPosts(updatedPosts);
       },
     }
   );
 
-  // 리액트 쿼리로 로딩/에러 처리
   const { isLoading, isError, error } = useQuery(['userData', uid], fetchData);
 
   if (isError) {
@@ -142,7 +135,6 @@ function MyPage() {
     });
   }
 
-  // 페이지 변경 이벤트 핸들러
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -154,7 +146,6 @@ function MyPage() {
           <s.UserInfoInner>
             <h3>마이페이지</h3>
             <div>
-              {/* 프로필 이미지/닉네임 컴포넌트 분리 */}
               <ProfileImage fetchData={fetchData} />
               <Nickname
                 ownData={ownData}
@@ -166,7 +157,6 @@ function MyPage() {
           <s.ListContainer>
             <s.ButtonContainer>
               <s.ChangeButtonContainer>
-                {/* 내가 쓴 글/ 저장한 글 전환 버튼 */}
                 <s.ChangeButton
                   onClick={activeMyListHandler}
                   selected={isMyListActived}
@@ -190,7 +180,6 @@ function MyPage() {
               <SkeletonCard />
             ) : (
               <s.ListContainerInner>
-                {/* 버튼 전환에 따른 리스트 변환 */}
                 {isMyListActived ? (
                   <MyList
                     myPosts={myPosts.slice(
@@ -220,7 +209,6 @@ function MyPage() {
           />
         </s.MypageContainer>
       ) : (
-        // 비회원일 경우에 Unloggined 컴포넌트 보여 주기
         <SuggestLogin />
       )}
     </>

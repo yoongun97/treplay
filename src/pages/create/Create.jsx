@@ -13,7 +13,6 @@ function Create() {
     window.onbeforeunload = () => {
       return '';
     };
-
     return () => {
       window.onbeforeunload = null;
     };

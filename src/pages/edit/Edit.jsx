@@ -23,9 +23,8 @@ const Edit = () => {
   const [editOneLineContent, setEditOneLineContent] = useState("");
   const [editImage, setEditImage] = useState(null);
   const navigate = useNavigate();
-
   const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
-  //장소와 카테고리 받기
+
   const queryClient = useQueryClient();
 
   // 이미지 파일 확장자를 확인하는 함수
@@ -40,7 +39,6 @@ const Edit = () => {
     const fetchData = async () => {
       const editPostData = doc(db, "posts", id);
       const docSnapshot = await getDoc(editPostData);
-      //detail페이지에서 전달 받은 텍스트,장소와 카테고리 전달 받기
       if (docSnapshot.exists()) {
         setpost({ id: docSnapshot.id, ...docSnapshot.data() });
         setEditContent(docSnapshot.data().postContent);
@@ -99,7 +97,7 @@ const Edit = () => {
       Swal.fire({ title: "이미지 삭제 오류입니다", icon: "error" });
     }
   };
-  //미리보기 이미지 삭제
+
   const handleImageDeletePreview = (index) => {
     setSelectedFilePreviews((prevPreviews) =>
       prevPreviews.filter((_, i) => i !== index)
@@ -110,10 +108,8 @@ const Edit = () => {
   const handlePostSave = async () => {
     try {
       const editData = doc(db, "posts", id);
-      // 업데이트할 필드와 값을 담을 빈 객체 생성
       const updateData = {};
 
-      // 수정된 경우에만 업데이트
       if (editContent !== undefined) {
         updateData.postContent = editContent;
       }
@@ -144,7 +140,6 @@ const Edit = () => {
     }
   };
 
-  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -196,7 +191,6 @@ const Edit = () => {
             {selectedFilePreviews.map((preview, index) => (
               <s.ImageBox key={index}>
                 <img src={preview} alt={`미리보기 이미지 ${index + 1}`} />
-                {/* <p>{selectedFileNames[index]}</p> */}
                 <button onClick={() => handleImageDeletePreview(index)}>
                   x
                 </button>

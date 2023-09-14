@@ -99,26 +99,6 @@ const StyledButton = styled(Link)`
   &:first-child {
     background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
   }
-
-  /* &:nth-child(2) {
-    background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
-  }
-
-  &:nth-child(3) {
-    background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
-  }
-  &:nth-child(4) {
-    background-image: url(${process.env.PUBLIC_URL}/image/korea.jpg);
-  }
-
-  &:nth-child(5) {
-    background-image: url(${process.env.PUBLIC_URL}/image/japan.jpg);
-  }
-
-  &:nth-child(6) {
-    background-image: url(${process.env.PUBLIC_URL}/image/america.jpg);
-  } */
-
   &::after {
     content: "";
     position: absolute;

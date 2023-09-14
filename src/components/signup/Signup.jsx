@@ -33,14 +33,12 @@ function Signup() {
   const navigate = useNavigate();
   const url = sessionStorage.getItem('url');
 
-  // 사진 넣기
   const [profileImage, setProfileImage] = useState(
     `${process.env.PUBLIC_URL}/image/baseprofile.jpeg`
   );
   const [selectedImage, setSelectedImage] = useState(null);
   const imageInputRef = useRef();
 
-  // input
   const [inputs, setInputs] = useState({
     email: '',
     password: '',
@@ -50,7 +48,6 @@ function Signup() {
     phoneNumber: '',
   });
 
-  // 모달 여닫기
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 체크박스
@@ -59,7 +56,6 @@ function Signup() {
 
   // error box 위치 상태
   const [errorBox, setErrorBox] = useState('');
-
   // error msg 선택
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -70,13 +66,12 @@ function Signup() {
   const confirmpwInputRef = useRef();
   const nicknameInputRef = useRef();
   const phonenumberInputRef = useRef();
-  // const checknumberInputRef = useRef();
   const checkboxInputRef = useRef();
 
-  // 이메일/닉네임 인지 확인
+  // 이메일/닉네임 중복 확인
   const [toCheck, setToCheck] = useState('');
 
-  // 중복확인 여부 확인
+  // 중복여부 확인
   const [isUsedEmail, setIsUsedEmail] = useState(true);
   const [isUsedNickname, setIsUsedNickname] = useState(true);
 
@@ -95,7 +90,6 @@ function Signup() {
     setErrorBox('');
   };
 
-  // 회원가입 함수
   const signupHandler = async (e) => {
     e.preventDefault();
 
@@ -191,6 +185,7 @@ function Signup() {
           inputs.email,
           inputs.password
         );
+
         //이미지 넣기
         if (selectedImage) {
           const storageRef = ref(
@@ -216,7 +211,7 @@ function Signup() {
           nickname: inputs.nickname,
           name: inputs.name,
           phoneNumber: inputs.phoneNumber,
-          createdAt: timestamp, // 가입한 날짜를 추가합니다.
+          createdAt: timestamp,
         };
 
         const collectionRef = collection(db, 'users');
@@ -255,7 +250,6 @@ function Signup() {
     }
   };
 
-  // 이메일 중복확인 함수
   const emailCheckHandler = async (email) => {
     try {
       const usedEmail = await fetchSignInMethodsForEmail(auth, email);
@@ -276,11 +270,9 @@ function Signup() {
     }
   };
 
-  // 닉네임 중복확인 함수
   const nicknameCheckHandler = async (nickname) => {
     try {
       const q = query(collection(db, 'users'));
-      // 여기서 시간 걸림
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -321,7 +313,6 @@ function Signup() {
     }
   };
 
-  // Clean Up 함수를 이용해 페이지 언마운트 시 스크롤 가장 위로
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);

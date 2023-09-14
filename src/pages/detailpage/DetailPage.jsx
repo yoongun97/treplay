@@ -26,9 +26,7 @@ function DetailPage() {
     error,
   } = useQuery(['post', id], async () => {
     const postRef = doc(db, 'posts', id);
-
     const docSnapshot = await getDoc(postRef);
-    console.log({ docSnapshot });
     if (docSnapshot.exists()) {
       return { id: docSnapshot.id, ...docSnapshot.data() };
     } else {
@@ -36,7 +34,6 @@ function DetailPage() {
     }
   });
 
-  // url 복사
   const copyUrl = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -50,7 +47,6 @@ function DetailPage() {
     }
   };
 
-  // 게시물 삭제
   const deleteMutation = useMutation(async (post) => {
     const result = await Swal.fire({
       title: '정말 삭제하시겠습니까?',
@@ -70,7 +66,6 @@ function DetailPage() {
     }
   });
 
-  // 페이지 언마운트 시 최상단으로 스크롤 이동
   useEffect(() => {
     return () => {
       window.scrollTo(0, 0);
@@ -107,6 +102,7 @@ function DetailPage() {
       </span>
     ));
   };
+
   return (
     <s.DetailContainer>
       <s.DetailContainerInner>
@@ -148,7 +144,6 @@ function DetailPage() {
         <DetailCarousel postImgs={post?.postImgs} />
 
         <s.ContentsContainer>
-          {/* 줄 바꿈 함수 추가 */}
           <p>{lineChangeText(post?.postContent)}</p>
 
           <p># {post?.postOneLineContent}</p>

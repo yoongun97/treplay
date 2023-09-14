@@ -61,10 +61,12 @@ const Bookmark = () => {
 
         return Swal.fire({ title: '북마크 저장 완료!', icon: 'success' });
       } else if (isSaved === true) {
-        const q = query(collection(db, 'saved'), where('uid', '==', user.uid));
-
+        const q = query(
+          collection(db, 'saved'),
+          where('uid', '==', user.uid),
+          where('postId', '==', id)
+        );
         const querySnapshot = await getDocs(q);
-        console.log(querySnapshot);
         querySnapshot.forEach(async (doc) => {
           await deleteDoc(doc.ref);
         });

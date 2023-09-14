@@ -1,7 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
 import "./slick.css";
-import { styled } from "styled-components";
+import { keyframes, styled } from "styled-components";
+import { useQuery } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 function SampleArrow(props) {
   const { className, style, onClick } = props;
@@ -14,7 +17,7 @@ function SampleArrow(props) {
   );
 }
 
-function NationCarousel() {
+function NationCarousel({ nation }) {
   const settings = {
     dots: true,
     infinite: true,
@@ -30,33 +33,43 @@ function NationCarousel() {
     appendDots: (dots) => <ul style={{ listStyle: "none" }}>{dots}</ul>,
     dotsClass: "dots_custom",
   };
+
+  const { data, isLoading, isError, error } = useQuery(
+    ["imgs", nation],
+    async () => {
+      const imgRef = collection(db, "imgs");
+      const q = query(imgRef, where("nation", "==", nation));
+
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        return querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+      } else {
+        throw new Error("해당 ID의 데이터를 찾을 수 없습니다.");
+      }
+    }
+  );
+
+  if (isLoading) {
+    return <SkeletonCarousel />;
+  }
+
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+
+  const carouselImg = data[0].imgUrls;
+
   return (
     <div className="CarouselContainer">
-      <StyledSlider
-        {...settings}
-        style={{
-          height: "700px",
-          width: "100%",
-        }}
-      >
-        <ImageContainer>
-          <img
-            src={`${process.env.PUBLIC_URL}/image/mainBanner01.jpg`}
-            alt="MainCarousel1"
-          ></img>
-        </ImageContainer>
-        <ImageContainer>
-          <img
-            src={`${process.env.PUBLIC_URL}/image/mainBanner02.jpg`}
-            alt="MainCarousel2"
-          ></img>
-        </ImageContainer>
-        <ImageContainer>
-          <img
-            src={`${process.env.PUBLIC_URL}/image/mainBanner03.jpg`}
-            alt="MainCarousel3"
-          ></img>
-        </ImageContainer>
+      <StyledSlider {...settings}>
+        {carouselImg.map((img, index) => (
+          <ImageContainer key={index}>
+            <img src={img} alt="nationCarousel Img" />
+          </ImageContainer>
+        ))}
       </StyledSlider>
     </div>
   );
@@ -86,4 +99,20 @@ const ImageContainer = styled.div`
   & > img {
     object-fit: cover;
   }
+`;
+
+const loading = keyframes`
+0% {
+ background-position: -460px 0;
+}
+100% {
+ background-position: 460px 0;
+}
+`;
+
+const SkeletonCarousel = styled.div`
+  height: 700px;
+  width: 100%;
+  background: linear-gradient(to right, #f2f2f2, #ddd, #f2f2f2);
+  animation: ${loading} 2s infinite linear;
 `;

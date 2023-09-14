@@ -1,8 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import * as s from "./StyledEventBanner";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../../store/userAtom";
 const EventBanner = () => {
   const { nation } = useParams();
+  const [user] = useAtom(userAtom);
 
   return (
     <s.EventBannerContainer>
@@ -25,7 +28,7 @@ const EventBanner = () => {
             {nation}이라면 역시 이곳! <br /> 나의 원픽 추천 장소를 자랑해
             주세요!
           </p>
-          <s.LinkBox to={`/create`}>
+          <s.LinkBox href={user ? "/create" : "/suggest"}>
             <span>자랑하기</span>
             <div></div>
           </s.LinkBox>

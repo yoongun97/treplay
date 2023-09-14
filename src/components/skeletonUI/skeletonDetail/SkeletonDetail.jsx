@@ -29,9 +29,7 @@ function SkeletonDetail() {
         <s.ImageBox />
 
         <s.ContentsContainer>
-          {/* 줄 바꿈 함수 추가 */}
           <p>내용</p>
-
           <p>한줄평</p>
         </s.ContentsContainer>
         <s.MapContainer />
