@@ -112,7 +112,7 @@ function ImageUpload() {
     const collectionRef = collection(db, "posts");
     const docRef = await addDoc(collectionRef, newPost);
 
-    navigate(`/detail/${docRef.id}`);
+    navigate(`/${post.nation}/${post.category}`);
   });
 
   return (
