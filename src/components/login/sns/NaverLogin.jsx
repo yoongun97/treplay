@@ -19,7 +19,7 @@ function NaverLogin() {
 
   let naverLogin = new window.naver.LoginWithNaverId({
     clientId: `${process.env.REACT_APP_NAVER_CLIENT_ID}`,
-    callbackUrl: `http://localhost:3000/login`,
+    callbackUrl: `https://treplay.vercel.app/login`,
     loginButton: { color: "green", type: 1, height: "30" },
   });
 
