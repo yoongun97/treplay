@@ -224,7 +224,9 @@ function CategoryPage() {
                     </s.PostBox>
                   </div>
                 ))
-              : filteredPosts.length === 0 && <div>결과가 없습니다.</div>}
+              : filteredPosts.length === 0 && (
+                  <s.SearchResults>결과가 없습니다.</s.SearchResults>
+                )}
           </>
         )}
       </s.PostsContainer>
