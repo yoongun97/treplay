@@ -71,11 +71,6 @@ const Bookmark = () => {
         querySnapshot.forEach(async (doc) => {
           await deleteDoc(doc.ref);
         });
-        // 여기서 forEach 문 돌리면서 doc.ref로 하지 않으면 삭제가 정상적으로 되지 않음(구글링 해봐도 원인 알 수 없는 에러가 발생함) ,,, 나는 꼭 지금 user.uid 와 saved db 내의 uid 값이 동일한 문서만 삭제하고 싶은 상황임!!
-        //   ex: const q = query(collection(db, "saved"), user.uid); await deleteDoc(q);
-        // 위처럼 작동시키면
-        //   Cannot read properties of undefined (reading 'toString') TypeError: Cannot read properties of undefined (reading 'toString'))
-        //   와 같은 에러문이 발생함. 따라서 user.uid 를 string 처리도 해 봤는데 제대로 되지 않음... 현재 컴포넌트에서 toString 사용하는 구간 없음
         setIsSaved(false);
         return Swal.fire({ title: "북마크 취소 완료!", icon: "success" });
       }

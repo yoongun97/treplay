@@ -88,18 +88,14 @@ function ImageUpload() {
         const imageRef = ref(storage, `${auth.currentUser.uid}/${file.name}`);
         await uploadBytes(imageRef, file);
 
-        // 파일 URL 가져오기
         const downloadURL = await getDownloadURL(imageRef);
         newDownloadURLs.push(downloadURL); // 새로운 downloadURL 배열에 추가
       }
 
-      // 업로드된 이미지 URL을 포스트에 추가
       const updatedPost = { ...post, postImgs: newDownloadURLs };
 
-      // 포스트 업데이트 후 데이터베이스에 추가
       addMutation.mutate(updatedPost);
 
-      // 업로드 후 선택한 파일 목록 초기화
       setSelectedFiles([]);
       document.getElementById("file-input").value = ""; // 파일 선택 초기화
     }
@@ -113,12 +109,9 @@ function ImageUpload() {
       uid: user.uid,
     };
 
-    // Firestore에서 'posts' 컬렉션에 대한 참조 생성하기
     const collectionRef = collection(db, "posts");
-    // 'posts' 컬렉션에 newPost 문서를 추가합니다.
     const docRef = await addDoc(collectionRef, newPost);
 
-    // 추가한 문서의 ID를 이용하여 상세 페이지로 이동
     navigate(`/detail/${docRef.id}`);
   });
 
@@ -147,7 +140,6 @@ function ImageUpload() {
         </s.StyledLabel>
       </s.FileContainer>
       <s.PreviewImagesContainer>
-        {/* edit페이지와 같은 로직 */}
         {!!selectedFilePreviews ? (
           selectedFilePreviews.map((preview, index) => (
             <s.ImageBox key={index}>

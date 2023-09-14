@@ -6,7 +6,6 @@ import * as s from "./StyledMyList";
 import Swal from "sweetalert2";
 
 function MyList({ myPosts, setMyPosts, allLikedData }) {
-  // 게시물 삭제
   const deletePostHandler = async (post) => {
     const result = await Swal.fire({
       title: "정말 삭제하시겠습니까?",

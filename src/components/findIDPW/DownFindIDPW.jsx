@@ -84,7 +84,7 @@ function DownFindIDPW() {
 
       const querySnapshot = await getDocs(q);
       const userData = querySnapshot.docs.map((doc) => doc.data());
-      setUserData(userData); // userData 상태 업데이트
+      setUserData(userData);
     } else {
       const q = query(
         collection(db, "users"),
@@ -95,8 +95,7 @@ function DownFindIDPW() {
 
       const querySnapshot = await getDocs(q);
       const userData = querySnapshot.docs.map((doc) => doc.data());
-      setUserData(userData); // emailData 상태 업데이트
-
+      setUserData(userData);
       if (userData.length > 0) {
         ResetBtnHandler();
       }
@@ -115,17 +114,15 @@ function DownFindIDPW() {
 
   const TimeStampToDate = (time) => {
     if (!time) {
-      // time이 없을 경우 처리
-      return null; // 또는 다른 기본값 또는 오류 처리 로직을 추가할 수 있습니다.
+      return null;
     }
 
     // Firebase timestamp를 JavaScript Date 객체로 변환합니다.
     const date = time.toDate();
 
-    // 원하는 형식으로 날짜를 문자열로 표시합니다.
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1을 해주고 두 자리로 만듭니다.
-    const day = String(date.getDate()).padStart(2, "0"); // 날짜를 두 자리로 만듭니다.
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
     const formattedDate = `${year}-${month}-${day}`;
 

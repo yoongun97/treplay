@@ -13,6 +13,7 @@ const CategoryLikes = (props) => {
       const q = query(collection(db, "likes"), where("postId", "==", id));
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => doc.data());
+
       // 또가요와 안가요 누적수
       const likedData = data.filter((doc) => doc.state === "like");
       const dislikedData = data.filter((doc) => doc.state === "dislike");
