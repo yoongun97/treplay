@@ -7,9 +7,11 @@ import BestPlace from "./components/bestPlace/BestPlace";
 import NationCarousel from "../../components/imageslide/nationpageSlide/NationCarousel";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+import { useParams } from "react-router-dom";
 
 function NationPage() {
   const [selectedCategory, setSelectedCategory] = useState("숙박");
+  const { nation } = useParams();
 
   useEffect(() => {
     return () => {
@@ -44,7 +46,7 @@ function NationPage() {
 
   return (
     <div className="Container">
-      <NationCarousel />
+      <NationCarousel nation={nation} />
       <Category />
       <Preview
         fetch={fetchData}
