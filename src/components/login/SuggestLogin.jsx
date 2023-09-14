@@ -15,7 +15,7 @@ const SuggestLogin = () => {
         <h2>
           <span>로그인</span>하시고
           <br />
-          <span>최고의 또갈집</span>을 확인해보세요
+          <span>최고의 또갈집</span>을 공유해 주세요
         </h2>
         <ImageBox></ImageBox>
         <BubbleBox>

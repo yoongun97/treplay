@@ -70,6 +70,7 @@ const StyledSlider = styled(Slider)`
     display: flex !important;
     justify-content: center;
     align-items: center;
+    max-width: 380px;
     width: 380px !important;
     height: 380px;
     border-radius: 50%;

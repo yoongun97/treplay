@@ -81,12 +81,6 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      window.scrollTo(0, 0);
-    };
-  }, []);
-
   return (
     <s.LoginContainer>
       <s.EmailLoginBox>
