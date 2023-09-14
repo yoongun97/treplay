@@ -199,8 +199,6 @@ export default function Likes() {
             </div>
             <p>{dislikesCount}명</p>
           </s.DislikesButton>
-
-          {/* 여기서 disabled={}는 likes/dislikes의 true/false여부에 따라 활성화/비활성화 하기 위해서 사용 */}
         </s.ButtonContainer>
       </s.LikesContainer>
     </StyleSheetManager>

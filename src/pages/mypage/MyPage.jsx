@@ -63,8 +63,8 @@ function MyPage() {
         ...doc.data(),
         id: doc.id,
       }));
-      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data);
-      const savedData = savedQuerySnapshot.docs.map((doc) => doc.data);
+      const likedData = likedQuerySnapshot.docs.map((doc) => doc.data());
+      const savedData = savedQuerySnapshot.docs.map((doc) => doc.data());
       const postsData = postsQuerySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
@@ -84,9 +84,6 @@ function MyPage() {
       console.error('데이터 가져오기 오류:', error);
     }
   };
-
-  // 처음 랜더링 될 때 likes / posts db에서 user의 uid와 동일한 uid 가 있는 것들만 정보 가져옴
-
   // 버튼 클릭 시 리스트 전환 함수
   const activeSavedListHandler = () => {
     setIsMyListActived(false);

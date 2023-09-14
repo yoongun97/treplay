@@ -47,7 +47,6 @@ function Comments({ id }) {
         id: docSnapshot.id,
         ...docSnapshot.data(),
         comments: commentsData,
-        //firebase 에서 댓글 불러오기
         staleTIme: Infinity,
       };
     } else {
@@ -171,6 +170,7 @@ function Comments({ id }) {
           value={comment}
           onChange={commentChange}
         />
+
         <input type="submit" value="등록" disabled={oneComment} />
       </s.CommentInputForm>
       <s.CommentsContainer>

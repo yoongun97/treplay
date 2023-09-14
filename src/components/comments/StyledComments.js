@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -52,7 +52,7 @@ export const CommentsContainer = styled.div`
   }
 
   & > div::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;

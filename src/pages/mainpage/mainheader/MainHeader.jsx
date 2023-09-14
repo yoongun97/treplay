@@ -30,7 +30,7 @@ const MainHeader = () => {
         <>
           <s.HomeLink to={'/'}></s.HomeLink>
           <s.LoginContainer>
-            <Link to={`/mypage/${user?.uid}`}>내프로필</Link>
+            <Link to={`/mypage`}>내프로필</Link>
             <span onClick={logoutHandler}>로그아웃</span>
           </s.LoginContainer>
         </>
