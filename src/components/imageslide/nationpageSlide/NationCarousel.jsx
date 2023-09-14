@@ -62,8 +62,6 @@ function NationCarousel({ nation }) {
 
   const carouselImg = data[0].imgUrls;
 
-  console.log(carouselImg);
-
   return (
     <div className="CarouselContainer">
       <StyledSlider {...settings}>
