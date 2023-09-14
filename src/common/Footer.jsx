@@ -3,16 +3,20 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Footer = () => {
-  const email = "sujeong.616.work@gmail.com";
+  const designerEmail = "sujeong.616.work@gmail.com";
+  const treplayEmail = "treplay333@gmail.com";
   return (
     <FooterContainer>
       <FooterInner>
         <FooterTop>
           <LogoBox></LogoBox>
           <LegacyBox>
-            <Link>저작권보호정책</Link>
-            <Link>개인정보처리방침</Link>
-            <Link>이메일무단수집거부</Link>
+            <a href={`mailto:${treplayEmail}`} target="blank">
+              고객불편신고
+            </a>
+            <a href={`mailto:${treplayEmail}`} target="blank">
+              treplay333@gmail.com
+            </a>
           </LegacyBox>
         </FooterTop>
         <FooterMain>
@@ -21,7 +25,7 @@ const Footer = () => {
             <span>•</span>
             <span>김수정</span>
             <span>Designer</span>
-            <a href={`mailto:${email}`} target="blank"></a>
+            <a href={`mailto:${designerEmail}`} target="blank"></a>
           </div>
           <div>
             <span>•</span>
@@ -107,16 +111,6 @@ const LegacyBox = styled.div`
     position: absolute;
     top: 50%;
     left: 0;
-    width: 1px;
-    height: 12px;
-    transform: translateY(-50%);
-    background-color: #777;
-  }
-  & > a:nth-child(2)::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 0;
     width: 1px;
     height: 12px;
     transform: translateY(-50%);

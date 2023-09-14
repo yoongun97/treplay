@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SnsBtn, SnsMent } from "../StyledLogin";
 import { styled } from "styled-components";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
@@ -11,6 +11,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+
 function NaverLogin() {
   const navigate = useNavigate();
   const timestamp = serverTimestamp();
@@ -22,7 +23,7 @@ function NaverLogin() {
     loginButton: { color: "green", type: 1, height: "30" },
   });
 
-  const naverLoginHandler = async () => {
+  const naverLoginHandler = () => {
     try {
       naverLogin.getLoginStatus(async (status) => {
         if (status) {
@@ -31,18 +32,9 @@ function NaverLogin() {
           const password = naverLogin.user.id;
 
           const usedEmail = await fetchSignInMethodsForEmail(auth, email);
-
           // 이미 존재하는 아이디가 있으면 로그인 진행
           if (usedEmail.length > 0) {
-            const loginedUser = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
-
-            // 이미 존재하는 아이디 없으면 회원가입 진행
-          } else if (usedEmail.length < 1) {
-            const userCredential = await createUserWithEmailAndPassword(
+            const userCredential = await signInWithEmailAndPassword(
               auth,
               email,
               password
@@ -51,16 +43,40 @@ function NaverLogin() {
               displayName: naverLogin.user.nickname,
               photoURL: naverLogin.user.profile_image,
             });
+            navigate(`${url}`);
             const user = userCredential.user;
             const userRef = doc(db, "users", user.uid);
             await setDoc(userRef, {
               nickname: naverLogin.user.nickname,
               email,
-              uid: naverLogin.user.id,
+              uid: user.uid,
               createdAt: timestamp,
             });
+          } // 이미 존재하는 아이디 없으면 회원가입 진행
+          else if (usedEmail.length < 1) {
+            // 여기에서 Firebase: Error (auth/email-already-in-use). 발생함 근데 아래쪽에 콘솔찍으면 또 찍혀서 미스테리임
+            try {
+              const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+              );
+              updateProfile(auth.currentUser, {
+                displayName: naverLogin.user.nickname,
+                photoURL: naverLogin.user.profile_image,
+              });
+              const user = userCredential.user;
+              const userRef = doc(db, "users", user.uid);
+              await setDoc(userRef, {
+                nickname: naverLogin.user.nickname,
+                email,
+                uid: user.uid,
+                createdAt: timestamp,
+              });
+            } catch (e) {
+              console.error(e);
+            }
           }
-
           navigate(`${url}`);
         }
       });
@@ -68,6 +84,7 @@ function NaverLogin() {
       console.log("에러발생");
     }
   };
+
   useEffect(() => {
     naverLogin.init();
     naverLogin.logout();
@@ -75,7 +92,7 @@ function NaverLogin() {
   }, []);
 
   return (
-    <SnsBtn onClick={NaverLogin}>
+    <SnsBtn>
       <StyledBox className="connect">
         <div id="naverIdLogin"></div>
       </StyledBox>

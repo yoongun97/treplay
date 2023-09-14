@@ -73,7 +73,19 @@ export const WriteButton = styled.a`
   text-align: center;
 `;
 
+export const SearchResults = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 18px;
+  font-weight: 400;
+`;
+
 export const PostsContainer = styled.div`
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 70px;

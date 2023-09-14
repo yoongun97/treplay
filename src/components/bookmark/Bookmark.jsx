@@ -67,7 +67,6 @@ const Bookmark = () => {
           where("uid", "==", user.uid),
           where("postId", "==", id)
         );
-
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach(async (doc) => {
           await deleteDoc(doc.ref);
