@@ -1,15 +1,15 @@
-import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
-import { storage, auth } from "../../firebaseConfig";
-import React, { useState } from "react";
-import { useAtom } from "jotai";
-import { postAtom } from "../../store/postAtom";
-import { useMutation } from "react-query";
-import { userAtom } from "../../store/userAtom";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
-import * as s from "./StyledImageUpload";
-import Swal from "sweetalert2";
+import { getDownloadURL, uploadBytes, ref } from 'firebase/storage';
+import { storage, auth } from '../../firebaseConfig';
+import React, { useState } from 'react';
+import { useAtom } from 'jotai';
+import { postAtom } from '../../store/postAtom';
+import { useMutation } from 'react-query';
+import { userAtom } from '../../store/userAtom';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+import * as s from './StyledImageUpload';
+import Swal from 'sweetalert2';
 
 const MAX_IMAGE_SIZE_MB = 5; // 최대 허용 이미지 파일 크기 (MB 단위)
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024; // MB를 바이트로 변환
@@ -23,11 +23,12 @@ function ImageUpload() {
   //이미지 선택 이름,미리보기
   const [selectedFilePreviews, setSelectedFilePreviews] = useState();
   const [, setSelectedFileNames] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   // 이미지 파일 확장자를 확인하는 함수
   function isImageFile(fileName) {
-    const allowedExtensions = ["jpg", "png", "gif", "jpeg"];
-    const fileExtension = fileName.split(".").pop().toLowerCase();
+    const allowedExtensions = ['jpg', 'png', 'gif', 'jpeg'];
+    const fileExtension = fileName.split('.').pop().toLowerCase();
     return allowedExtensions.includes(fileExtension);
   }
 
@@ -36,11 +37,17 @@ function ImageUpload() {
     const files = Array.from(e.target.files);
     for (const file of files) {
       if (!isImageFile(file.name)) {
-        alert("파일은 jpg, png, jpeg, gif 형식의 파일만 업로드 가능합니다!");
+        Swal.fire({
+          title: '파일은 jpg, png, jpeg, gif 형식의 파일만 업로드 가능합니다!',
+          icon: 'warning',
+        });
         return;
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
-        alert(`파일 크기는 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다!`);
+        Swal.fire({
+          title: `파일 크기는 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다!`,
+          icon: 'warning',
+        });
         return;
       }
     }
@@ -66,38 +73,52 @@ function ImageUpload() {
   // 이미지 파일 업로드 함수
   const handleUpload = async (e) => {
     e.preventDefault();
+    if (isSaving) {
+      return;
+    } // 버튼 중복 안되도록
+    setIsSaving(true);
 
-    if (post.nation === "") {
-      Swal.fire({ title: "나라를 선택해주세요.", icon: "warning" });
-    } else if (post.category === "") {
-      Swal.fire({ title: "카테고리를 선택해주세요.", icon: "warning" });
-    } else if (post.category === "") {
-      Swal.fire({ title: "카테고리를 선택해주세요.", icon: "warning" });
-    } else if (post.placeName === "") {
-      Swal.fire({ title: "장소를 선택해주세요.", icon: "warning" });
-    } else if (post.postContent === "") {
-      Swal.fire({ title: "내용을 입력해주세요.", icon: "warning" });
-    } else if (selectedFiles.length === 0) {
-      Swal.fire({ title: "파일을 선택해주세요.", icon: "warning" });
-    } else {
-      const newDownloadURLs = []; // 새로운 downloadURL 배열 생성
+    try {
+      if (post.nation === '') {
+        Swal.fire({ title: '나라를 선택해주세요.', icon: 'warning' });
+      } else if (post.category === '') {
+        Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
+      } else if (post.category === '') {
+        Swal.fire({ title: '카테고리를 선택해주세요.', icon: 'warning' });
+      } else if (post.placeName === '') {
+        Swal.fire({ title: '장소를 선택해주세요.', icon: 'warning' });
+      } else if (post.postContent === '') {
+        Swal.fire({ title: '내용을 입력해주세요.', icon: 'warning' });
+      } else if (selectedFiles.length === 0) {
+        Swal.fire({ title: '파일을 선택해주세요.', icon: 'warning' });
+      } else {
+        const newDownloadURLs = []; // 새로운 downloadURL 배열 생성
 
-      // 각 이미지 파일을 순회하며 업로드
-      for (const file of selectedFiles) {
-        // ref 함수를 이용해서 Storage 내부 저장할 위치를 지정하고, uploadBytes 함수를 이용해서 파일을 저장합니다.
-        const imageRef = ref(storage, `${auth.currentUser.uid}/${file.name}`);
-        await uploadBytes(imageRef, file);
+        // 각 이미지 파일을 순회하며 업로드
+        for (const file of selectedFiles) {
+          // ref 함수를 이용해서 Storage 내부 저장할 위치를 지정하고, uploadBytes 함수를 이용해서 파일을 저장합니다.
+          const imageRef = ref(storage, `${auth.currentUser.uid}/${file.name}`);
+          await uploadBytes(imageRef, file);
 
-        const downloadURL = await getDownloadURL(imageRef);
-        newDownloadURLs.push(downloadURL); // 새로운 downloadURL 배열에 추가
+          // 파일 URL 가져오기
+          const downloadURL = await getDownloadURL(imageRef);
+          newDownloadURLs.push(downloadURL); // 새로운 downloadURL 배열에 추가
+        }
+
+        // 업로드된 이미지 URL을 포스트에 추가
+        const updatedPost = { ...post, postImgs: newDownloadURLs };
+
+        // 포스트 업데이트 후 데이터베이스에 추가
+        addMutation.mutate(updatedPost);
+
+        // 업로드 후 선택한 파일 목록 초기화
+        setSelectedFiles([]);
+        document.getElementById('file-input').value = ''; // 파일 선택 초기화
       }
-
-      const updatedPost = { ...post, postImgs: newDownloadURLs };
-
-      addMutation.mutate(updatedPost);
-
-      setSelectedFiles([]);
-      document.getElementById("file-input").value = ""; // 파일 선택 초기화
+    } catch (error) {
+      Swal.fire({ title: `Error Code Number : ${error}`, icon: 'error' });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -109,10 +130,10 @@ function ImageUpload() {
       uid: user.uid,
     };
 
-    const collectionRef = collection(db, "posts");
+    const collectionRef = collection(db, 'posts');
     const docRef = await addDoc(collectionRef, newPost);
 
-    navigate(`/detail/${docRef.id}`);
+    navigate(`/${post.nation}/${post.category}`);
   });
 
   return (
@@ -207,7 +228,9 @@ function ImageUpload() {
           </>
         )}
       </s.PreviewImagesContainer>
-      <s.SubmitButton onClick={handleUpload}>저장</s.SubmitButton>
+      <s.SubmitButton onClick={handleUpload} disabled={isSaving}>
+        저장
+      </s.SubmitButton>
     </>
   );
 }
