@@ -17,6 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import SuggestLogin from "./components/login/SuggestLogin";
 import DownFindIDPW from "./components/findIDPW/DownFindIDPW";
+import ErrorPage from "./pages/errorpage/ErrorPage";
 
 function App() {
   const [, setUser] = useAtom(userAtom); // userAtom 사용
@@ -62,15 +63,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
-      <Route
-        path="*"
-        element={
-          <>
-            <div>없는 페이지입니다.</div>
-            <Link to="/">홈으로 이동</Link>
-          </>
-        }
-      />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }
